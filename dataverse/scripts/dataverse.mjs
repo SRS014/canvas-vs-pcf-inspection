@@ -39,7 +39,7 @@ const cachePlugin = {
   },
 };
 
-async function acquireToken(url) {
+export async function acquireToken(url) {
   if (process.env.DATAVERSE_TOKEN) return process.env.DATAVERSE_TOKEN;
   const pca = new PublicClientApplication({
     auth: { clientId: CLIENT_ID, authority: "https://login.microsoftonline.com/organizations" },
@@ -71,6 +71,7 @@ export async function connect({ solution } = {}) {
   async function api(method, path, body, { allow404 = false, headers = {} } = {}) {
     for (let attempt = 1; ; attempt++) {
       const res = await fetch(base + path, {
+        signal: AbortSignal.timeout(120_000),
         method,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,6 +83,8 @@ export async function connect({ solution } = {}) {
           ...headers,
         },
         body: body === undefined ? undefined : JSON.stringify(body),
+      }).catch((e) => {
+        throw new Error(`Cannot reach ${url} (${e.cause?.code ?? e.message}). Check the environment URL; npm run discover lists yours.`);
       });
       if (res.status === 404 && allow404) return null;
       const text = await res.text();

@@ -5,6 +5,7 @@
   "description": "Provision the Dataverse schema and seed data for the Canvas vs PCF inspection project.",
   "scripts": {
     "validate": "node scripts/seed.mjs --validate-only",
+    "discover": "node scripts/discover.mjs",
     "provision": "node scripts/provision.mjs",
     "seed": "node scripts/seed.mjs"
   },
