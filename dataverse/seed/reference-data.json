@@ -1,0 +1,17 @@
+{
+  "$comment": "Fictional reference data for the demo. Not a real company.",
+  "sites": [
+    { "name": "Northgate Distribution Centre", "code": "NGD", "region": "North" },
+    { "name": "Riverside Assembly Plant", "code": "RAP", "region": "Central" },
+    { "name": "Eastport Bonded Warehouse", "code": "EBW", "region": "East" }
+  ],
+  "equipment": [
+    { "name": "Forklift FL-07 (counterbalance, 2.5 t)", "assetTag": "NGD-FL-07", "type": "Forklift", "criticality": "High", "hourMeter": 6120, "site": "NGD" },
+    { "name": "Forklift FL-12 (reach truck, 1.6 t)", "assetTag": "NGD-FL-12", "type": "Forklift", "criticality": "Medium", "hourMeter": 410, "site": "NGD" },
+    { "name": "Forklift FL-03 (counterbalance, 3 t)", "assetTag": "RAP-FL-03", "type": "Forklift", "criticality": "High", "hourMeter": 9875, "site": "RAP" },
+    { "name": "Conveyor CV-A (inbound sortation)", "assetTag": "NGD-CV-A", "type": "Conveyor", "criticality": "High", "hourMeter": 22010, "site": "NGD" },
+    { "name": "Conveyor CV-2 (line 2 transfer)", "assetTag": "RAP-CV-2", "type": "Conveyor", "criticality": "Medium", "hourMeter": 15400, "site": "RAP" },
+    { "name": "Forklift FL-21 (counterbalance, 2 t)", "assetTag": "EBW-FL-21", "type": "Forklift", "criticality": "Low", "hourMeter": 2300, "site": "EBW" },
+    { "name": "Conveyor CV-E1 (despatch)", "assetTag": "EBW-CV-E1", "type": "Conveyor", "criticality": "Low", "hourMeter": 8800, "site": "EBW" }
+  ]
+}

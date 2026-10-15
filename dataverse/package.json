@@ -1,0 +1,17 @@
+{
+  "name": "canvas-vs-pcf-dataverse",
+  "private": true,
+  "type": "module",
+  "description": "Provision the Dataverse schema and seed data for the Canvas vs PCF inspection project.",
+  "scripts": {
+    "validate": "node scripts/seed.mjs --validate-only",
+    "provision": "node scripts/provision.mjs",
+    "seed": "node scripts/seed.mjs"
+  },
+  "dependencies": {
+    "@azure/msal-node": "7.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

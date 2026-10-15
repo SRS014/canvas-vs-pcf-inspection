@@ -1,0 +1,194 @@
+{
+  "$comment": "Declarative Dataverse schema for the Canvas vs PCF inspection project. Read by scripts/provision.mjs. Logical names are lower-case schema names.",
+  "publisher": {
+    "uniquename": "fusionplatform",
+    "friendlyname": "The Fusion Platform",
+    "customizationprefix": "fp",
+    "customizationoptionvalueprefix": 72710
+  },
+  "solution": {
+    "uniquename": "CanvasVsPcfInspection",
+    "friendlyname": "Canvas vs PCF: Equipment Inspection",
+    "version": "1.0.0.0"
+  },
+  "optionSets": [
+    {
+      "name": "fp_equipmenttype",
+      "displayName": "Equipment type",
+      "options": [
+        { "value": 727100000, "label": "Forklift" },
+        { "value": 727100001, "label": "Conveyor" },
+        { "value": 727100002, "label": "Pallet racking" },
+        { "value": 727100003, "label": "Air compressor" }
+      ]
+    },
+    {
+      "name": "fp_inspectionstage",
+      "displayName": "Inspection stage",
+      "options": [
+        { "value": 727100000, "label": "Pre-use" },
+        { "value": 727100001, "label": "Visual and structural" },
+        { "value": 727100002, "label": "Operational test" },
+        { "value": 727100003, "label": "Safety sign-off" }
+      ]
+    },
+    {
+      "name": "fp_answertype",
+      "displayName": "Answer type",
+      "options": [
+        { "value": 727100000, "label": "Yes/No" },
+        { "value": 727100001, "label": "Choice" },
+        { "value": 727100002, "label": "Number" },
+        { "value": 727100003, "label": "Text" }
+      ]
+    },
+    {
+      "name": "fp_conditionoperator",
+      "displayName": "Condition operator",
+      "options": [
+        { "value": 727100000, "label": "Equals" },
+        { "value": 727100001, "label": "Not equals" },
+        { "value": 727100002, "label": "Greater than" },
+        { "value": 727100003, "label": "Less than" },
+        { "value": 727100004, "label": "One of" }
+      ]
+    },
+    {
+      "name": "fp_riskband",
+      "displayName": "Risk band",
+      "options": [
+        { "value": 727100000, "label": "Low" },
+        { "value": 727100001, "label": "Medium" },
+        { "value": 727100002, "label": "High" },
+        { "value": 727100003, "label": "Critical" }
+      ]
+    },
+    {
+      "name": "fp_criticality",
+      "displayName": "Equipment criticality",
+      "options": [
+        { "value": 727100000, "label": "Low" },
+        { "value": 727100001, "label": "Medium" },
+        { "value": 727100002, "label": "High" }
+      ]
+    },
+    {
+      "name": "fp_inspectionstatus",
+      "displayName": "Inspection status",
+      "options": [
+        { "value": 727100000, "label": "Draft" },
+        { "value": 727100001, "label": "Submitted" }
+      ]
+    },
+    {
+      "name": "fp_builtwith",
+      "displayName": "Built with",
+      "options": [
+        { "value": 727100000, "label": "Canvas only" },
+        { "value": 727100001, "label": "Canvas + PCF" }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "schemaName": "fp_Site",
+      "displayName": "Site",
+      "pluralName": "Sites",
+      "description": "A warehouse or plant where equipment is inspected.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Site name", "maxLength": 100 },
+      "columns": [
+        { "type": "string", "schemaName": "fp_SiteCode", "displayName": "Site code", "maxLength": 10 },
+        { "type": "string", "schemaName": "fp_Region", "displayName": "Region", "maxLength": 100 }
+      ]
+    },
+    {
+      "schemaName": "fp_Equipment",
+      "displayName": "Equipment",
+      "pluralName": "Equipment",
+      "description": "A piece of equipment that needs periodic inspection.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Equipment name", "maxLength": 100 },
+      "columns": [
+        { "type": "string", "schemaName": "fp_AssetTag", "displayName": "Asset tag", "maxLength": 20 },
+        { "type": "choice", "schemaName": "fp_EquipmentType", "displayName": "Equipment type", "optionSet": "fp_equipmenttype", "required": true },
+        { "type": "choice", "schemaName": "fp_Criticality", "displayName": "Criticality", "optionSet": "fp_criticality", "description": "Multiplies the risk score: Low x1.0, Medium x1.25, High x1.5." },
+        { "type": "integer", "schemaName": "fp_HourMeter", "displayName": "Hour meter", "min": 0, "max": 1000000 }
+      ]
+    },
+    {
+      "schemaName": "fp_ChecklistQuestion",
+      "displayName": "Checklist question",
+      "pluralName": "Checklist questions",
+      "description": "One question in an inspection template. Questions form a tree: a child is shown only when its parent's answer meets the show condition.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Question", "maxLength": 300 },
+      "columns": [
+        { "type": "string", "schemaName": "fp_Code", "displayName": "Code", "maxLength": 40, "description": "Stable key, for example FL-01.1.1. The dots show the nesting." },
+        { "type": "choice", "schemaName": "fp_EquipmentType", "displayName": "Equipment type", "optionSet": "fp_equipmenttype", "required": true },
+        { "type": "choice", "schemaName": "fp_Stage", "displayName": "Stage", "optionSet": "fp_inspectionstage", "required": true },
+        { "type": "integer", "schemaName": "fp_SortOrder", "displayName": "Sort order", "min": 0, "max": 100000 },
+        { "type": "integer", "schemaName": "fp_Depth", "displayName": "Depth", "min": 0, "max": 50, "description": "0 for a root question. Maintained by the seed script." },
+        { "type": "choice", "schemaName": "fp_AnswerType", "displayName": "Answer type", "optionSet": "fp_answertype", "required": true },
+        { "type": "string", "schemaName": "fp_Options", "displayName": "Options", "maxLength": 500, "description": "Pipe-separated choices for Choice questions, for example Good|Worn|Damaged." },
+        { "type": "choice", "schemaName": "fp_ShowOperator", "displayName": "Show when operator", "optionSet": "fp_conditionoperator" },
+        { "type": "string", "schemaName": "fp_ShowValue", "displayName": "Show when value", "maxLength": 200, "description": "Compared with the parent's answer. For One of, pipe-separated." },
+        { "type": "integer", "schemaName": "fp_RiskWeight", "displayName": "Risk weight", "min": 0, "max": 100 },
+        { "type": "choice", "schemaName": "fp_RiskOperator", "displayName": "Risk when operator", "optionSet": "fp_conditionoperator" },
+        { "type": "string", "schemaName": "fp_RiskValue", "displayName": "Risk when value", "maxLength": 200 },
+        { "type": "boolean", "schemaName": "fp_IsCritical", "displayName": "Critical stop", "description": "When this question's risk triggers, the inspection is Critical regardless of the score." },
+        { "type": "memo", "schemaName": "fp_RuleJson", "displayName": "Advanced rule (JSON)", "maxLength": 10000, "description": "Optional cross-question visibility rule tree. Evaluated by the PCF component only; see docs/where-canvas-stopped.md." },
+        { "type": "string", "schemaName": "fp_HelpText", "displayName": "Help text", "maxLength": 500 }
+      ]
+    },
+    {
+      "schemaName": "fp_Inspection",
+      "displayName": "Inspection",
+      "pluralName": "Inspections",
+      "description": "One inspection of one piece of equipment.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Inspection number", "maxLength": 100, "autoNumberFormat": "INS-{SEQNUM:5}" },
+      "columns": [
+        { "type": "choice", "schemaName": "fp_Status", "displayName": "Status", "optionSet": "fp_inspectionstatus" },
+        { "type": "decimal", "schemaName": "fp_RiskScore", "displayName": "Risk score", "min": 0, "max": 100, "precision": 1 },
+        { "type": "choice", "schemaName": "fp_RiskBand", "displayName": "Risk band", "optionSet": "fp_riskband" },
+        { "type": "datetime", "schemaName": "fp_StartedOn", "displayName": "Started on" },
+        { "type": "datetime", "schemaName": "fp_SubmittedOn", "displayName": "Submitted on" },
+        { "type": "string", "schemaName": "fp_InspectorName", "displayName": "Inspector", "maxLength": 200 },
+        { "type": "choice", "schemaName": "fp_BuiltWith", "displayName": "Built with", "optionSet": "fp_builtwith", "description": "Which app captured this inspection, so the two approaches can be compared on real records." },
+        { "type": "memo", "schemaName": "fp_Notes", "displayName": "Notes", "maxLength": 4000 }
+      ]
+    },
+    {
+      "schemaName": "fp_InspectionAnswer",
+      "displayName": "Inspection answer",
+      "pluralName": "Inspection answers",
+      "description": "The answer to one question in one inspection.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Question code", "maxLength": 100 },
+      "columns": [
+        { "type": "string", "schemaName": "fp_Value", "displayName": "Value", "maxLength": 4000 },
+        { "type": "decimal", "schemaName": "fp_NumericValue", "displayName": "Numeric value", "min": -1000000, "max": 1000000, "precision": 2 },
+        { "type": "decimal", "schemaName": "fp_RiskContribution", "displayName": "Risk contribution", "min": 0, "max": 1000, "precision": 1 }
+      ]
+    },
+    {
+      "schemaName": "fp_InspectionPhoto",
+      "displayName": "Inspection photo",
+      "pluralName": "Inspection photos",
+      "description": "A photo taken during an inspection, with optional annotation.",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Caption", "maxLength": 200 },
+      "columns": [
+        { "type": "image", "schemaName": "fp_Photo", "displayName": "Photo", "primary": true, "maxSizeInKB": 10240 },
+        { "type": "image", "schemaName": "fp_CanvasStrokes", "displayName": "Canvas pen strokes", "maxSizeInKB": 10240, "description": "App 1: the Pen input control's output. Strokes only, not merged with the photo." },
+        { "type": "image", "schemaName": "fp_AnnotatedPhoto", "displayName": "Annotated photo", "maxSizeInKB": 10240, "description": "App 2: the PCF component's flattened photo with annotations burned in." },
+        { "type": "memo", "schemaName": "fp_AnnotationJson", "displayName": "Annotation data (JSON)", "maxLength": 100000, "description": "App 2: each marker, arrow and note as structured data, so annotations stay editable and searchable." }
+      ]
+    }
+  ],
+  "relationships": [
+    { "schemaName": "fp_site_equipment", "referenced": "fp_site", "referencing": "fp_equipment", "lookupSchemaName": "fp_Site", "lookupDisplayName": "Site", "deleteBehavior": "Restrict" },
+    { "schemaName": "fp_question_parent", "referenced": "fp_checklistquestion", "referencing": "fp_checklistquestion", "lookupSchemaName": "fp_ParentQuestion", "lookupDisplayName": "Parent question", "deleteBehavior": "RemoveLink" },
+    { "schemaName": "fp_equipment_inspection", "referenced": "fp_equipment", "referencing": "fp_inspection", "lookupSchemaName": "fp_Equipment", "lookupDisplayName": "Equipment", "deleteBehavior": "Restrict" },
+    { "schemaName": "fp_site_inspection", "referenced": "fp_site", "referencing": "fp_inspection", "lookupSchemaName": "fp_Site", "lookupDisplayName": "Site", "deleteBehavior": "Restrict" },
+    { "schemaName": "fp_inspection_answer", "referenced": "fp_inspection", "referencing": "fp_inspectionanswer", "lookupSchemaName": "fp_Inspection", "lookupDisplayName": "Inspection", "deleteBehavior": "Cascade" },
+    { "schemaName": "fp_question_answer", "referenced": "fp_checklistquestion", "referencing": "fp_inspectionanswer", "lookupSchemaName": "fp_Question", "lookupDisplayName": "Question", "deleteBehavior": "Restrict" },
+    { "schemaName": "fp_inspection_photo", "referenced": "fp_inspection", "referencing": "fp_inspectionphoto", "lookupSchemaName": "fp_Inspection", "lookupDisplayName": "Inspection", "deleteBehavior": "Cascade" },
+    { "schemaName": "fp_question_photo", "referenced": "fp_checklistquestion", "referencing": "fp_inspectionphoto", "lookupSchemaName": "fp_Question", "lookupDisplayName": "Question", "deleteBehavior": "RemoveLink" }
+  ]
+}

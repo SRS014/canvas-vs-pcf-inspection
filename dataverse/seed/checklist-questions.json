@@ -1,0 +1,49 @@
+{
+  "$comment": "Inspection templates. A question with 'parent' is shown only when the parent's answer meets show.op/show.value. Depth and sort order are computed by the seed script from this file. 'risk' adds 'weight' points when the question's own answer meets risk.op/risk.value. 'critical' forces the Critical band. 'rule' is an advanced cross-question visibility rule that only the PCF component evaluates.",
+  "questions": [
+    { "code": "FL-01", "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is the forklift tagged as in service?" },
+    { "code": "FL-01.1", "parent": "FL-01", "show": { "op": "Equals", "value": "No" }, "type": "Forklift", "stage": "Pre-use", "answer": "Choice", "options": "Awaiting repair|Scheduled maintenance|Damaged", "text": "Why is it out of service?" },
+    { "code": "FL-01.1.1", "parent": "FL-01.1", "show": { "op": "Equals", "value": "Damaged" }, "type": "Forklift", "stage": "Pre-use", "answer": "Choice", "options": "Mast|Forks|Tyres|Hydraulics|Overhead guard", "text": "Where is the damage?", "help": "Take a photo of the damaged area." },
+    { "code": "FL-01.1.1.1", "parent": "FL-01.1.1", "show": { "op": "Equals", "value": "Hydraulics" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is hydraulic fluid leaking onto the floor?", "risk": { "op": "Equals", "value": "Yes", "weight": 20 } },
+    { "code": "FL-01.1.1.1.1", "parent": "FL-01.1.1.1", "show": { "op": "Equals", "value": "Yes" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Has a spill kit been deployed?", "risk": { "op": "Equals", "value": "No", "weight": 15 } },
+    { "code": "FL-01.1.1.1.1.1", "parent": "FL-01.1.1.1.1", "show": { "op": "Equals", "value": "No" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is the spill area cordoned off from pedestrians?", "risk": { "op": "Equals", "value": "No", "weight": 25 }, "critical": true, "help": "Added in template v2 after a near miss. Sixth level of nesting." },
+    { "code": "FL-01.1.1.2", "parent": "FL-01.1.1", "show": { "op": "Equals", "value": "Forks" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is a fork cracked or bent?", "risk": { "op": "Equals", "value": "Yes", "weight": 25 }, "critical": true },
+    { "code": "FL-01.2", "parent": "FL-01", "show": { "op": "Equals", "value": "No" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is a return-to-service date agreed?" },
+    { "code": "FL-02", "type": "Forklift", "stage": "Pre-use", "answer": "Number", "text": "Hour meter reading" },
+    { "code": "FL-02.1", "parent": "FL-02", "show": { "op": "Greater than", "value": "500" }, "type": "Forklift", "stage": "Pre-use", "answer": "Number", "text": "Hours since last service", "risk": { "op": "Greater than", "value": "250", "weight": 10 } },
+    { "code": "FL-02.1.1", "parent": "FL-02.1", "show": { "op": "Greater than", "value": "250" }, "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Is a service-overdue tag fitted?", "risk": { "op": "Equals", "value": "No", "weight": 5 } },
+    { "code": "FL-03", "type": "Forklift", "stage": "Pre-use", "answer": "Yes/No", "text": "Does the operator hold a valid licence?", "risk": { "op": "Equals", "value": "No", "weight": 30 }, "critical": true },
+
+    { "code": "FL-10", "type": "Forklift", "stage": "Visual and structural", "answer": "Choice", "options": "Good|Worn|Damaged", "text": "Tyre condition", "risk": { "op": "Equals", "value": "Damaged", "weight": 15 } },
+    { "code": "FL-10.1", "parent": "FL-10", "show": { "op": "One of", "value": "Worn|Damaged" }, "type": "Forklift", "stage": "Visual and structural", "answer": "Choice", "options": "Front left|Front right|Rear left|Rear right|Several", "text": "Which tyres?" },
+    { "code": "FL-10.1.1", "parent": "FL-10.1", "show": { "op": "Equals", "value": "Several" }, "type": "Forklift", "stage": "Visual and structural", "answer": "Yes/No", "text": "Is a photo of the tyres attached?", "risk": { "op": "Equals", "value": "No", "weight": 5 } },
+    { "code": "FL-11", "type": "Forklift", "stage": "Visual and structural", "answer": "Choice", "options": "OK|Wear visible|Crack visible", "text": "Forks and carriage", "risk": { "op": "Equals", "value": "Crack visible", "weight": 30 }, "critical": true },
+    { "code": "FL-12", "type": "Forklift", "stage": "Visual and structural", "answer": "Choice", "options": "OK|Slack|Damaged", "text": "Lift chains and mast", "risk": { "op": "Equals", "value": "Damaged", "weight": 20 } },
+    { "code": "FL-12.1", "parent": "FL-12", "show": { "op": "One of", "value": "Slack|Damaged" }, "type": "Forklift", "stage": "Visual and structural", "answer": "Number", "text": "Measured chain stretch (%)", "risk": { "op": "Greater than", "value": "3", "weight": 15 } },
+    { "code": "FL-13", "type": "Forklift", "stage": "Visual and structural", "answer": "Yes/No", "text": "Any fluid leaks visible?", "risk": { "op": "Equals", "value": "Yes", "weight": 15 } },
+    { "code": "FL-13.1", "parent": "FL-13", "show": { "op": "Equals", "value": "Yes" }, "type": "Forklift", "stage": "Visual and structural", "answer": "Choice", "options": "Hydraulic|Engine oil|Coolant|Battery acid", "text": "Which fluid?" },
+    { "code": "FL-13.1.1", "parent": "FL-13.1", "show": { "op": "Equals", "value": "Battery acid" }, "type": "Forklift", "stage": "Visual and structural", "answer": "Yes/No", "text": "Is an eye-wash station within 10 m?", "risk": { "op": "Equals", "value": "No", "weight": 20 } },
+
+    { "code": "FL-20", "type": "Forklift", "stage": "Operational test", "answer": "Yes/No", "text": "Do the brakes stop the truck within normal distance?", "risk": { "op": "Equals", "value": "No", "weight": 25 }, "critical": true },
+    { "code": "FL-21", "type": "Forklift", "stage": "Operational test", "answer": "Yes/No", "text": "Are the horn, lights and alarms working?", "risk": { "op": "Equals", "value": "No", "weight": 10 } },
+    { "code": "FL-21.1", "parent": "FL-21", "show": { "op": "Equals", "value": "No" }, "type": "Forklift", "stage": "Operational test", "answer": "Choice", "options": "Horn|Headlights|Beacon|Reverse alarm", "text": "Which one failed?" },
+    { "code": "FL-22", "type": "Forklift", "stage": "Operational test", "answer": "Yes/No", "text": "Do lift and tilt controls move smoothly?", "risk": { "op": "Equals", "value": "No", "weight": 15 } },
+    { "code": "FL-23", "type": "Forklift", "stage": "Operational test", "answer": "Yes/No", "text": "Is the load backrest secure?", "risk": { "op": "Equals", "value": "No", "weight": 10 } },
+
+    { "code": "FL-30", "type": "Forklift", "stage": "Safety sign-off", "answer": "Yes/No", "text": "Is a fire extinguisher fitted and in date?", "risk": { "op": "Equals", "value": "No", "weight": 10 } },
+    { "code": "FL-31", "type": "Forklift", "stage": "Safety sign-off", "answer": "Yes/No", "text": "Is the seat belt working?", "risk": { "op": "Equals", "value": "No", "weight": 15 } },
+    { "code": "FL-32", "type": "Forklift", "stage": "Safety sign-off", "answer": "Yes/No", "text": "Notify the site safety lead now?", "help": "Shown only when a leak and a missing extinguisher are both recorded, or the brakes failed. A cross-question rule, not a parent-child one.", "rule": { "any": [ { "all": [ { "q": "FL-13", "op": "Equals", "v": "Yes" }, { "q": "FL-30", "op": "Equals", "v": "No" } ] }, { "q": "FL-20", "op": "Equals", "v": "No" } ] } },
+    { "code": "FL-33", "type": "Forklift", "stage": "Safety sign-off", "answer": "Text", "text": "Inspector comments" },
+
+    { "code": "CV-01", "type": "Conveyor", "stage": "Pre-use", "answer": "Yes/No", "text": "Is the conveyor isolated and locked out for inspection?", "risk": { "op": "Equals", "value": "No", "weight": 30 }, "critical": true },
+    { "code": "CV-02", "type": "Conveyor", "stage": "Pre-use", "answer": "Yes/No", "text": "Are all emergency stops reachable and unobstructed?", "risk": { "op": "Equals", "value": "No", "weight": 20 } },
+    { "code": "CV-10", "type": "Conveyor", "stage": "Visual and structural", "answer": "Choice", "options": "Good|Frayed|Torn", "text": "Belt condition", "risk": { "op": "Equals", "value": "Torn", "weight": 20 } },
+    { "code": "CV-10.1", "parent": "CV-10", "show": { "op": "One of", "value": "Frayed|Torn" }, "type": "Conveyor", "stage": "Visual and structural", "answer": "Number", "text": "Length of damaged section (cm)", "risk": { "op": "Greater than", "value": "30", "weight": 10 } },
+    { "code": "CV-11", "type": "Conveyor", "stage": "Visual and structural", "answer": "Yes/No", "text": "Are all guards and nip-point covers fitted?", "risk": { "op": "Equals", "value": "No", "weight": 25 }, "critical": true },
+    { "code": "CV-11.1", "parent": "CV-11", "show": { "op": "Equals", "value": "No" }, "type": "Conveyor", "stage": "Visual and structural", "answer": "Choice", "options": "Head pulley|Tail pulley|Drive chain|Side rails", "text": "Which guard is missing?" },
+    { "code": "CV-20", "type": "Conveyor", "stage": "Operational test", "answer": "Number", "text": "Motor temperature after 10 minutes (°C)", "risk": { "op": "Greater than", "value": "80", "weight": 15 } },
+    { "code": "CV-20.1", "parent": "CV-20", "show": { "op": "Greater than", "value": "80" }, "type": "Conveyor", "stage": "Operational test", "answer": "Yes/No", "text": "Is there a burning smell or visible smoke?", "risk": { "op": "Equals", "value": "Yes", "weight": 30 }, "critical": true },
+    { "code": "CV-21", "type": "Conveyor", "stage": "Operational test", "answer": "Yes/No", "text": "Does the belt track centrally under load?", "risk": { "op": "Equals", "value": "No", "weight": 10 } },
+    { "code": "CV-30", "type": "Conveyor", "stage": "Safety sign-off", "answer": "Text", "text": "Inspector comments" }
+  ]
+}
