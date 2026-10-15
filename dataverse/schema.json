@@ -1,10 +1,10 @@
 {
   "$comment": "Declarative Dataverse schema for the Canvas vs PCF inspection project. Read by scripts/provision.mjs. Logical names are lower-case schema names.",
   "publisher": {
-    "uniquename": "fusionplatform",
-    "friendlyname": "The Fusion Platform",
+    "uniquename": "Sohan",
+    "friendlyname": "Sohan",
     "customizationprefix": "fp",
-    "customizationoptionvalueprefix": 72710
+    "customizationoptionvalueprefix": 12250
   },
   "solution": {
     "uniquename": "CanvasVsPcfInspection",
@@ -16,76 +16,76 @@
       "name": "fp_equipmenttype",
       "displayName": "Equipment type",
       "options": [
-        { "value": 727100000, "label": "Forklift" },
-        { "value": 727100001, "label": "Conveyor" },
-        { "value": 727100002, "label": "Pallet racking" },
-        { "value": 727100003, "label": "Air compressor" }
+        { "value": 122500000, "label": "Forklift" },
+        { "value": 122500001, "label": "Conveyor" },
+        { "value": 122500002, "label": "Pallet racking" },
+        { "value": 122500003, "label": "Air compressor" }
       ]
     },
     {
       "name": "fp_inspectionstage",
       "displayName": "Inspection stage",
       "options": [
-        { "value": 727100000, "label": "Pre-use" },
-        { "value": 727100001, "label": "Visual and structural" },
-        { "value": 727100002, "label": "Operational test" },
-        { "value": 727100003, "label": "Safety sign-off" }
+        { "value": 122500000, "label": "Pre-use" },
+        { "value": 122500001, "label": "Visual and structural" },
+        { "value": 122500002, "label": "Operational test" },
+        { "value": 122500003, "label": "Safety sign-off" }
       ]
     },
     {
       "name": "fp_answertype",
       "displayName": "Answer type",
       "options": [
-        { "value": 727100000, "label": "Yes/No" },
-        { "value": 727100001, "label": "Choice" },
-        { "value": 727100002, "label": "Number" },
-        { "value": 727100003, "label": "Text" }
+        { "value": 122500000, "label": "Yes/No" },
+        { "value": 122500001, "label": "Choice" },
+        { "value": 122500002, "label": "Number" },
+        { "value": 122500003, "label": "Text" }
       ]
     },
     {
       "name": "fp_conditionoperator",
       "displayName": "Condition operator",
       "options": [
-        { "value": 727100000, "label": "Equals" },
-        { "value": 727100001, "label": "Not equals" },
-        { "value": 727100002, "label": "Greater than" },
-        { "value": 727100003, "label": "Less than" },
-        { "value": 727100004, "label": "One of" }
+        { "value": 122500000, "label": "Equals" },
+        { "value": 122500001, "label": "Not equals" },
+        { "value": 122500002, "label": "Greater than" },
+        { "value": 122500003, "label": "Less than" },
+        { "value": 122500004, "label": "One of" }
       ]
     },
     {
       "name": "fp_riskband",
       "displayName": "Risk band",
       "options": [
-        { "value": 727100000, "label": "Low" },
-        { "value": 727100001, "label": "Medium" },
-        { "value": 727100002, "label": "High" },
-        { "value": 727100003, "label": "Critical" }
+        { "value": 122500000, "label": "Low" },
+        { "value": 122500001, "label": "Medium" },
+        { "value": 122500002, "label": "High" },
+        { "value": 122500003, "label": "Critical" }
       ]
     },
     {
       "name": "fp_criticality",
       "displayName": "Equipment criticality",
       "options": [
-        { "value": 727100000, "label": "Low" },
-        { "value": 727100001, "label": "Medium" },
-        { "value": 727100002, "label": "High" }
+        { "value": 122500000, "label": "Low" },
+        { "value": 122500001, "label": "Medium" },
+        { "value": 122500002, "label": "High" }
       ]
     },
     {
       "name": "fp_inspectionstatus",
       "displayName": "Inspection status",
       "options": [
-        { "value": 727100000, "label": "Draft" },
-        { "value": 727100001, "label": "Submitted" }
+        { "value": 122500000, "label": "Draft" },
+        { "value": 122500001, "label": "Submitted" }
       ]
     },
     {
       "name": "fp_builtwith",
       "displayName": "Built with",
       "options": [
-        { "value": 727100000, "label": "Canvas only" },
-        { "value": 727100001, "label": "Canvas + PCF" }
+        { "value": 122500000, "label": "Canvas only" },
+        { "value": 122500001, "label": "Canvas + PCF" }
       ]
     }
   ],
