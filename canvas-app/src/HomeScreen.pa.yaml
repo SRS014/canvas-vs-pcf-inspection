@@ -18,10 +18,12 @@ Screens:
             RadiusTopLeft: =0
             RadiusTopRight: =0
           Children:
-            - htmHomeTopLine:
+            - htmHomeTopBar:
                 Control: HtmlViewer
                 Properties:
                   HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
                   PaddingTop: =0
                   PaddingBottom: =0
                   PaddingLeft: =0
@@ -48,6 +50,8 @@ Screens:
                       Control: HtmlViewer
                       Properties:
                         HtmlText: =HtmlWash(Parent.Height)
+                        AutoHeight: =true
+                        Size: =1
                         PaddingTop: =0
                         PaddingBottom: =0
                         PaddingLeft: =0
@@ -90,7 +94,7 @@ Screens:
                         X: =104
                         Y: =44
                         Width: =Parent.Width - 104 - 248
-                        Height: =40
+                        Height: =42
                         Size: =28
                         FontWeight: =FontWeight.Bold
                         Color: =cText
@@ -127,7 +131,7 @@ Screens:
                         AccessibleLabel: ="Start a new inspection"
                         OnSelect: |-
                           =Set(varBannerText, "");
-                          Navigate(StartScreen, ScreenTransition.None)
+                          Navigate(NewInspectionScreen, ScreenTransition.None)
                   - conHomeHeroRule:
                       Control: GroupContainer
                       Variant: ManualLayout
@@ -180,6 +184,8 @@ Screens:
                         - txtHomeBannerLabel:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               Text: ="✓  Submitted"
                               Size: =16
@@ -190,6 +196,8 @@ Screens:
                         - txtHomeBannerText:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               Text: =varBannerText
                               Size: =16
@@ -269,10 +277,12 @@ Screens:
                               RadiusBottomRight: =8
                               RadiusTopLeft: =8
                               RadiusTopRight: =8
-                        - htmHomeKpiLine:
+                        - htmHomeKpiBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 8)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -303,7 +313,7 @@ Screens:
                               X: =16
                               Y: =38
                               Width: =Parent.TemplateWidth - 40
-                              Height: =40
+                              Height: =42
                               Size: =28
                               FontWeight: =FontWeight.Bold
                               Color: =If(ThisItem.Alert && ThisItem.Val <> "0", cError, cText)
@@ -344,10 +354,12 @@ Screens:
                         RadiusTopLeft: =8
                         RadiusTopRight: =8
                       Children:
-                        - htmHomeListLine:
+                        - htmHomeListBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 8)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -356,7 +368,7 @@ Screens:
                               FillPortions: =0
                               LayoutMinHeight: =3
                               AlignInContainer: =AlignInContainer.Stretch
-                        - conHomeListTitle:
+                        - conHomeListTitleRow:
                             Control: GroupContainer
                             Variant: AutoLayout
                             Properties:
@@ -370,9 +382,11 @@ Screens:
                               PaddingLeft: =16
                               PaddingRight: =16
                             Children:
-                              - txtHomeListHeading:
+                              - txtHomeListTitle:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="Inspections"
                                     Size: =18
@@ -380,9 +394,11 @@ Screens:
                                     Color: =cText
                                     Width: =130
                                     LayoutMinWidth: =120
-                              - txtHomeListSub:
+                              - txtHomeListCaption:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="Newest first · read-only"
                                     Size: =14
@@ -405,6 +421,8 @@ Screens:
                               - txtHomeColInspection:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="INSPECTION"
                                     X: =16
@@ -416,6 +434,8 @@ Screens:
                               - txtHomeColEquipment:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="EQUIPMENT"
                                     X: =232
@@ -427,6 +447,8 @@ Screens:
                               - txtHomeColSite:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="SITE"
                                     X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
@@ -438,6 +460,8 @@ Screens:
                               - txtHomeColStatus:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="STATUS"
                                     X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16
@@ -449,6 +473,8 @@ Screens:
                               - txtHomeColRisk:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="RISK"
                                     X: =Parent.Width - 16 - 160 - 16 - 180 - 16
@@ -460,6 +486,8 @@ Screens:
                               - txtHomeColBuilt:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: ="BUILT WITH"
                                     X: =Parent.Width - 16 - 160 - 16
@@ -489,6 +517,8 @@ Screens:
                               - txtHomeRowNumber:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =ThisItem.'Inspection number'
                                     X: =16
@@ -501,6 +531,8 @@ Screens:
                               - txtHomeRowDate:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =Text(ThisItem.'Started on', "dd mmm yyyy, hh:mm")
                                     X: =16
@@ -512,6 +544,8 @@ Screens:
                               - txtHomeRowEquipment:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =ThisItem.Equipment.'Equipment name'
                                     X: =232
@@ -524,6 +558,8 @@ Screens:
                               - txtHomeRowAsset:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =ThisItem.Equipment.'Asset tag'
                                     X: =232
@@ -535,6 +571,8 @@ Screens:
                               - txtHomeRowSite:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =ThisItem.Site.'Site name'
                                     X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
@@ -547,6 +585,8 @@ Screens:
                               - txtHomeRowSiteCode:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =ThisItem.Site.'Site code'
                                     X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
@@ -558,6 +598,8 @@ Screens:
                               - txtHomeRowStatus:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =Text(ThisItem.'Status (fp_status)')
                                     X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16
@@ -579,6 +621,8 @@ Screens:
                               - txtHomeRowRisk:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: |-
                                       =If(
@@ -619,6 +663,8 @@ Screens:
                               - txtHomeRowBuilt:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Text: =Upper(Text(ThisItem.'Built with'))
                                     Visible: =!IsBlank(ThisItem.'Built with')
@@ -655,6 +701,8 @@ Screens:
                         - txtHomeEmpty:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               Visible: =galHomeInspections.AllItemsCount = 0
                               Text: ="No inspections yet. Start one with New inspection."
@@ -664,10 +712,12 @@ Screens:
                               Height: =48
                               FillPortions: =0
                               AlignInContainer: =AlignInContainer.Stretch
-            - htmHomeFootLine:
+            - htmHomeFootBar:
                 Control: HtmlViewer
                 Properties:
                   HtmlText: =HtmlLine(2, 0)
+                  AutoHeight: =true
+                  Size: =1
                   PaddingTop: =0
                   PaddingBottom: =0
                   PaddingLeft: =0
@@ -676,7 +726,7 @@ Screens:
                   FillPortions: =0
                   LayoutMinHeight: =2
                   AlignInContainer: =AlignInContainer.Stretch
-            - conHomeFooter:
+            - conHomeFooterRow:
                 Control: GroupContainer
                 Variant: AutoLayout
                 Properties:
@@ -695,9 +745,11 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                 Children:
-                  - txtHomeFooterBrand:
+                  - txtHomeFooterBrandText:
                       Control: ModernText
                       Properties:
+                        PaddingTop: =0
+                        PaddingBottom: =0
                         AccessibleLabel: =Self.Text
                         Text: ="The Fusion Platform by Sohan"
                         Size: =14
@@ -706,18 +758,22 @@ Screens:
                         Width: =220
                         LayoutMinWidth: =220
                         PaddingLeft: =0
-                  - txtHomeFooterTagline:
+                  - txtHomeFooterTaglineText:
                       Control: ModernText
                       Properties:
+                        PaddingTop: =0
+                        PaddingBottom: =0
                         AccessibleLabel: =Self.Text
                         Text: =BrandTagline
                         Size: =14
                         Color: =cMuted
                         FillPortions: =1
                         Wrap: =false
-                  - txtHomeFooterProject:
+                  - txtHomeFooterProjectText:
                       Control: ModernText
                       Properties:
+                        PaddingTop: =0
+                        PaddingBottom: =0
                         AccessibleLabel: =Self.Text
                         Text: ="Canvas vs PCF  ·  App 1 of 2"
                         Size: =14

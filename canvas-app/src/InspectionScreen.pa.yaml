@@ -1,5 +1,5 @@
 Screens:
-  InspectScreen:
+  InspectionScreen:
     Properties:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
@@ -18,10 +18,12 @@ Screens:
             RadiusTopRight: =0
             Width: =Parent.Width
           Children:
-            - htmInspTopLine:
+            - htmInspTopBar:
                 Control: HtmlViewer
                 Properties:
                   HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
                   PaddingTop: =0
                   PaddingBottom: =0
                   PaddingLeft: =0
@@ -49,7 +51,7 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                 Children:
-                  - btnInspAbandon:
+                  - btnInspExit:
                       Control: ModernButton
                       Properties:
                         AccessibleLabel: ="Abandon this inspection"
@@ -74,7 +76,7 @@ Screens:
                         Size: =16
                         Text: ="Abandon"
                         Width: =128
-                  - imgInspLogo:
+                  - imgInspMark:
                       Control: Image
                       Properties:
                         Image: =BrandSymbol
@@ -92,10 +94,10 @@ Screens:
                       Properties:
                         AlignInContainer: =AlignInContainer.Center
                         DropShadow: =DropShadow.None
-                        Height: =64
+                        Height: =72
                         LayoutDirection: =LayoutDirection.Vertical
                         LayoutJustifyContent: =LayoutJustifyContent.Center
-                        LayoutMinHeight: =64
+                        LayoutMinHeight: =72
                       Children:
                         - txtInspEyebrow:
                             Control: ModernText
@@ -118,8 +120,8 @@ Screens:
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
-                              Height: =26
-                              LayoutMinHeight: =26
+                              Height: =32
+                              LayoutMinHeight: =32
                               PaddingBottom: =0
                               PaddingLeft: =0
                               PaddingTop: =0
@@ -131,8 +133,8 @@ Screens:
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
-                              Height: =20
-                              LayoutMinHeight: =20
+                              Height: =22
+                              LayoutMinHeight: =22
                               PaddingBottom: =0
                               PaddingLeft: =0
                               PaddingTop: =0
@@ -149,7 +151,7 @@ Screens:
                         Color: =cPrimary
                         Height: =48
                         Icon: ="Camera"
-                        OnSelect: =Navigate(PhotoScreen, ScreenTransition.None)
+                        OnSelect: =Navigate(PhotosScreen, ScreenTransition.None)
                         Size: =16
                         Text: ="Photos"
                         Width: =128
@@ -161,7 +163,7 @@ Screens:
                         FontWeight: =FontWeight.Semibold
                         Height: =48
                         Icon: ="ClipboardTaskListLtr"
-                        OnSelect: =Navigate(ReviewScreen, ScreenTransition.None)
+                        OnSelect: =Navigate(ReviewSubmitScreen, ScreenTransition.None)
                         Size: =16
                         Text: ="Review"
                         Width: =140
@@ -218,6 +220,8 @@ Screens:
                               - txtInspStageEmpty:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Align: =Align.Center
                                     AlignInContainer: =AlignInContainer.Stretch
@@ -260,6 +264,8 @@ Screens:
                                     - txtInspQCode:
                                         Control: ModernText
                                         Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
                                           AccessibleLabel: =Self.Text
                                           Color: =cMuted
                                           Height: =24
@@ -272,6 +278,8 @@ Screens:
                                     - txtInspQCritical:
                                         Control: ModernText
                                         Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
                                           AccessibleLabel: =Self.Text
                                           Align: =Align.Center
                                           BorderColor: =cPurple
@@ -294,6 +302,8 @@ Screens:
                                     - txtInspQText:
                                         Control: ModernText
                                         Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
                                           AccessibleLabel: =Self.Text
                                           Color: =cText
                                           FontWeight: =FontWeight.Semibold
@@ -308,6 +318,8 @@ Screens:
                                     - txtInspQHelp:
                                         Control: ModernText
                                         Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
                                           AccessibleLabel: =Self.Text
                                           Color: =cMuted
                                           Height: =26
@@ -476,9 +488,11 @@ Screens:
                         RadiusTopRight: =8
                         Width: =340
                       Children:
-                        - txtInspRiskEyebrow:
+                        - txtInspRiskKicker:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cPurple
@@ -487,10 +501,12 @@ Screens:
                               PaddingLeft: =0
                               Size: =12
                               Text: ="LIVE RISK"
-                        - htmInspRiskEyebrowLine:
+                        - htmInspRiskEyebrowBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -504,6 +520,8 @@ Screens:
                         - txtInspRiskScore:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: ="Live risk score " & Text(LiveScore, "0.0") & " out of 100, " & LiveBand
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
@@ -516,6 +534,8 @@ Screens:
                         - txtInspRiskBadge:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               Align: =Align.Center
                               AlignInContainer: =AlignInContainer.Stretch
@@ -560,6 +580,8 @@ Screens:
                               - txtInspDerivLabel:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Color: =cMuted
                                     Height: =26
@@ -571,6 +593,8 @@ Screens:
                               - txtInspDerivValue:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Align: =Align.Right
                                     Color: =cText
@@ -584,6 +608,8 @@ Screens:
                         - txtInspStopsHeading:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
@@ -595,6 +621,8 @@ Screens:
                         - txtInspStopsNone:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
@@ -619,6 +647,8 @@ Screens:
                               - txtInspStopItem:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Color: =cError
                                     Height: =48
@@ -639,6 +669,8 @@ Screens:
                         - txtInspAnswered:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted

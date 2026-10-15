@@ -11,10 +11,10 @@ The app is authored as `.pa.yaml` source with Microsoft's **canvas app authoring
 | Screen | What it does | Canvas features shown |
 | --- | --- | --- |
 | `Screen1` (Home) | Inspection list with risk badges, status and which app captured it; KPI tiles; "New inspection" | Gallery on Dataverse, delegable filter and sort, modern controls, Fusion Sky theme |
-| `StartScreen` | Pick a site, then a piece of equipment (filtered by site), then start | Cascading selection, `Patch` to create the Draft inspection, autonumber name |
-| `InspectScreen` | Stage tabs, the visible questions for the stage (indented by depth), an answer control per answer type, and a live risk panel | Conditional visibility, collections, behavior user-defined functions, live recalculation |
-| `PhotoScreen` | Capture or attach photos, add a caption, save to Dataverse. "Annotate" overlays a transparent Pen input on the photo | Add picture / Camera, image column `Patch`, Pen input |
-| `ReviewScreen` | Answers grouped by stage, a score breakdown, Submit | `ForAll` + `Patch` of answers, final score and band written to the inspection |
+| `NewInspectionScreen` | Pick a site, then a piece of equipment (filtered by site), then start | Cascading selection, `Patch` to create the Draft inspection, autonumber name |
+| `InspectionScreen` | Stage tabs, the visible questions for the stage (indented by depth), an answer control per answer type, and a live risk panel | Conditional visibility, collections, behavior user-defined functions, live recalculation |
+| `PhotosScreen` | Capture or attach photos, add a caption, save to Dataverse. "Annotate" overlays a transparent Pen input on the photo | Add picture / Camera, image column `Patch`, Pen input |
+| `ReviewSubmitScreen` | Answers grouped by stage, a score breakdown, Submit | `ForAll` + `Patch` of answers, final score and band written to the inspection |
 
 ## Core logic (Power Fx)
 

@@ -20,10 +20,10 @@ It stopped in four places. None of them is a missing button. Each is a point whe
 | A1 | **No recursion** | Power Fx user-defined functions don't support recursion ([Microsoft Learn](https://learn.microsoft.com/power-platform/power-fx/reference/object-app#user-defined-functions)). Visibility is five near-identical named formulas, `VisL0` to `VisL4`, joined by `VisibleQ`. Adding a level means a new `VisL5` formula, an edit to `VisibleQ` and a republish. | [App.pa.yaml](../canvas-app/src/App.pa.yaml) |
 | A2 | **Silent data loss on deeper templates** | The seeded question FL-01.1.1.1.1.1 is at depth 5. It's a critical stop worth 25 points, and it never appears in the Canvas app, never scores and raises no error. The risk band understates a real hazard. | Seed data; `VisL0`–`VisL4` |
 | A3 | **Rules as data can't be evaluated** | `fp_rulejson` on FL-32 holds an `any`/`all` tree. Canvas uses the hard-coded `FL32Visible` instead. That's correct today, but it no longer follows the stored rule once someone edits it. | `FL32Visible` in App.pa.yaml |
-| A4 | **Image columns need an undocumented shape** | The Dataverse image column is typed as a Record in Power Fx. Patching the Add picture control's `Media` (Text) was rejected by the compiler. `{Full: Media, Value: Media}` compiles; whether it saves full resolution is a runtime check (B4). | PhotoScreen `btnPhotoSave` |
-| A5 | **Annotation ceiling** | The Pen input exposes draw/erase, colour and thickness, and outputs a single `Image` of the strokes. Shapes, text, numbered markers, per-mark undo and structured mark data aren't available. Strokes go to `fp_canvasstrokes`, separate from `fp_photo`. | PhotoScreen |
-| A6 | **Client-side template load** | The checklist loads into a collection, because the visibility walk needs the whole tree in memory. Collections are capped by the data row limit (500 by default, 2,000 maximum), and the compiler flagged delegation until it was restructured. Large templates would be cut off. | StartScreen `btnStartGo` |
-| A7 | **Control-level restrictions** | The tab list's display text can't contain lookups or counts, so per-stage "answered/visible" counts had to move into a separate named formula. Two Inspections columns both show as "Status", and choice names clash with column names, so formulas need disambiguation (`[@'Risk band']`). | InspectScreen, App.pa.yaml |
+| A4 | **Image columns need an undocumented shape** | The Dataverse image column is typed as a Record in Power Fx. Patching the Add picture control's `Media` (Text) was rejected by the compiler. `{Full: Media, Value: Media}` compiles; whether it saves full resolution is a runtime check (B4). | PhotosScreen `btnPhotoSave` |
+| A5 | **Annotation ceiling** | The Pen input exposes draw/erase, colour and thickness, and outputs a single `Image` of the strokes. Shapes, text, numbered markers, per-mark undo and structured mark data aren't available. Strokes go to `fp_canvasstrokes`, separate from `fp_photo`. | PhotosScreen |
+| A6 | **Client-side template load** | The checklist loads into a collection, because the visibility walk needs the whole tree in memory. Collections are capped by the data row limit (500 by default, 2,000 maximum), and the compiler flagged delegation until it was restructured. Large templates would be cut off. | NewInspectionScreen `btnStartGo` |
+| A7 | **Control-level restrictions** | The tab list's display text can't contain lookups or counts, so per-stage "answered/visible" counts had to move into a separate named formula. Two Inspections columns both show as "Status", and choice names clash with column names, so formulas need disambiguation (`[@'Risk band']`). | InspectionScreen, App.pa.yaml |
 | A8 | **Compound risk** | The scoring formula supports weights, a multiplier, a cap and critical stops. Compound rules (A + B scores more than A plus B) weren't built. Each would be another hand-written formula. | `RiskItems`, `LiveScore` |
 | A9 | **Brand fidelity costs workarounds** | Canvas can't load the brand fonts (Manrope, Inter), so the app uses Segoe UI with brand weights. There is no gradient fill, so the brand's gradient line, light wash and ring symbol are drawn as inline SVG and HTML. Image controls always count as interactive, so the accessibility checker flagged every decorative gradient until they were moved to the HTML text control. | App.pa.yaml (`BrandLine`, `HtmlLine`), all headers |
 
@@ -44,13 +44,28 @@ This run used a build from before the accessibility and brand pass (it still had
 
 Not covered by this run: B3 (the conveyor checklist has no sixth level) and B6.
 
+### Run 2 (2026-10-16, Monitor trace, forklift FL-07, INS-01002)
+
+The current build, with no errors or warnings. The only warning in the file came from a stale `Screen1` session that loaded for 11 seconds before the reload.
+
+- **B2 passed: about 70–210 ms per tap.** Each Yes/No tap ran about 830 formula evaluations (`StageTabs` 3,514 and `AnsweredCount` 2,672 over the run), and the screen still settled within 210 ms. The recalculation fan-out from Run 1 is still there, but it isn't visible at 19 questions.
+- **B3 confirmed.** FL-01 No → Damaged → Hydraulics → Yes → No showed five levels. FL-01.1.1.1.1.1 never appeared and wasn't scored (35 × 1.5 = 52.5, High, with no critical stop).
+- **B4 and B5 saved.** The photo went to `fp_photo` as a separate file upload (PATCH, 204) and came back through the full-image file download, not the thumbnail. The strokes went to `fp_canvasstrokes` (PATCH, 204). Whether the overlay lines up is still a visual check.
+- **B6: the guard held.** Two dropdown answers fired three change events. The `Self.Selected.Value <> current` guard stopped the extra one from writing.
+- **B7 passed, 5.8 s for 7 answers.** The 7 answer rows were created in parallel within 50 ms. But each row's `Question` lookup made its own Dataverse query, one after another: 7 × 350 ms = 2.5 s. The question rows are now cached in `colQ` when the checklist loads, so Submit makes no per-answer queries.
+- **The layout broke in Studio, not in the source (A10).** See below.
+
+| # | Limit | What the build showed | Where |
+| --- | --- | --- | --- |
+| A10 | **Text and decoration scroll; Studio keeps its own control order** | A modern Text control shows scroll arrows when one line of text plus its default 5 px top and bottom padding is taller than the control: 56 of 98 labels did. Each needs zero vertical padding or more height, checked label by label. The HTML text control behind each gradient also showed a scrollbar, and needs `AutoHeight`. Separately, controls added to an existing screen through co-authoring were appended to the end of their container, not placed where the source puts them. Recompiling never reorders existing controls, so the logo, accent lines, a footer and two card titles drifted. The reliable fix was to rename the screen, so Studio rebuilt it in source order. | All screens |
+
 - [ ] **B1. Re-render on answer.** Every answer changes `colAns`, which re-evaluates `VisL0`–`VisL4`, `VisibleQ`, `RiskItems` and the gallery's items. Does the question list flicker or jump, or does focus leave the field? Check especially when typing in a Number answer.
-- [ ] **B2. Responsiveness as the form grows.** Answer the forklift branch FL-01 → No → Damaged → Hydraulics → Yes → No. Note how long each answer takes to update the score and show the next question (Monitor timings).
-- [ ] **B3. The missing sixth level.** At FL-01.1.1.1.1 "Has a spill kit been deployed?", answer **No**. Confirm FL-01.1.1.1.1.1 doesn't appear and the score doesn't include its 25 points or the critical stop.
+- [x] **B2. Responsiveness as the form grows.** Answer the forklift branch FL-01 → No → Damaged → Hydraulics → Yes → No. Note how long each answer takes to update the score and show the next question (Monitor timings).
+- [x] **B3. The missing sixth level.** At FL-01.1.1.1.1 "Has a spill kit been deployed?", answer **No**. Confirm FL-01.1.1.1.1.1 doesn't appear and the score doesn't include its 25 points or the critical stop.
 - [ ] **B4. Photo save.** Add a picture, save it, reopen it. Is the full-size image stored and shown (not just the 144 px thumbnail)?
 - [ ] **B5. Annotation.** Draw on a photo and save. Does the strokes image overlay the photo correctly afterwards (transparent background, same aspect ratio)? Does the photo itself stay unchanged?
-- [ ] **B6. Choice dropdown loop.** Change a Choice answer that reveals children. Does the dropdown's change event fire again when the list reloads? Microsoft documents this as a gallery pitfall.
-- [ ] **B7. Submit.** Submit, then check the Dataverse records: one answer row per visible answered question, plus the score, band, status and "Canvas only" on the inspection.
+- [x] **B6. Choice dropdown loop.** Change a Choice answer that reveals children. Does the dropdown's change event fire again when the list reloads? Microsoft documents this as a gallery pitfall.
+- [x] **B7. Submit.** Submit, then check the Dataverse records: one answer row per visible answered question, plus the score, band, status and "Canvas only" on the inspection.
 
 ## What this sets up for App 2
 

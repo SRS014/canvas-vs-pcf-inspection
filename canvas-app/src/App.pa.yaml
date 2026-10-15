@@ -34,7 +34,9 @@ App:
           "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='r' gradientUnits='userSpaceOnUse' x1='10' y1='10' x2='54' y2='54'><stop offset='0' stop-color='#209CCB'/><stop offset='1' stop-color='#742774'/></linearGradient></defs><circle cx='32' cy='24.68' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='32' cy='24.68' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/><circle cx='23.5' cy='39.4' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='23.5' cy='39.4' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/><circle cx='40.5' cy='39.4' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='40.5' cy='39.4' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/></svg>"
       );
       BrandTagline = "Fuse ideas. Build smarter. Integrate better.";
-      // Decorative gradients as HTML (not focusable, so screen readers skip them).
+      // Decorative gradients as HTML (not focusable, so screen readers skip them; an Image control
+      // fails the accessibility checker even when disabled). Each HtmlViewer uses AutoHeight with
+      // Size 1, so it grows to fit its content and never shows a scrollbar.
       HtmlLine(px: Number, radius: Number): Text =
           "<div style=""height:" & px & "px;border-radius:" & radius & "px " & radius & "px 0 0;" &
           "background:linear-gradient(90deg,#209CCB,#742774,#E3008C)""></div>";
@@ -131,7 +133,9 @@ App:
               RiskOp: "",
               RiskVal: "",
               Weight: 0,
-              Critical: false
+              Critical: false,
+              // The question row itself, so Submit can set the Question lookup without one query per answer.
+              Rec: Defaults('Checklist questions')
           }
       );
       Clear(colQ);

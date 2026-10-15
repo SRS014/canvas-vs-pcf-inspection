@@ -1,5 +1,5 @@
 Screens:
-  PhotoScreen:
+  PhotosScreen:
     Properties:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
@@ -20,10 +20,12 @@ Screens:
             RadiusTopRight: =0
             Width: =Parent.Width
           Children:
-            - htmPhotoTopLine:
+            - htmPhotoTopBar:
                 Control: HtmlViewer
                 Properties:
                   HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
                   PaddingTop: =0
                   PaddingBottom: =0
                   PaddingLeft: =0
@@ -51,7 +53,7 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                 Children:
-                  - btnPhotoBack:
+                  - btnPhotoBackNav:
                       Control: ModernButton
                       Properties:
                         AccessibleLabel: =Self.Text
@@ -60,11 +62,11 @@ Screens:
                         DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
                         Height: =48
                         Icon: ="ArrowLeft"
-                        OnSelect: =Navigate(InspectScreen, ScreenTransition.None)
+                        OnSelect: =Navigate(InspectionScreen, ScreenTransition.None)
                         Size: =16
                         Text: ="Back to checklist"
                         Width: =190
-                  - imgPhotoLogo:
+                  - imgPhotoMark:
                       Control: Image
                       Properties:
                         Image: =BrandSymbol
@@ -82,10 +84,10 @@ Screens:
                       Properties:
                         AlignInContainer: =AlignInContainer.Center
                         DropShadow: =DropShadow.None
-                        Height: =64
+                        Height: =72
                         LayoutDirection: =LayoutDirection.Vertical
                         LayoutJustifyContent: =LayoutJustifyContent.Center
-                        LayoutMinHeight: =64
+                        LayoutMinHeight: =72
                       Children:
                         - txtPhotoEyebrow:
                             Control: ModernText
@@ -108,8 +110,8 @@ Screens:
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
-                              Height: =26
-                              LayoutMinHeight: =26
+                              Height: =32
+                              LayoutMinHeight: =32
                               PaddingBottom: =0
                               PaddingLeft: =0
                               PaddingTop: =0
@@ -121,8 +123,8 @@ Screens:
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
-                              Height: =20
-                              LayoutMinHeight: =20
+                              Height: =22
+                              LayoutMinHeight: =22
                               PaddingBottom: =0
                               PaddingLeft: =0
                               PaddingTop: =0
@@ -189,9 +191,11 @@ Screens:
                         RadiusTopRight: =8
                         Width: =360
                       Children:
-                        - txtPhotoListHeading:
+                        - txtPhotoListTitle:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
@@ -200,10 +204,12 @@ Screens:
                               PaddingLeft: =0
                               Size: =18
                               Text: ="Photos (" & galPhotoList.AllItemsCount & ")"
-                        - htmPhotoListHeadingLine:
+                        - htmPhotoListHeadingBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -217,6 +223,8 @@ Screens:
                         - txtPhotoListEmpty:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
@@ -276,6 +284,8 @@ Screens:
                               - txtPhotoRowCaption:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Color: =cText
                                     FontWeight: =FontWeight.Semibold
@@ -290,6 +300,8 @@ Screens:
                               - txtPhotoRowTag:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Align: =Align.Center
                                     BorderColor: =cPurple
@@ -357,6 +369,8 @@ Screens:
                               - txtPhotoToolbarTitle:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Color: =If(locMode = "Annotate", cPurple, If(IsBlank(locSelPhoto) && locMode = "View", cMuted, cText))
                                     FillPortions: =1
@@ -469,6 +483,8 @@ Screens:
                         - txtPhotoError:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               BorderColor: =cError
@@ -484,6 +500,8 @@ Screens:
                         - txtPhotoHelper:
                             Control: ModernText
                             Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
@@ -507,6 +525,8 @@ Screens:
                               - txtPhotoNothing:
                                   Control: ModernText
                                   Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     AccessibleLabel: =Self.Text
                                     Align: =Align.Center
                                     Color: =cMuted

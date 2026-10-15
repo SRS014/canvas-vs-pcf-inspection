@@ -5,10 +5,10 @@ An equipment inspection app built entirely with Canvas controls and Power Fx, on
 | Screen | What it does |
 | --- | --- |
 | `HomeScreen` | Inspections newest first, with KPIs including a Canvas-only vs Canvas + PCF split |
-| `StartScreen` | Site, then equipment, then Start: creates a Draft inspection and loads that equipment type's checklist |
-| `InspectScreen` | Stage tabs with live counts, the visible questions indented by level, an answer control per answer type, and a live risk panel |
-| `PhotoScreen` | Add picture to the Dataverse image column; Annotate with a transparent Pen input; strokes saved to a separate column |
-| `ReviewScreen` | Answers by stage, the score breakdown, Submit (one batched `Collect` of `ForAll` answer records, then `Patch` of the inspection) |
+| `NewInspectionScreen` | Site, then equipment, then Start: creates a Draft inspection and loads that equipment type's checklist |
+| `InspectionScreen` | Stage tabs with live counts, the visible questions indented by level, an answer control per answer type, and a live risk panel |
+| `PhotosScreen` | Add picture to the Dataverse image column; Annotate with a transparent Pen input; strokes saved to a separate column |
+| `ReviewSubmitScreen` | Answers by stage, the score breakdown, Submit (one batched `Collect` of `ForAll` answer records, then `Patch` of the inspection) |
 
 ## Brand and UX
 
