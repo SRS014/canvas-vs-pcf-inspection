@@ -4,11 +4,31 @@ An equipment inspection app built entirely with Canvas controls and Power Fx, on
 
 | Screen | What it does |
 | --- | --- |
-| `Screen1` (Home) | Inspections newest first, with KPIs including a Canvas-only vs Canvas + PCF split |
+| `HomeScreen` | Inspections newest first, with KPIs including a Canvas-only vs Canvas + PCF split |
 | `StartScreen` | Site, then equipment, then Start: creates a Draft inspection and loads that equipment type's checklist |
 | `InspectScreen` | Stage tabs with live counts, the visible questions indented by level, an answer control per answer type, and a live risk panel |
 | `PhotoScreen` | Add picture to the Dataverse image column; Annotate with a transparent Pen input; strokes saved to a separate column |
 | `ReviewScreen` | Answers by stage, the score breakdown, Submit (`ForAll` + `Patch` of the answers, then the inspection) |
+
+## Brand and UX
+
+The app uses The Fusion Platform's Fusion Sky identity, the same template as the portfolio site:
+- the 6 px line gradient (#209CCB → #742774 → #E3008C) across the top of every screen
+- the gradient ring symbol in every header
+- a light-wash hero on Home
+- 3 px gradient lines on cards and under section headings
+- purple uppercase eyebrows
+- a footer with the tagline
+
+Colour carries meaning only for risk. The band is always shown as a word plus a score, never by colour alone.
+
+Buttons are solid Deep lagoon (#0B5F7E), which the brand allows. A gradient behind a button would lose the platform's hover, focus-ring and disabled states. Canvas can't load Manrope or Inter, so text uses Segoe UI with brand weights.
+
+Quality gates: App checker has 0 issues, and the accessibility checker has 0 errors.
+- Every text control has an accessible label.
+- Lists have keyboard tab stops.
+- Decorative gradients are HTML, which screen readers skip.
+- The pen has a text alternative ("Describe what you marked").
 
 ## Source
 

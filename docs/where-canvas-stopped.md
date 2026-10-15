@@ -25,8 +25,9 @@ It stopped in four places. None of them is a missing button. Each is a point whe
 | A6 | **Client-side template load** | The checklist loads into a collection, because the visibility walk needs the whole tree in memory. Collections are capped by the data row limit (500 by default, 2,000 maximum), and the compiler flagged delegation until it was restructured. Large templates would be cut off. | StartScreen `btnStartGo` |
 | A7 | **Control-level restrictions** | The tab list's display text can't contain lookups or counts, so per-stage "answered/visible" counts had to move into a separate named formula. Two Inspections columns both show as "Status", and choice names clash with column names, so formulas need disambiguation (`[@'Risk band']`). | InspectScreen, App.pa.yaml |
 | A8 | **Compound risk** | The scoring formula supports weights, a multiplier, a cap and critical stops. Compound rules (A + B scores more than A plus B) weren't built. Each would be another hand-written formula. | `RiskItems`, `LiveScore` |
+| A9 | **Brand fidelity costs workarounds** | Canvas can't load the brand fonts (Manrope, Inter), so the app uses Segoe UI with brand weights. There is no gradient fill, so the brand's gradient line, light wash and ring symbol are drawn as inline SVG and HTML. Image controls always count as interactive, so the accessibility checker flagged every decorative gradient until they were moved to the HTML text control. | App.pa.yaml (`BrandLine`, `HtmlLine`), all headers |
 
-Size of what a maker maintains: about 3,200 lines of Power Fx YAML across 5 screens and 203 controls. The checklist screen alone has 41 controls and depends on the shared visibility and risk formulas in App.pa.yaml.
+Size of what a maker maintains: about 3,600 lines of Power Fx YAML across 5 screens and 209 controls. The checklist screen alone has 41 controls and depends on the shared visibility and risk formulas in App.pa.yaml.
 
 ## Part B: confirm in the test run
 
