@@ -1,0 +1,743 @@
+Screens:
+  Screen1:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+    Children:
+      - conHomeRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            Width: =Parent.Width
+            Height: =Parent.Height
+            Fill: =cWash
+            DropShadow: =DropShadow.None
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - conHomeAccent:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =4
+                  Fill: =cSecondary
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutMinHeight: =4
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+            - conHomeHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =68
+                  Fill: =cWhite
+                  DropShadow: =DropShadow.None
+                  BorderColor: =cBorder
+                  FillPortions: =0
+                  LayoutMinHeight: =68
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutGap: =16
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - conHomeTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        LayoutMinHeight: =52
+                        Height: =52
+                        AlignInContainer: =AlignInContainer.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                      Children:
+                        - txtHomeEyebrow:
+                            Control: ModernText
+                            Properties:
+                              Text: ="APP 1 · BUILT WITH CANVAS"
+                              Size: =12
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cPurple
+                              Height: =20
+                              LayoutMinHeight: =20
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtHomeTitle:
+                            Control: ModernText
+                            Properties:
+                              Text: ="Equipment inspections"
+                              Size: =22
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =30
+                              LayoutMinHeight: =30
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                  - btnHomeNew:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="New inspection"
+                        Icon: ="Add"
+                        Height: =48
+                        Width: =200
+                        Size: =16
+                        FontWeight: =FontWeight.Semibold
+                        BasePaletteColor: =cPrimary
+                        AccessibleLabel: ="Start a new inspection"
+                        OnSelect: |-
+                          =Set(varBannerText, "");
+                          Navigate(StartScreen, ScreenTransition.None)
+            - conHomeBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =1
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =16
+                  PaddingTop: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - conHomeBanner:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Visible: =!IsBlank(varBannerText)
+                        Height: =56
+                        FillPortions: =0
+                        LayoutMinHeight: =56
+                        Fill: =cSuccessTint
+                        BorderColor: =cSuccess
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutGap: =12
+                        PaddingLeft: =16
+                        PaddingRight: =8
+                      Children:
+                        - txtHomeBannerLabel:
+                            Control: ModernText
+                            Properties:
+                              Text: ="Submitted"
+                              Size: =16
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cSuccess
+                              Width: =100
+                              LayoutMinWidth: =100
+                        - txtHomeBannerText:
+                            Control: ModernText
+                            Properties:
+                              Text: =varBannerText
+                              Size: =16
+                              Color: =cText
+                              FillPortions: =1
+                              LayoutMinWidth: =200
+                        - btnHomeBannerDismiss:
+                            Control: ModernButton
+                            Properties:
+                              Text: ="Dismiss"
+                              Appearance: =ButtonAppearance.Subtle
+                              Color: =cPrimary
+                              Height: =48
+                              Width: =110
+                              OnSelect: =Set(varBannerText, "")
+                  - conHomeKpis:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =104
+                        FillPortions: =0
+                        LayoutMinHeight: =104
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =16
+                      Children:
+                        - conHomeKpiTotal:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =140
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiTotalLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Total inspections"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiTotalValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Text(CountIf(Inspections, true))
+                                    Size: =32
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Height: =44
+                                    LayoutMinHeight: =44
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeKpiDrafts:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =140
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiDraftsLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Drafts"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiDraftsValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Text(CountRows(Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Draft)))
+                                    Size: =32
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Height: =44
+                                    LayoutMinHeight: =44
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeKpiSubmitted:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =140
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiSubmittedLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Submitted"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiSubmittedValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Text(CountRows(Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted)))
+                                    Size: =32
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Height: =44
+                                    LayoutMinHeight: =44
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeKpiHigh:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =140
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiHighLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="High + Critical"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiHighValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: |-
+                                      =Text(
+                                          CountRows(
+                                              Filter(
+                                                  Inspections,
+                                                  'Status (fp_status)' = 'Inspection status'.Submitted &&
+                                                  ('Risk band' = [@'Risk band'].High || 'Risk band' = [@'Risk band'].Critical)
+                                              )
+                                          )
+                                      )
+                                    Size: =32
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cError
+                                    Height: =44
+                                    LayoutMinHeight: =44
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeKpiAvg:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =140
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiAvgLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Average submitted score"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiAvgValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: |-
+                                      =With(
+                                          {submitted: Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted)},
+                                          If(
+                                              CountRows(submitted) = 0,
+                                              "None yet",
+                                              Text(Average(submitted, 'Risk score'), "0.0") & " / 100"
+                                          )
+                                      )
+                                    Size: =26
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Height: =44
+                                    LayoutMinHeight: =44
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeKpiBuilt:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinWidth: =160
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =16
+                              PaddingRight: =12
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtHomeKpiBuiltLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Built with"
+                                    Size: =14
+                                    Color: =cMuted
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiBuiltCanvas:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: |-
+                                      ="Canvas only   " & CountRows(Filter(Inspections, 'Built with' = [@'Built with'].'Canvas only'))
+                                    Size: =15
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - txtHomeKpiBuiltPcf:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: |-
+                                      ="Canvas + PCF   " & CountRows(Filter(Inspections, 'Built with' = [@'Built with'].'Canvas + PCF'))
+                                    Size: =15
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cPurple
+                                    Height: =24
+                                    PaddingLeft: =0
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                  - conHomeListCard:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        LayoutDirection: =LayoutDirection.Vertical
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - conHomeListTitle:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =56
+                              FillPortions: =0
+                              LayoutMinHeight: =56
+                              DropShadow: =DropShadow.None
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutGap: =12
+                              PaddingLeft: =16
+                              PaddingRight: =16
+                            Children:
+                              - txtHomeListHeading:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Inspections"
+                                    Size: =18
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Width: =140
+                                    LayoutMinWidth: =120
+                              - txtHomeListSub:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Newest first"
+                                    Size: =14
+                                    Color: =cMuted
+                                    FillPortions: =1
+                        - conHomeColHeaders:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              Height: =40
+                              FillPortions: =0
+                              LayoutMinHeight: =40
+                              Fill: =cWash
+                              DropShadow: =DropShadow.None
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                            Children:
+                              - txtHomeColInspection:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Inspection"
+                                    X: =16
+                                    Y: =4
+                                    Width: =200
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                              - txtHomeColEquipment:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Equipment"
+                                    X: =232
+                                    Y: =4
+                                    Width: =200
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                              - txtHomeColSite:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Site"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =4
+                                    Width: =220
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                              - txtHomeColStatus:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Status"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16
+                                    Y: =4
+                                    Width: =140
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                              - txtHomeColRisk:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Risk"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16
+                                    Y: =4
+                                    Width: =180
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                              - txtHomeColBuilt:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="Built with"
+                                    X: =Parent.Width - 16 - 160 - 16
+                                    Y: =4
+                                    Width: =160
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cMuted
+                        - galHomeInspections:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Items: =Sort(Inspections, 'Created On', SortOrder.Descending)
+                              TemplateSize: =64
+                              TemplatePadding: =0
+                              Height: =400
+                              FillPortions: =1
+                              LayoutMinHeight: =128
+                              Selectable: =false
+                              ShowScrollbar: =true
+                              BorderThickness: =0
+                              LoadingSpinner: =LoadingSpinner.Data
+                              LoadingSpinnerColor: =cPrimary
+                              AccessibleLabel: ="Inspections, newest first"
+                            Children:
+                              - txtHomeRowNumber:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.'Inspection number'
+                                    X: =16
+                                    Y: =8
+                                    Width: =200
+                                    Height: =26
+                                    Size: =16
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                              - txtHomeRowDate:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Text(ThisItem.'Started on', "dd mmm yyyy, hh:mm")
+                                    X: =16
+                                    Y: =32
+                                    Width: =200
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                              - txtHomeRowEquipment:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Equipment.'Equipment name'
+                                    X: =232
+                                    Y: =8
+                                    Width: =Max(120, Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16 - 232 - 16)
+                                    Height: =26
+                                    Size: =16
+                                    Color: =cText
+                                    Wrap: =false
+                              - txtHomeRowAsset:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Equipment.'Asset tag'
+                                    X: =232
+                                    Y: =32
+                                    Width: =Max(120, Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16 - 232 - 16)
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                              - txtHomeRowSite:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Site.'Site name'
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =8
+                                    Width: =220
+                                    Height: =26
+                                    Size: =16
+                                    Color: =cText
+                                    Wrap: =false
+                              - txtHomeRowSiteCode:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Site.'Site code'
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =32
+                                    Width: =220
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                              - txtHomeRowStatus:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Text(ThisItem.'Status (fp_status)')
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16
+                                    Y: =16
+                                    Width: =104
+                                    Height: =32
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Align: =Align.Center
+                                    Color: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimary, cMuted)
+                                    Fill: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimaryTint, cWhite)
+                                    BorderColor: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimaryTint, cMuted)
+                                    BorderThickness: =1
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =16
+                                    RadiusTopRight: =16
+                                    RadiusBottomLeft: =16
+                                    RadiusBottomRight: =16
+                              - txtHomeRowRisk:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted,
+                                          Text(ThisItem.'Risk score', "0.0") & " · " & Text(ThisItem.'Risk band'),
+                                          "Not scored"
+                                      )
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16
+                                    Y: =16
+                                    Width: =160
+                                    Height: =32
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Align: =Align.Center
+                                    Color: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cMuted,
+                                          Text(ThisItem.'Risk band') = "Critical", cWhite,
+                                          BandColor(Text(ThisItem.'Risk band'))
+                                      )
+                                    Fill: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cWhite,
+                                          BandTint(Text(ThisItem.'Risk band'))
+                                      )
+                                    BorderColor: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cBorder,
+                                          BandColor(Text(ThisItem.'Risk band'))
+                                      )
+                                    BorderThickness: =If(Text(ThisItem.'Risk band') = "High", 2, 1)
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                              - txtHomeRowBuilt:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Upper(Text(ThisItem.'Built with'))
+                                    Visible: =!IsBlank(ThisItem.'Built with')
+                                    X: =Parent.TemplateWidth - 16 - 160
+                                    Y: =18
+                                    Width: =130
+                                    Height: =28
+                                    Size: =12
+                                    FontWeight: =FontWeight.Semibold
+                                    Align: =Align.Center
+                                    Color: =cPurple
+                                    Fill: =cPurpleTint
+                                    BorderColor: =cPurple
+                                    BorderThickness: =1
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                              - conHomeRowDivider:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    X: =0
+                                    Y: =Parent.TemplateHeight - 1
+                                    Width: =Parent.TemplateWidth
+                                    Height: =1
+                                    Fill: =cBorder
+                                    DropShadow: =DropShadow.None
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                        - txtHomeEmpty:
+                            Control: ModernText
+                            Properties:
+                              Visible: =CountRows(galHomeInspections.AllItems) = 0
+                              Text: ="No inspections yet. Start one with New inspection."
+                              Size: =16
+                              Color: =cMuted
+                              Align: =Align.Center
+                              Height: =48
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Stretch

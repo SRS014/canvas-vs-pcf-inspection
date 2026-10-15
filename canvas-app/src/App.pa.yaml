@@ -1,0 +1,134 @@
+App:
+  Properties:
+    Theme: =PowerAppsTheme
+    StartScreen: =Screen1
+    OnStart: |-
+      =// Typed, empty session collections. They are filled when an inspection starts.
+      ClearCollect(
+          colQ,
+          {
+              QId: GUID(),
+              Code: "",
+              QText: "",
+              Help: "",
+              ParentId: GUID(),
+              Depth: 0,
+              Stage: "",
+              SortKey: 0,
+              AnswerType: "",
+              Options: "",
+              ShowOp: "",
+              ShowVal: "",
+              RiskOp: "",
+              RiskVal: "",
+              Weight: 0,
+              Critical: false
+          }
+      );
+      Clear(colQ);
+      ClearCollect(colAns, {AQId: GUID(), ACode: "", AValue: ""});
+      Clear(colAns);
+      Set(
+          varCtx,
+          {
+              InspectionId: GUID(),
+              Number: "",
+              EquipmentName: "",
+              AssetTag: "",
+              SiteName: "",
+              EquipType: "",
+              Criticality: ""
+          }
+      );
+      Set(varHasInspection, false);
+      Set(varStage, "Pre-use");
+      Set(varBannerText, "")
+    Formulas: |-
+      =// ---------- Fusion Sky colour tokens ----------
+      cPrimary = ColorValue("#0B5F7E");
+      cSecondary = ColorValue("#209CCB");
+      cPurple = ColorValue("#742774");
+      cText = ColorValue("#0F2530");
+      cMuted = ColorValue("#51646E");
+      cWash = ColorValue("#EDF7FB");
+      cBorder = ColorValue("#CBE2EC");
+      cSuccess = ColorValue("#167044");
+      cWarning = ColorValue("#8A5A00");
+      cError = ColorValue("#B42318");
+      cSuccessTint = ColorValue("#E8F3EC");
+      cWarningTint = ColorValue("#FBF1DF");
+      cErrorTint = ColorValue("#FBE9E7");
+      cPrimaryTint = ColorValue("#E3F0F5");
+      cPurpleTint = ColorValue("#F3E9F3");
+      cWhite = Color.White;
+
+      // ---------- Checklist structure ----------
+      Stages = ["Pre-use", "Visual and structural", "Operational test", "Safety sign-off"];
+
+      // Does an answer meet a show or risk condition?
+      Meets(answer: Text, op: Text, value: Text): Boolean =
+          If(
+              IsBlank(answer) || IsBlank(op), false,
+              op = "Equals", answer = value,
+              op = "Not equals", answer <> value,
+              op = "Greater than", IfError(Value(answer) > Value(value), false),
+              op = "Less than", IfError(Value(answer) < Value(value), false),
+              op = "One of", answer in Split(value, "|"),
+              false
+          );
+
+      AnswerOf(code: Text): Text = LookUp(colAns, ACode = code).AValue;
+
+      // Session answers live in colAns until Submit.
+      SetAnswer(qid: GUID, code: Text, newValue: Text): Void = {
+          If(
+              IsBlank(LookUp(colAns, AQId = qid)),
+              Collect(colAns, {AQId: qid, ACode: code, AValue: newValue}),
+              UpdateIf(colAns, AQId = qid, {AValue: newValue})
+          )
+      };
+      ClearAnswer(qid: GUID): Void = { RemoveIf(colAns, AQId = qid) };
+
+      // FL-32's cross-question rule, hard-coded. Canvas can't evaluate the generic
+      // rule tree stored in fp_rulejson (no recursion), so each such rule becomes code.
+      FL32Visible = (AnswerOf("FL-13") = "Yes" && AnswerOf("FL-30") = "No") || AnswerOf("FL-20") = "No";
+
+      // ---------- Visibility: one formula per level ----------
+      // Power Fx functions can't recurse, so the question tree is walked one depth at a time.
+      // This app supports five levels (depth 0-4). A sixth level needs a new formula here.
+      VisL0 = Filter(colQ, Depth = 0 && (Code <> "FL-32" || FL32Visible));
+      VisL1 = Filter(colQ, Depth = 1 && ParentId in VisL0.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
+      VisL2 = Filter(colQ, Depth = 2 && ParentId in VisL1.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
+      VisL3 = Filter(colQ, Depth = 3 && ParentId in VisL2.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
+      VisL4 = Filter(colQ, Depth = 4 && ParentId in VisL3.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
+      VisibleQ = Ungroup(Table({L: VisL0}, {L: VisL1}, {L: VisL2}, {L: VisL3}, {L: VisL4}), L);
+
+      // ---------- Risk ----------
+      Multiplier(criticality: Text): Number = Switch(criticality, "High", 1.5, "Medium", 1.25, 1);
+      Band(score: Number, criticalStop: Boolean): Text =
+          If(criticalStop || score >= 75, "Critical", score >= 50, "High", score >= 25, "Medium", "Low");
+      RiskItems = Filter(VisibleQ, Weight > 0 && Meets(LookUp(colAns, AQId = QId).AValue, RiskOp, RiskVal));
+      CriticalHit = CountRows(Filter(RiskItems, Critical)) > 0;
+      RawPoints = Sum(RiskItems, Weight);
+      LiveScore = Min(100, Round(RawPoints * Multiplier(varCtx.Criticality), 1));
+      LiveBand = Band(LiveScore, CriticalHit);
+      BandColor(band: Text): Color = Switch(band, "Low", cSuccess, "Medium", cWarning, cError);
+      BandTint(band: Text): Color = Switch(band, "Low", cSuccessTint, "Medium", cWarningTint, "High", cErrorTint, cError);
+      AnsweredCount = CountRows(Filter(VisibleQ, !IsBlank(LookUp(colAns, AQId = QId).AValue)));
+
+      StageIndex(stage: Text): Number =
+          Switch(stage, "Pre-use", 1, "Visual and structural", 2, "Operational test", 3, "Safety sign-off", 4, 5);
+
+      // Visible questions with their session answers (used by Review and Submit).
+      VisibleAnswers = AddColumns(VisibleQ, AValue, LookUp(colAns, AQId = QId).AValue);
+
+      // Stage tabs with live "answered/visible" counts.
+      StageTabs = ForAll(
+          Stages As s,
+          {
+              Value: s.Value,
+              Label: s.Value & "  " &
+                  CountRows(Filter(VisibleQ, Stage = s.Value && !IsBlank(LookUp(colAns, AQId = QId).AValue))) & "/" &
+                  CountRows(Filter(VisibleQ, Stage = s.Value))
+          }
+      );

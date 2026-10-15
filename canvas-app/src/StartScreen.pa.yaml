@@ -1,0 +1,586 @@
+Screens:
+  StartScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+      OnVisible: |-
+        =UpdateContext({locSiteId: Blank(), locEquip: Blank(), locStarting: false, locStartError: false})
+    Children:
+      - conStartRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            Width: =Parent.Width
+            Height: =Parent.Height
+            Fill: =cWash
+            DropShadow: =DropShadow.None
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - conStartAccent:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =4
+                  Fill: =cSecondary
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutMinHeight: =4
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+            - conStartHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =68
+                  Fill: =cWhite
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutMinHeight: =68
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutGap: =16
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnStartCancel:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="Cancel"
+                        Icon: ="ArrowLeft"
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        Height: =48
+                        Width: =120
+                        Size: =16
+                        AccessibleLabel: ="Cancel and return to the inspection list"
+                        OnSelect: =Navigate(Screen1, ScreenTransition.None)
+                  - conStartTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        Height: =52
+                        LayoutMinHeight: =52
+                        AlignInContainer: =AlignInContainer.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                      Children:
+                        - txtStartEyebrow:
+                            Control: ModernText
+                            Properties:
+                              Text: ="NEW INSPECTION"
+                              Size: =12
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cPurple
+                              Height: =20
+                              LayoutMinHeight: =20
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtStartTitle:
+                            Control: ModernText
+                            Properties:
+                              Text: ="Choose equipment to inspect"
+                              Size: =22
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =30
+                              LayoutMinHeight: =30
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+            - conStartBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =1
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutGap: =24
+                  PaddingTop: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - conStartSites:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Width: =360
+                        FillPortions: =0
+                        LayoutMinWidth: =280
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        PaddingTop: =16
+                        PaddingBottom: =16
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtStartSitesHeading:
+                            Control: ModernText
+                            Properties:
+                              Text: ="1   Site"
+                              Size: =18
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =36
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - galStartSites:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Items: =Sort(Sites, 'Site name')
+                              TemplateSize: =80
+                              TemplatePadding: =0
+                              FillPortions: =1
+                              LayoutMinHeight: =160
+                              LayoutMinWidth: =200
+                              Selectable: =false
+                              BorderThickness: =0
+                              LoadingSpinnerColor: =cPrimary
+                              AccessibleLabel: ="Sites"
+                            Children:
+                              - conStartSiteCard:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    X: =0
+                                    Y: =4
+                                    Width: =Parent.TemplateWidth
+                                    Height: =72
+                                    Fill: =If(locSiteId = ThisItem.Site, cPrimaryTint, cWhite)
+                                    BorderColor: =If(locSiteId = ThisItem.Site, cPrimary, cBorder)
+                                    BorderThickness: =If(locSiteId = ThisItem.Site, 2, 1)
+                                    DropShadow: =DropShadow.None
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                              - txtStartSiteName:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.'Site name'
+                                    X: =16
+                                    Y: =14
+                                    Width: =Parent.TemplateWidth - 64
+                                    Height: =26
+                                    Size: =16
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Wrap: =false
+                              - txtStartSiteMeta:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.'Site code' & " · " & ThisItem.Region
+                                    X: =16
+                                    Y: =40
+                                    Width: =Parent.TemplateWidth - 64
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                              - txtStartSiteCheck:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="✓"
+                                    Visible: =locSiteId = ThisItem.Site
+                                    X: =Parent.TemplateWidth - 44
+                                    Y: =24
+                                    Width: =32
+                                    Height: =32
+                                    Size: =18
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cPrimary
+                              - btnStartSiteSelect:
+                                  Control: ModernButton
+                                  Properties:
+                                    Text: =""
+                                    Appearance: =ButtonAppearance.Transparent
+                                    Layout: =ButtonLayout.TextOnly
+                                    X: =0
+                                    Y: =4
+                                    Width: =Parent.TemplateWidth
+                                    Height: =72
+                                    AccessibleLabel: =ThisItem.'Site name' & If(locSiteId = ThisItem.Site, ", selected", "")
+                                    DisplayMode: =If(locStarting, DisplayMode.Disabled, DisplayMode.Edit)
+                                    OnSelect: '=UpdateContext({locSiteId: ThisItem.Site, locEquip: Blank(), locStartError: false})'
+                  - conStartEquipment:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        FillPortions: =1
+                        LayoutMinWidth: =320
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        PaddingTop: =16
+                        PaddingBottom: =16
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtStartEquipHeading:
+                            Control: ModernText
+                            Properties:
+                              Text: |-
+                                ="2   Equipment" & If(IsBlank(locSiteId), "", "  at " & LookUp(Sites, Site = locSiteId).'Site name')
+                              Size: =18
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =36
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtStartEquipPlaceholder:
+                            Control: ModernText
+                            Properties:
+                              Visible: =IsBlank(locSiteId) || CountRows(galStartEquipment.AllItems) = 0
+                              Text: =If(IsBlank(locSiteId), "Choose a site first.", "No equipment at this site. Choose another site.")
+                              Size: =16
+                              Color: =cMuted
+                              Height: =40
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - galStartEquipment:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Items: =Sort(Filter(Equipment, Site.Site = locSiteId), 'Equipment name')
+                              TemplateSize: =80
+                              TemplatePadding: =0
+                              FillPortions: =1
+                              LayoutMinHeight: =160
+                              LayoutMinWidth: =240
+                              Selectable: =false
+                              BorderThickness: =0
+                              LoadingSpinnerColor: =cPrimary
+                              AccessibleLabel: ="Equipment at the selected site"
+                            Children:
+                              - conStartEquipCard:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    X: =0
+                                    Y: =4
+                                    Width: =Parent.TemplateWidth
+                                    Height: =72
+                                    Fill: =If(locEquip.Equipment = ThisItem.Equipment, cPrimaryTint, cWhite)
+                                    BorderColor: =If(locEquip.Equipment = ThisItem.Equipment, cPrimary, cBorder)
+                                    BorderThickness: =If(locEquip.Equipment = ThisItem.Equipment, 2, 1)
+                                    DropShadow: =DropShadow.None
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                              - txtStartEquipName:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.'Equipment name'
+                                    X: =16
+                                    Y: =14
+                                    Width: =Parent.TemplateWidth - 230
+                                    Height: =26
+                                    Size: =16
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cText
+                                    Wrap: =false
+                              - txtStartEquipMeta:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.'Asset tag' & " · " & Text(ThisItem.'Equipment type')
+                                    X: =16
+                                    Y: =40
+                                    Width: =Parent.TemplateWidth - 230
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                              - txtStartEquipCrit:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =Upper(Text(ThisItem.Criticality)) & " CRITICALITY"
+                                    X: =Parent.TemplateWidth - 210
+                                    Y: =24
+                                    Width: =160
+                                    Height: =28
+                                    Size: =12
+                                    FontWeight: =FontWeight.Semibold
+                                    Align: =Align.Center
+                                    Color: =cMuted
+                                    BorderColor: =cMuted
+                                    BorderThickness: =1
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                              - txtStartEquipCheck:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="✓"
+                                    Visible: =locEquip.Equipment = ThisItem.Equipment
+                                    X: =Parent.TemplateWidth - 44
+                                    Y: =24
+                                    Width: =32
+                                    Height: =32
+                                    Size: =18
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cPrimary
+                              - btnStartEquipSelect:
+                                  Control: ModernButton
+                                  Properties:
+                                    Text: =""
+                                    Appearance: =ButtonAppearance.Transparent
+                                    Layout: =ButtonLayout.TextOnly
+                                    X: =0
+                                    Y: =4
+                                    Width: =Parent.TemplateWidth
+                                    Height: =72
+                                    AccessibleLabel: =ThisItem.'Equipment name' & If(locEquip.Equipment = ThisItem.Equipment, ", selected", "")
+                                    DisplayMode: =If(locStarting, DisplayMode.Disabled, DisplayMode.Edit)
+                                    OnSelect: '=UpdateContext({locEquip: ThisItem, locStartError: false})'
+                  - conStartConfirm:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Width: =384
+                        FillPortions: =0
+                        LayoutMinWidth: =296
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =12
+                        PaddingTop: =16
+                        PaddingBottom: =16
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtStartConfirmHeading:
+                            Control: ModernText
+                            Properties:
+                              Text: ="3   Confirm and start"
+                              Size: =18
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =36
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtStartConfirmEmpty:
+                            Control: ModernText
+                            Properties:
+                              Visible: =IsBlank(locEquip)
+                              Text: ="Your selection will appear here."
+                              Size: =16
+                              Color: =cMuted
+                              Height: =40
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - galStartSummary:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Visible: =!IsBlank(locEquip)
+                              Items: |-
+                                =Table(
+                                    {Label: "Site", Val: LookUp(Sites, Site = locSiteId).'Site name'},
+                                    {Label: "Equipment", Val: locEquip.'Equipment name'},
+                                    {Label: "Asset tag", Val: locEquip.'Asset tag'},
+                                    {Label: "Type", Val: Text(locEquip.'Equipment type')},
+                                    {Label: "Criticality", Val: Text(locEquip.Criticality) & " · x" & Text(Multiplier(Text(locEquip.Criticality)), "0.00")},
+                                    {Label: "Hour meter", Val: Text(locEquip.'Hour meter', "#,##0")}
+                                )
+                              TemplateSize: =36
+                              TemplatePadding: =0
+                              Height: =216
+                              FillPortions: =0
+                              LayoutMinHeight: =216
+                              Selectable: =false
+                              ShowScrollbar: =false
+                              BorderThickness: =0
+                              AccessibleLabel: ="Selected equipment"
+                            Children:
+                              - txtStartSummaryLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Label
+                                    X: =0
+                                    Y: =4
+                                    Width: =110
+                                    Height: =28
+                                    Size: =14
+                                    Color: =cMuted
+                                    PaddingLeft: =0
+                              - txtStartSummaryValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Val
+                                    X: =112
+                                    Y: =4
+                                    Width: =Parent.TemplateWidth - 112
+                                    Height: =28
+                                    Size: =16
+                                    Color: =cText
+                                    Wrap: =false
+                        - conStartSpacer:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinHeight: =0
+                              LayoutDirection: =LayoutDirection.Vertical
+                        - txtStartNoChecklist:
+                            Control: ModernText
+                            Properties:
+                              Visible: =!IsBlank(locEquip) && CountIf('Checklist questions', 'Equipment type' = locEquip.'Equipment type') = 0
+                              Text: ="Warning · There is no checklist for " & Text(locEquip.'Equipment type') & " yet. Choose different equipment."
+                              Size: =14
+                              Color: =cWarning
+                              Fill: =cWarningTint
+                              BorderColor: =cWarning
+                              BorderThickness: =1
+                              BorderStyle: =BorderStyle.Solid
+                              Height: =64
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtStartError:
+                            Control: ModernText
+                            Properties:
+                              Visible: =locStartError
+                              Text: ="Error · The inspection couldn't be created. Your selection is kept; try again."
+                              Size: =14
+                              Color: =cError
+                              Fill: =cErrorTint
+                              BorderColor: =cError
+                              BorderThickness: =1
+                              BorderStyle: =BorderStyle.Solid
+                              Height: =64
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtStartReason:
+                            Control: ModernText
+                            Properties:
+                              Visible: =IsBlank(locEquip)
+                              Text: ="Choose a site and equipment to start"
+                              Size: =14
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - btnStartGo:
+                            Control: ModernButton
+                            Properties:
+                              Text: =If(locStarting, "Starting...", "Start inspection")
+                              Height: =56
+                              Size: =16
+                              FontWeight: =FontWeight.Semibold
+                              BasePaletteColor: =cPrimary
+                              AlignInContainer: =AlignInContainer.Stretch
+                              DisplayMode: |-
+                                =If(
+                                    locStarting || IsBlank(locEquip) ||
+                                    CountIf('Checklist questions', 'Equipment type' = locEquip.'Equipment type') = 0,
+                                    DisplayMode.Disabled,
+                                    DisplayMode.Edit
+                                )
+                              OnSelect: |-
+                                =UpdateContext({locStarting: true, locStartError: false});
+                                With(
+                                    {eq: locEquip, eqType: locEquip.'Equipment type', site: LookUp(Sites, Site = locSiteId)},
+                                    IfError(
+                                        Set(
+                                            varNewInspection,
+                                            Patch(
+                                                Inspections,
+                                                Defaults(Inspections),
+                                                {
+                                                    'Status (fp_status)': 'Inspection status'.Draft,
+                                                    Equipment: eq,
+                                                    Site: site,
+                                                    'Started on': Now(),
+                                                    Inspector: User().FullName,
+                                                    'Built with': [@'Built with'].'Canvas only'
+                                                }
+                                            )
+                                        );
+                                        // The template loads client-side: Canvas caps this at the data row limit (500 by default).
+                                        ClearCollect(colQRaw, Filter('Checklist questions', 'Equipment type' = eqType));
+                                        ClearCollect(
+                                            colQ,
+                                            ForAll(
+                                                Sort(colQRaw, 'Sort order'),
+                                                {
+                                                    QId: ThisRecord.'Checklist question',
+                                                    Code: ThisRecord.Code,
+                                                    QText: ThisRecord.Question,
+                                                    Help: ThisRecord.'Help text',
+                                                    ParentId: ThisRecord.'Parent question'.'Checklist question',
+                                                    Depth: ThisRecord.Depth,
+                                                    Stage: Text(ThisRecord.Stage),
+                                                    SortKey: ThisRecord.'Sort order',
+                                                    AnswerType: Text(ThisRecord.'Answer type'),
+                                                    Options: ThisRecord.Options,
+                                                    ShowOp: Text(ThisRecord.'Show when operator'),
+                                                    ShowVal: ThisRecord.'Show when value',
+                                                    RiskOp: Text(ThisRecord.'Risk when operator'),
+                                                    RiskVal: ThisRecord.'Risk when value',
+                                                    Weight: Coalesce(ThisRecord.'Risk weight', 0),
+                                                    Critical: ThisRecord.'Critical stop' = 'Critical stop (Checklist questions)'.Yes
+                                                }
+                                            )
+                                        );
+                                        Clear(colAns);
+                                        Set(
+                                            varCtx,
+                                            {
+                                                InspectionId: varNewInspection.Inspection,
+                                                Number: varNewInspection.'Inspection number',
+                                                EquipmentName: eq.'Equipment name',
+                                                AssetTag: eq.'Asset tag',
+                                                SiteName: site.'Site name',
+                                                EquipType: Text(eq.'Equipment type'),
+                                                Criticality: Text(eq.Criticality)
+                                            }
+                                        );
+                                        Set(varHasInspection, true);
+                                        Set(varStage, "Pre-use");
+                                        UpdateContext({locStarting: false});
+                                        Navigate(InspectScreen, ScreenTransition.None),
+                                        UpdateContext({locStarting: false, locStartError: true})
+                                    )
+                                )

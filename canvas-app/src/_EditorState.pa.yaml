@@ -1,0 +1,7 @@
+EditorState:
+  ScreensOrder:
+    - Screen1
+    - StartScreen
+    - InspectScreen
+    - PhotoScreen
+    - ReviewScreen

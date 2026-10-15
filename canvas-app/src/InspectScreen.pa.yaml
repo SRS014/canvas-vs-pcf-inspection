@@ -1,0 +1,624 @@
+Screens:
+  InspectScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+    Children:
+      - conInspRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            Width: =Parent.Width
+            Height: =Parent.Height
+            Fill: =cWash
+            DropShadow: =DropShadow.None
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - conInspAccent:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =4
+                  Fill: =cSecondary
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutMinHeight: =4
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+            - conInspHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =76
+                  Fill: =cWhite
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutMinHeight: =76
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutGap: =16
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnInspAbandon:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="Abandon"
+                        Icon: ="Dismiss"
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        Height: =48
+                        Width: =128
+                        Size: =16
+                        AccessibleLabel: ="Abandon this inspection"
+                        OnSelect: |-
+                          =If(
+                              Confirm(
+                                  "Your answers will be lost. The Draft inspection stays on the home list without a score.",
+                                  {
+                                      Title: "Abandon " & varCtx.Number & "?",
+                                      ConfirmButton: "Abandon inspection",
+                                      CancelButton: "Keep inspecting"
+                                  }
+                              ),
+                              Clear(colAns);
+                              Clear(colQ);
+                              Set(varHasInspection, false);
+                              Navigate(Screen1, ScreenTransition.None)
+                          )
+                  - conInspTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        Height: =64
+                        LayoutMinHeight: =64
+                        AlignInContainer: =AlignInContainer.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                      Children:
+                        - txtInspEyebrow:
+                            Control: ModernText
+                            Properties:
+                              Text: ="DRAFT INSPECTION"
+                              Size: =12
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cPurple
+                              Height: =18
+                              LayoutMinHeight: =18
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtInspTitle:
+                            Control: ModernText
+                            Properties:
+                              Text: =varCtx.Number
+                              Size: =22
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =26
+                              LayoutMinHeight: =26
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtInspContext:
+                            Control: ModernText
+                            Properties:
+                              Text: |-
+                                =varCtx.EquipmentName & " · " & varCtx.AssetTag & " · " & varCtx.SiteName & " · " &
+                                varCtx.EquipType & " · " & varCtx.Criticality & " x" & Text(Multiplier(varCtx.Criticality), "0.00")
+                              Size: =14
+                              Color: =cMuted
+                              Wrap: =false
+                              Height: =20
+                              LayoutMinHeight: =20
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                  - btnInspPhotos:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="Photos"
+                        Icon: ="Camera"
+                        Appearance: =ButtonAppearance.Outline
+                        Color: =cPrimary
+                        Height: =48
+                        Width: =128
+                        Size: =16
+                        OnSelect: =Navigate(PhotoScreen, ScreenTransition.None)
+                  - btnInspReview:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="Review"
+                        Icon: ="ClipboardTaskListLtr"
+                        BasePaletteColor: =cPrimary
+                        Height: =48
+                        Width: =140
+                        Size: =16
+                        FontWeight: =FontWeight.Semibold
+                        OnSelect: =Navigate(ReviewScreen, ScreenTransition.None)
+            - conInspBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =1
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutGap: =24
+                  PaddingTop: =16
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - conInspMain:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        LayoutMinWidth: =560
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =12
+                      Children:
+                        - tabInspStages:
+                            Control: ModernTabList
+                            Properties:
+                              Items: =StageTabs
+                              ItemDisplayText: =ThisItem.Label
+                              Default: =LookUp(StageTabs, Value = varStage)
+                              OnChange: =If(Self.Selected.Value <> varStage, Set(varStage, Self.Selected.Value))
+                              Appearance: =TabListAppearance.Subtle
+                              BasePaletteColor: =cPrimary
+                              TabSize: =TabSize.Large
+                              Size: =16
+                              Height: =56
+                              FillPortions: =0
+                              LayoutMinHeight: =56
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AccessibleLabel: ="Inspection stages"
+                        - conInspQuestionCard:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutDirection: =LayoutDirection.Vertical
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtInspStageEmpty:
+                                  Control: ModernText
+                                  Properties:
+                                    Visible: =CountRows(galInspQuestions.AllItems) = 0
+                                    Text: |-
+                                      =If(
+                                          CountRows(colQ) = 0,
+                                          "This equipment type has no checklist questions. You can still add photos, review, or abandon.",
+                                          "No questions in " & varStage & " for this equipment. Answers in other stages are kept."
+                                      )
+                                    Size: =16
+                                    Color: =cMuted
+                                    Align: =Align.Center
+                                    Height: =80
+                                    FillPortions: =0
+                                    AlignInContainer: =AlignInContainer.Stretch
+                              - galInspQuestions:
+                                  Control: Gallery
+                                  Variant: Vertical
+                                  Properties:
+                                    Items: =SortByColumns(Filter(VisibleQ, Stage = varStage), "SortKey", SortOrder.Ascending)
+                                    TemplateSize: =112
+                                    TemplatePadding: =0
+                                    FillPortions: =1
+                                    LayoutMinHeight: =200
+                                    Selectable: =false
+                                    BorderThickness: =0
+                                    ShowScrollbar: =true
+                                    AccessibleLabel: ="Checklist questions for the selected stage"
+                                  Children:
+                                    - conInspConnector:
+                                        Control: GroupContainer
+                                        Variant: ManualLayout
+                                        Properties:
+                                          Visible: =ThisItem.Depth > 0
+                                          X: =ThisItem.Depth * 32 - 8
+                                          Y: =0
+                                          Width: =2
+                                          Height: =Parent.TemplateHeight
+                                          Fill: =cBorder
+                                          DropShadow: =DropShadow.None
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                    - txtInspQCode:
+                                        Control: ModernText
+                                        Properties:
+                                          Text: =ThisItem.Code & "   ·   level " & (ThisItem.Depth + 1)
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =8
+                                          Width: =220
+                                          Height: =24
+                                          Size: =14
+                                          Color: =cMuted
+                                          PaddingLeft: =0
+                                    - txtInspQCritical:
+                                        Control: ModernText
+                                        Properties:
+                                          Visible: =ThisItem.Critical
+                                          Text: ="CRITICAL STOP"
+                                          X: =16 + ThisItem.Depth * 32 + 224
+                                          Y: =8
+                                          Width: =112
+                                          Height: =24
+                                          Size: =12
+                                          FontWeight: =FontWeight.Semibold
+                                          Align: =Align.Center
+                                          Color: =cPurple
+                                          Fill: =cPurpleTint
+                                          BorderColor: =cPurple
+                                          BorderThickness: =1
+                                          BorderStyle: =BorderStyle.Solid
+                                          RadiusTopLeft: =6
+                                          RadiusTopRight: =6
+                                          RadiusBottomLeft: =6
+                                          RadiusBottomRight: =6
+                                    - txtInspQText:
+                                        Control: ModernText
+                                        Properties:
+                                          Text: =ThisItem.QText
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =32
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32) - 360
+                                          Height: =48
+                                          Size: =16
+                                          FontWeight: =FontWeight.Semibold
+                                          Color: =cText
+                                          VerticalAlign: =VerticalAlign.Top
+                                          PaddingLeft: =0
+                                    - txtInspQHelp:
+                                        Control: ModernText
+                                        Properties:
+                                          Visible: =!IsBlank(ThisItem.Help)
+                                          Text: =ThisItem.Help
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =80
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32) - 360
+                                          Height: =26
+                                          Size: =14
+                                          Italic: =true
+                                          Color: =cMuted
+                                          Wrap: =false
+                                          PaddingLeft: =0
+                                    - btnInspYes:
+                                        Control: ModernButton
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Yes/No"
+                                          Text: ="Yes"
+                                          Layout: =ButtonLayout.TextOnly
+                                          Appearance: =If(LookUp(colAns, AQId = ThisItem.QId).AValue = "Yes", ButtonAppearance.Primary, ButtonAppearance.Outline)
+                                          BasePaletteColor: =cPrimary
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                          Width: =112
+                                          Height: =48
+                                          Size: =16
+                                          FontWeight: =FontWeight.Semibold
+                                          AccessibleLabel: =ThisItem.Code & " Yes"
+                                          OnSelect: =SetAnswer(ThisItem.QId, ThisItem.Code, "Yes")
+                                    - btnInspNo:
+                                        Control: ModernButton
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Yes/No"
+                                          Text: ="No"
+                                          Layout: =ButtonLayout.TextOnly
+                                          Appearance: =If(LookUp(colAns, AQId = ThisItem.QId).AValue = "No", ButtonAppearance.Primary, ButtonAppearance.Outline)
+                                          BasePaletteColor: =cPrimary
+                                          X: =Parent.TemplateWidth - 220
+                                          Y: =32
+                                          Width: =112
+                                          Height: =48
+                                          Size: =16
+                                          FontWeight: =FontWeight.Semibold
+                                          AccessibleLabel: =ThisItem.Code & " No"
+                                          OnSelect: =SetAnswer(ThisItem.QId, ThisItem.Code, "No")
+                                    - btnInspClear:
+                                        Control: ModernButton
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Yes/No" && !IsBlank(LookUp(colAns, AQId = ThisItem.QId).AValue)
+                                          Text: ="Clear"
+                                          Layout: =ButtonLayout.TextOnly
+                                          Appearance: =ButtonAppearance.Subtle
+                                          Color: =cPrimary
+                                          X: =Parent.TemplateWidth - 100
+                                          Y: =32
+                                          Width: =84
+                                          Height: =48
+                                          Size: =14
+                                          AccessibleLabel: ="Clear answer to " & ThisItem.Code
+                                          OnSelect: =ClearAnswer(ThisItem.QId)
+                                    - ddInspChoice:
+                                        Control: ModernDropdown
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Choice"
+                                          Items: =Split("No answer|" & ThisItem.Options, "|")
+                                          ItemDisplayText: =ThisItem.Value
+                                          Default: |-
+                                            =LookUp(
+                                                Split("No answer|" & ThisItem.Options, "|"),
+                                                Value = Coalesce(LookUp(colAns, AQId = ThisItem.QId).AValue, "No answer")
+                                            )
+                                          OnChange: |-
+                                            =If(
+                                                Self.Selected.Value <> Coalesce(LookUp(colAns, AQId = ThisItem.QId).AValue, "No answer"),
+                                                If(
+                                                    Self.Selected.Value = "No answer",
+                                                    ClearAnswer(ThisItem.QId),
+                                                    SetAnswer(ThisItem.QId, ThisItem.Code, Self.Selected.Value)
+                                                )
+                                            )
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                          Width: =320
+                                          Height: =48
+                                          Size: =16
+                                          AccessibleLabel: =ThisItem.QText
+                                    - numInspNumber:
+                                        Control: ModernNumberInput
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Number"
+                                          Default: |-
+                                            =If(
+                                                IsBlank(LookUp(colAns, AQId = ThisItem.QId).AValue),
+                                                Blank(),
+                                                Value(LookUp(colAns, AQId = ThisItem.QId).AValue)
+                                            )
+                                          OnChange: |-
+                                            =If(
+                                                IsBlank(Self.Value),
+                                                ClearAnswer(ThisItem.QId),
+                                                Text(Self.Value) <> LookUp(colAns, AQId = ThisItem.QId).AValue,
+                                                SetAnswer(ThisItem.QId, ThisItem.Code, Text(Self.Value))
+                                            )
+                                          HintText: ="Enter a number"
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                          Width: =160
+                                          Height: =48
+                                          Size: =16
+                                          AccessibleLabel: =ThisItem.QText
+                                    - txtInspText:
+                                        Control: ModernTextInput
+                                        Properties:
+                                          Visible: =ThisItem.AnswerType = "Text"
+                                          Default: =LookUp(colAns, AQId = ThisItem.QId).AValue
+                                          TriggerOutput: =TriggerOutput.FocusOut
+                                          Type: =TextInputType.Multiline
+                                          OnChange: |-
+                                            =If(
+                                                IsBlank(Trim(Self.Text)),
+                                                ClearAnswer(ThisItem.QId),
+                                                SetAnswer(ThisItem.QId, ThisItem.Code, Trim(Self.Text))
+                                            )
+                                          Placeholder: ="Type your comments"
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =16
+                                          Width: =320
+                                          Height: =80
+                                          Size: =16
+                                          AccessibleLabel: =ThisItem.QText
+                                    - conInspRowDivider:
+                                        Control: GroupContainer
+                                        Variant: ManualLayout
+                                        Properties:
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =Parent.TemplateHeight - 1
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32)
+                                          Height: =1
+                                          Fill: =cBorder
+                                          DropShadow: =DropShadow.None
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                  - conInspRisk:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Width: =340
+                        FillPortions: =0
+                        LayoutMinWidth: =300
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =10
+                        PaddingTop: =20
+                        PaddingBottom: =20
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtInspRiskEyebrow:
+                            Control: ModernText
+                            Properties:
+                              Text: ="LIVE RISK"
+                              Size: =12
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cPurple
+                              Height: =20
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtInspRiskScore:
+                            Control: ModernText
+                            Properties:
+                              Text: =Text(LiveScore, "0.0") & " / 100"
+                              Size: =40
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =60
+                              LayoutMinHeight: =60
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AccessibleLabel: ="Live risk score " & Text(LiveScore, "0.0") & " out of 100, " & LiveBand
+                        - txtInspRiskBadge:
+                            Control: ModernText
+                            Properties:
+                              Text: =If(LiveBand = "Critical", "⛔ ", "") & Upper(LiveBand) & If(CriticalHit, " · critical stop", "")
+                              Size: =18
+                              FontWeight: =FontWeight.Semibold
+                              Align: =Align.Center
+                              Color: =If(LiveBand = "Critical", cWhite, BandColor(LiveBand))
+                              Fill: =BandTint(LiveBand)
+                              BorderColor: =BandColor(LiveBand)
+                              BorderThickness: =If(LiveBand = "High", 2, 1)
+                              BorderStyle: =BorderStyle.Solid
+                              Height: =48
+                              LayoutMinHeight: =48
+                              RadiusTopLeft: =6
+                              RadiusTopRight: =6
+                              RadiusBottomLeft: =6
+                              RadiusBottomRight: =6
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - galInspDerivation:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Items: |-
+                                =Filter(
+                                    Table(
+                                        {Label: "Subtotal", Val: Text(RawPoints), Show: true},
+                                        {Label: "Criticality (" & varCtx.Criticality & ")", Val: "x" & Text(Multiplier(varCtx.Criticality), "0.00"), Show: true},
+                                        {Label: "Capped at 100", Val: "100", Show: RawPoints * Multiplier(varCtx.Criticality) > 100},
+                                        {Label: "Critical stop", Val: "Forces Critical", Show: CriticalHit}
+                                    ),
+                                    Show
+                                )
+                              TemplateSize: =30
+                              TemplatePadding: =0
+                              Height: =124
+                              FillPortions: =0
+                              LayoutMinHeight: =124
+                              Selectable: =false
+                              ShowScrollbar: =false
+                              BorderThickness: =0
+                              AccessibleLabel: ="How the score is calculated"
+                            Children:
+                              - txtInspDerivLabel:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Label
+                                    X: =0
+                                    Y: =2
+                                    Width: =Parent.TemplateWidth - 120
+                                    Height: =26
+                                    Size: =14
+                                    Color: =cMuted
+                                    PaddingLeft: =0
+                              - txtInspDerivValue:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: =ThisItem.Val
+                                    X: =Parent.TemplateWidth - 120
+                                    Y: =2
+                                    Width: =120
+                                    Height: =26
+                                    Size: =14
+                                    FontWeight: =FontWeight.Semibold
+                                    Align: =Align.Right
+                                    Color: =cText
+                        - txtInspStopsHeading:
+                            Control: ModernText
+                            Properties:
+                              Text: ="Critical stops"
+                              Size: =16
+                              FontWeight: =FontWeight.Semibold
+                              Color: =cText
+                              Height: =28
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - txtInspStopsNone:
+                            Control: ModernText
+                            Properties:
+                              Visible: =!CriticalHit
+                              Text: ="None triggered"
+                              Size: =14
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - galInspStops:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Visible: =CriticalHit
+                              Items: =Filter(RiskItems, Critical)
+                              TemplateSize: =52
+                              TemplatePadding: =0
+                              FillPortions: =1
+                              LayoutMinHeight: =52
+                              Selectable: =false
+                              BorderThickness: =0
+                              AccessibleLabel: ="Triggered critical stops"
+                            Children:
+                              - txtInspStopItem:
+                                  Control: ModernText
+                                  Properties:
+                                    Text: ="⛔ " & ThisItem.Code & "  " & ThisItem.QText
+                                    X: =0
+                                    Y: =2
+                                    Width: =Parent.TemplateWidth
+                                    Height: =48
+                                    Size: =14
+                                    Color: =cError
+                                    VerticalAlign: =VerticalAlign.Top
+                                    PaddingLeft: =0
+                        - conInspRiskSpacer:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Visible: =!CriticalHit
+                              DropShadow: =DropShadow.None
+                              FillPortions: =1
+                              LayoutMinHeight: =0
+                              LayoutDirection: =LayoutDirection.Vertical
+                        - txtInspAnswered:
+                            Control: ModernText
+                            Properties:
+                              Text: ="Answered " & AnsweredCount & " of " & CountRows(VisibleQ) & " visible questions"
+                              Size: =14
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              AlignInContainer: =AlignInContainer.Stretch

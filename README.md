@@ -23,7 +23,7 @@ A manufacturing company inspects equipment (forklifts and conveyors) across seve
 | --- | --- | --- |
 | 1. Model the data | Six Dataverse tables. The checklist is a tree of rows with show conditions and risk rules, so templates change without changing an app. | [docs/data-model.md](docs/data-model.md) |
 | 2. Build it in Canvas | Inspection list, guided start, stage-by-stage checklist with conditional visibility, photo capture, live score, submit to Dataverse. | [canvas-app/](canvas-app/) |
-| 3. Find the wall | What became unmanageable, slow or impossible, with evidence from the build. | [docs/where-canvas-stopped.md](docs/where-canvas-stopped.md) *(after App 1)* |
+| 3. Find the wall | What became unmanageable, slow or impossible, with evidence from the build. | [docs/where-canvas-stopped.md](docs/where-canvas-stopped.md) |
 | 4. Go pro-code | A React + TypeScript PCF component for the recursive checklist, an annotation canvas and a rules-based risk engine, embedded in the Canvas app. | [pcf/](pcf/) *(App 2)* |
 | 5. Map limit to solution | Each Canvas limit, and the specific pro-code technique that removes it. | [docs/how-pro-code-solved-it.md](docs/how-pro-code-solved-it.md) *(after App 2)* |
 
@@ -62,9 +62,9 @@ Everything is built to run on a free Power Apps Developer Plan environment.
 
 ## Status
 
-- [x] Data model, provisioning and seed scripts
-- [ ] App 1: Canvas app
-- [ ] "Where Canvas stopped"
+- [x] Data model, provisioning and seed scripts (provisioned in a Developer environment)
+- [x] App 1: Canvas app, 5 screens, compiled clean against a live Studio session (owner test run pending)
+- [ ] "Where Canvas stopped": draft with build evidence; runtime checks pending
 - [ ] App 2: PCF component
 - [ ] "How pro-code solved it"
 - [ ] Portfolio write-up
