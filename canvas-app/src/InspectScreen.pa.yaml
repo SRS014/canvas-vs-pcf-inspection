@@ -402,9 +402,8 @@ Screens:
                                           BorderColor: =cMuted
                                           Default: |-
                                             =If(
-                                                IsBlank(LookUp(colAns, AQId = ThisItem.QId).AValue),
-                                                Blank(),
-                                                Value(LookUp(colAns, AQId = ThisItem.QId).AValue)
+                                                ThisItem.AnswerType = "Number",
+                                                IfError(Value(LookUp(colAns, AQId = ThisItem.QId).AValue), Blank())
                                             )
                                           Height: =48
                                           HintText: ="Enter a number"

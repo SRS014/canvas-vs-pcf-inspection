@@ -157,6 +157,25 @@ async function main() {
     console.log(`+ lookup ${rel.referencing}.${logical(rel.lookupSchemaName)} -> ${rel.referenced}`);
   }
 
+  // Image columns: Dataverse ignores CanStoreFullImage and IsPrimaryImage on create
+  // (it stores 144 px thumbnails and makes the last image column primary), so set them by update.
+  for (const table of schema.tables) {
+    const name = logical(table.schemaName);
+    for (const col of table.columns.filter((c) => c.type === "image")) {
+      const path = `EntityDefinitions(LogicalName='${name}')/Attributes(LogicalName='${logical(col.schemaName)}')/Microsoft.Dynamics.CRM.ImageAttributeMetadata`;
+      const def = await api("GET", path);
+      if (def.CanStoreFullImage && def.IsPrimaryImage === !!col.primary) continue;
+      delete def["@odata.context"];
+      def["@odata.type"] = "Microsoft.Dynamics.CRM.ImageAttributeMetadata";
+      def.CanStoreFullImage = true;
+      def.IsPrimaryImage = !!col.primary;
+      await api("PUT", `EntityDefinitions(LogicalName='${name}')/Attributes(${def.MetadataId})`, def, {
+        headers: { "MSCRM.MergeLabels": "true" },
+      });
+      console.log(`  ~ ${name}.${logical(col.schemaName)} full image on${col.primary ? ", primary" : ""}`);
+    }
+  }
+
   // Publish
   const entities = schema.tables.map((t) => `<entity>${logical(t.schemaName)}</entity>`).join("");
   const optionSets = schema.optionSets.map((o) => `<optionset>${o.name}</optionset>`).join("");

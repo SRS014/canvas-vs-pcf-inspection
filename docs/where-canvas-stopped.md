@@ -33,6 +33,17 @@ Size of what a maker maintains: about 3,600 lines of Power Fx YAML across 5 scre
 
 Run each check in the published app with Monitor open, then record what happens.
 
+### Run 1 (2026-10-15, Monitor trace, conveyor CV-A, INS-01001)
+
+This run used a build from before the accessibility and brand pass (it still had `Screen1` and the per-answer submit loop). It still settled four things:
+
+- **Tap to update: about 85 ms.** Tapping Yes on CV-01 updated the visible list, the stage counts and the score within about 85 ms. Within that one tap, though, `StageTabs`, `RiskItems`, `AnsweredCount` and the gallery items were each re-evaluated about ten times, because every named formula that depends on `colAns` recalculates. Ten questions are fine. The cost grows with every formula and every question.
+- **Hidden controls still evaluate.** Every row has all four answer controls, with only one visible. The hidden number input still evaluated `Value("Yes")` on Yes/No rows and logged an unhandled error on every tap. Fixed with a type guard, but it shows the cost of "one gallery row fits every answer type".
+- **Image columns held thumbnails only (B4 failed, B5 invalid).** The 600 px photo was stored as 144 × 144, and the 704 × 544 strokes image was squeezed to 144 × 144, losing its aspect ratio. The cause was Dataverse, not Canvas. `CanStoreFullImage` sent at column creation is ignored, so all three image columns kept 144 px only, and the last image column created became the primary image. The columns were corrected by metadata update, and `provision.mjs` now applies it after creation. B4 and B5 need a re-run.
+- **Submit worked (B7 passed on the old build).** Two answer rows, score 0, band Low, status Submitted, Built with "Canvas only". But the old row-by-row submit took 2.4 s for two answers: about 1.2 s each, for a lookup, a second lookup and a create. A full 30-question forklift run would take over 30 seconds. The current build writes all answers in one batched `Collect`.
+
+Not covered by this run: B3 (the conveyor checklist has no sixth level) and B6.
+
 - [ ] **B1. Re-render on answer.** Every answer changes `colAns`, which re-evaluates `VisL0`–`VisL4`, `VisibleQ`, `RiskItems` and the gallery's items. Does the question list flicker or jump, or does focus leave the field? Check especially when typing in a Number answer.
 - [ ] **B2. Responsiveness as the form grows.** Answer the forklift branch FL-01 → No → Damaged → Hydraulics → Yes → No. Note how long each answer takes to update the score and show the next question (Monitor timings).
 - [ ] **B3. The missing sixth level.** At FL-01.1.1.1.1 "Has a spill kit been deployed?", answer **No**. Confirm FL-01.1.1.1.1.1 doesn't appear and the score doesn't include its 25 points or the critical stop.

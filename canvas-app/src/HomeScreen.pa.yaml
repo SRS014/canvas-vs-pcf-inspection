@@ -214,24 +214,28 @@ Screens:
                         Items: |-
                           =With(
                               {
-                                  submitted: Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted),
+                                  submittedCount: CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted),
                                   canvasCount: CountIf(Inspections, 'Built with' = [@'Built with'].'Canvas only'),
                                   pcfCount: CountIf(Inspections, 'Built with' = [@'Built with'].'Canvas + PCF')
                               },
                               Table(
                                   {Label: "Total inspections", Val: Text(CountIf(Inspections, true)), Sub: "", Alert: false},
                                   {Label: "Drafts", Val: Text(CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Draft)), Sub: "", Alert: false},
-                                  {Label: "Submitted", Val: Text(CountRows(submitted)), Sub: "", Alert: false},
+                                  {Label: "Submitted", Val: Text(submittedCount), Sub: "", Alert: false},
                                   {
                                       Label: "High + Critical",
-                                      Val: Text(CountIf(submitted, 'Risk band' = [@'Risk band'].High || 'Risk band' = [@'Risk band'].Critical)),
+                                      Val: Text(CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted && ('Risk band' = [@'Risk band'].High || 'Risk band' = [@'Risk band'].Critical))),
                                       Sub: "submitted inspections",
                                       Alert: true
                                   },
                                   {
                                       Label: "Average risk score",
-                                      Val: If(CountRows(submitted) = 0, "–", Text(Average(submitted, 'Risk score'), "0.0")),
-                                      Sub: If(CountRows(submitted) = 0, "no submitted inspections", "out of 100"),
+                                      Val: If(
+                                          submittedCount = 0,
+                                          "–",
+                                          Text(Average(Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted), 'Risk score'), "0.0")
+                                      ),
+                                      Sub: If(submittedCount = 0, "no submitted inspections", "out of 100"),
                                       Alert: false
                                   },
                                   {Label: "Built with", Val: "Canvas " & canvasCount, Sub: "Canvas + PCF  " & pcfCount, Alert: false}
