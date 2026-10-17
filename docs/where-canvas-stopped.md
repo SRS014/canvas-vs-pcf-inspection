@@ -1,6 +1,6 @@
 # Where Canvas stopped
 
-> **Status: draft.** Part A is evidence from building and compiling App 1 against a live Power Apps Studio session (2026-10-15). Part B lists what can only be shown by running the app; those results go in after the test run.
+> **Status: final for App 1 (2026-10-17).** Part A is evidence from building and compiling App 1 against a live Power Apps Studio session. Part B records three Monitor-traced test runs and the owner's sign-off.
 
 ## The short version (for the portfolio)
 
@@ -59,11 +59,11 @@ The current build, with no errors or warnings. The only warning in the file came
 | --- | --- | --- | --- |
 | A10 | **Text and decoration scroll; Studio keeps its own control order** | A modern Text control shows scroll arrows when one line of text plus its default 5 px top and bottom padding is taller than the control: 56 of 98 labels did. Each needs zero vertical padding or more height, checked label by label. Even then, Run 3 (17 Oct) still showed arrows in play mode on labels that looked fine in Studio: the modern Text control has no overflow setting. The fix was the classic Label (`Overflow.Hidden`, same point sizes) for 86 labels, with a rounded container behind the 8 badges because the classic Label has no corner radius. Twelve Labels that Studio created new were flagged as interactive by the accessibility checker, so those headings use a modern Text control with `AutoHeight` instead. Run 3 also showed that Studio had been rolled back to an older version, so always confirm the live build before testing. The HTML text control behind each gradient also showed a scrollbar, and needs `AutoHeight`. Separately, controls added to an existing screen through co-authoring were appended to the end of their container, not placed where the source puts them. Recompiling never reorders existing controls, so the logo, accent lines, a footer and two card titles drifted. The reliable fix was to rename the screen, so Studio rebuilt it in source order. | All screens |
 
-- [ ] **B1. Re-render on answer.** Every answer changes `colAns`, which re-evaluates `VisL0`–`VisL4`, `VisibleQ`, `RiskItems` and the gallery's items. Does the question list flicker or jump, or does focus leave the field? Check especially when typing in a Number answer.
+- [x] **B1. Re-render on answer.** *Owner accepted on a visual check, 2026-10-17; no Monitor evidence of flicker or focus loss.* Every answer changes `colAns`, which re-evaluates `VisL0`–`VisL4`, `VisibleQ`, `RiskItems` and the gallery's items. Does the question list flicker or jump, or does focus leave the field? Check especially when typing in a Number answer.
 - [x] **B2. Responsiveness as the form grows.** Answer the forklift branch FL-01 → No → Damaged → Hydraulics → Yes → No. Note how long each answer takes to update the score and show the next question (Monitor timings).
 - [x] **B3. The missing sixth level.** At FL-01.1.1.1.1 "Has a spill kit been deployed?", answer **No**. Confirm FL-01.1.1.1.1.1 doesn't appear and the score doesn't include its 25 points or the critical stop.
-- [ ] **B4. Photo save.** Add a picture, save it, reopen it. Is the full-size image stored and shown (not just the 144 px thumbnail)?
-- [ ] **B5. Annotation.** Draw on a photo and save. Does the strokes image overlay the photo correctly afterwards (transparent background, same aspect ratio)? Does the photo itself stay unchanged?
+- [x] **B4. Photo save.** *Run 2: the photo uploaded as a file and came back through the full-image download.* Add a picture, save it, reopen it. Is the full-size image stored and shown (not just the 144 px thumbnail)?
+- [x] **B5. Annotation.** *Owner accepted on a visual check, 2026-10-17. Strokes save to their own column (Run 2 trace).* Draw on a photo and save. Does the strokes image overlay the photo correctly afterwards (transparent background, same aspect ratio)? Does the photo itself stay unchanged?
 - [x] **B6. Choice dropdown loop.** Change a Choice answer that reveals children. Does the dropdown's change event fire again when the list reloads? Microsoft documents this as a gallery pitfall.
 - [x] **B7. Submit.** Submit, then check the Dataverse records: one answer row per visible answered question, plus the score, band, status and "Canvas only" on the inspection.
 

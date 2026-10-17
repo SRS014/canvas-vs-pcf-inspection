@@ -10,7 +10,7 @@ The app is authored as `.pa.yaml` source with Microsoft's **canvas app authoring
 
 | Screen | What it does | Canvas features shown |
 | --- | --- | --- |
-| `Screen1` (Home) | Inspection list with risk badges, status and which app captured it; KPI tiles; "New inspection" | Gallery on Dataverse, delegable filter and sort, modern controls, Fusion Sky theme |
+| `InspectionsHomeScreen` | Inspection list with risk badges, status and which app captured it; KPI tiles; "New inspection" | Gallery on Dataverse, delegable filter and sort, modern controls, Fusion Sky theme |
 | `NewInspectionScreen` | Pick a site, then a piece of equipment (filtered by site), then start | Cascading selection, `Patch` to create the Draft inspection, autonumber name |
 | `InspectionScreen` | Stage tabs, the visible questions for the stage (indented by depth), an answer control per answer type, and a live risk panel | Conditional visibility, collections, behavior user-defined functions, live recalculation |
 | `PhotosScreen` | Capture or attach photos, add a caption, save to Dataverse. "Annotate" overlays a transparent Pen input on the photo | Add picture / Camera, image column `Patch`, Pen input |
@@ -37,12 +37,12 @@ Each level is its own statement. The app supports as many levels as there are st
 
 **Photos.** The image column takes the captured photo directly. The Pen input's `Image` output (the strokes) is saved to a second image column, `fp_canvasstrokes`.
 
-## Evidence to collect while building (for "Where Canvas stopped")
+## Evidence collected while building (recorded in "Where Canvas stopped")
 
-- [ ] Line count and statement count of the visibility routine, and what must change to add one more level of nesting
-- [ ] What happens to the seeded sixth-level question (FL-01.1.1.1.1.1) in the Canvas app
-- [ ] Whether the cross-question rule (FL-32) can be evaluated generically from `fp_rulejson`
-- [ ] App checker and Monitor observations as the question gallery re-evaluates after each answer (including input focus and gallery reload)
-- [ ] What the Pen input overlay can and can't produce: freehand only, strokes saved separately from the photo, no shapes, text labels or numbered markers, no per-mark data
-- [ ] How compound risk rules would have to be written in Power Fx
-- [ ] Screenshots of every screen
+- [x] Line count and statement count of the visibility routine, and what must change to add one more level of nesting
+- [x] What happens to the seeded sixth-level question (FL-01.1.1.1.1.1) in the Canvas app
+- [x] Whether the cross-question rule (FL-32) can be evaluated generically from `fp_rulejson`
+- [x] App checker and Monitor observations as the question gallery re-evaluates after each answer (including input focus and gallery reload)
+- [x] What the Pen input overlay can and can't produce: freehand only, strokes saved separately from the photo, no shapes, text labels or numbered markers, no per-mark data
+- [x] How compound risk rules would have to be written in Power Fx
+- [ ] Screenshots of every screen (to add to the repo for the write-up)

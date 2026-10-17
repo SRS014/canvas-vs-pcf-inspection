@@ -24,8 +24,8 @@ Colour carries meaning only for risk. The band is always shown as a word plus a 
 
 Buttons are solid Deep lagoon (#0B5F7E), which the brand allows. A gradient behind a button would lose the platform's hover, focus-ring and disabled states. Canvas can't load Manrope or Inter, so text uses Segoe UI with brand weights.
 
-Quality gates: App checker has 0 issues, and the accessibility checker has 0 errors.
-- Every text control has an accessible label.
+Quality gates: the App checker has 0 issues, and the accessibility checker has 0 errors. One suggestion remains, for an alternative to pen input, and the caption field covers it.
+- Text uses classic Labels, which screen readers read from their visible text. Headings that use the modern Text control have an accessible label.
 - Lists have keyboard tab stops.
 - Decorative gradients are HTML, which screen readers skip.
 - The pen has a text alternative ("Describe what you marked").

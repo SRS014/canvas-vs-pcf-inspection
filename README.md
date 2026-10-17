@@ -63,9 +63,9 @@ Everything is built to run on a free Power Apps Developer Plan environment.
 ## Status
 
 - [x] Data model, provisioning and seed scripts (provisioned in a Developer environment)
-- [x] App 1: Canvas app, 5 screens, compiled clean against a live Studio session (owner test run pending)
-- [ ] "Where Canvas stopped": draft with build evidence; runtime checks pending
-- [ ] App 2: PCF component
+- [x] App 1: Canvas app, 5 screens, compiled clean against a live Studio session and signed off after three Monitor-traced test runs (2026-10-17)
+- [x] "Where Canvas stopped": build evidence (A1–A10) and runtime checks (B1–B7)
+- [ ] App 2: PCF component (in progress)
 - [ ] "How pro-code solved it"
 - [ ] Portfolio write-up
 
