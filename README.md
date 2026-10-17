@@ -56,7 +56,7 @@ docs/        data model, "Where Canvas stopped", "How pro-code solved it", the w
 
 1. **Dataverse.** Follow [docs/data-model.md#provisioning](docs/data-model.md#provisioning). Two commands create the solution and load fictional demo data.
 2. **Canvas app.** See [canvas-app/](canvas-app/).
-3. **PCF component.** Coming with App 2.
+3. **PCF components.** See [pcf/](pcf/): `npm test`, `npm run build`, `npm start`. Deployment comes with the App 2 canvas app.
 
 Everything is built to run on a free Power Apps Developer Plan environment.
 

@@ -75,9 +75,13 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
 - In the Power Platform admin center, the environment setting **Allow publishing of canvas apps with code components** must be on (owner).
 - Deployment: `pac auth create` with device code in the owner's browser, then `pac pcf push` for development and a solution package for the release.
 
+## Progress
+
+- 2026-10-17: `fp_riskrule` provisioned and seeded (6 rules). Both components written in one project ([components/](components/)), build clean (lint, type-check, bundle). 14 engine and contract tests pass against the seed data. Not yet run in the test harness or deployed.
+
 ## Build order and checkpoints
 
-1. **Engine first.** The visibility, rules and scoring engine with unit tests against the seed data. Checkpoint: the tests show the sixth level, FL-32 and the compound rules working.
+1. **Engine first.** The visibility, rules and scoring engine with unit tests against the seed data. Checkpoint: the tests show the sixth level, FL-32 and the compound rules working. *Done.*
 2. **InspectionChecklist UI** in the PCF test harness (`npm start`).
 3. **PhotoAnnotator** in the test harness.
 4. **Deploy** both components to the environment (owner signs in).

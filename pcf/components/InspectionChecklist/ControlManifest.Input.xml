@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="Fusion" constructor="InspectionChecklist" version="0.1.0" display-name-key="Inspection checklist" description-key="Recursive inspection checklist with cross-question rules and a live, explained risk score. Canvas passes data in as JSON; the component never calls Dataverse." control-type="virtual">
+    <external-service-usage enabled="false">
+    </external-service-usage>
+
+    <!-- Inputs from the Canvas app -->
+    <property name="QuestionsJson" display-name-key="Questions (JSON)" description-key="JSON(colQ): QId, Code, QText, Help, ParentId, Stage, SortKey, AnswerType, Options, ShowOp, ShowVal, RiskOp, RiskVal, Weight, Critical, Rule." of-type="Multiple" usage="input" required="true" />
+    <property name="RulesJson" display-name-key="Risk rules (JSON)" description-key="Active fp_riskrule rows: Code, Name, Bonus, Explanation, Rule, Active." of-type="Multiple" usage="input" required="false" />
+    <property name="AnswersJson" display-name-key="Saved answers (JSON)" description-key="Answers to load: QId, Code, Value. A new value replaces the answers in the component." of-type="Multiple" usage="input" required="false" />
+    <property name="Criticality" display-name-key="Criticality" description-key="Low, Medium or High (multiplier 1.0, 1.25, 1.5)." of-type="SingleLine.Text" usage="input" required="false" />
+    <property name="ReadOnly" display-name-key="Read only" description-key="Show answers without allowing changes." of-type="TwoOptions" usage="input" required="false" />
+
+    <!-- Outputs to the Canvas app -->
+    <property name="AnswersOut" display-name-key="Answers (JSON)" description-key="Answers to visible questions only: QId, Code, Value, Contribution." of-type="Multiple" usage="output" />
+    <property name="Score" display-name-key="Score" description-key="Live risk score, 0 to 100." of-type="Decimal" usage="output" />
+    <property name="Band" display-name-key="Band" description-key="Low, Medium, High or Critical." of-type="SingleLine.Text" usage="output" />
+    <property name="CriticalHit" display-name-key="Critical stop" description-key="True when a critical-stop question triggered." of-type="TwoOptions" usage="output" />
+    <property name="AnsweredCount" display-name-key="Answered count" description-key="Answered visible questions." of-type="Whole.None" usage="output" />
+    <property name="VisibleCount" display-name-key="Visible count" description-key="Visible questions." of-type="Whole.None" usage="output" />
+    <property name="ExplanationJson" display-name-key="Score explanation (JSON)" description-key="Every point in the score: Kind (question or rule), Code, Label, Points, Critical." of-type="Multiple" usage="output" />
+
+    <resources>
+      <code path="index.ts" order="1" />
+      <platform-library name="React" version="16.14.0" />
+      <platform-library name="Fluent" version="9.68.0" />
+    </resources>
+  </control>
+</manifest>
