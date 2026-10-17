@@ -155,5 +155,5 @@ App:
       );
       Set(varStage, "Pre-use");
       Set(varBannerText, "")
-    StartScreen: =HomeScreen
+    StartScreen: =InspectionsHomeScreen
     Theme: =PowerAppsTheme

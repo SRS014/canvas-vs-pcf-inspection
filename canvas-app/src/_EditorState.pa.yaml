@@ -1,6 +1,6 @@
 EditorState:
   ScreensOrder:
-    - HomeScreen
+    - InspectionsHomeScreen
     - NewInspectionScreen
     - InspectionScreen
     - PhotosScreen
