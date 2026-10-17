@@ -139,6 +139,21 @@
       ]
     },
     {
+      "schemaName": "fp_RiskRule",
+      "displayName": "Risk rule",
+      "pluralName": "Risk rules",
+      "description": "A compound risk rule: when every condition in the rule tree is met by visible answers, the bonus points are added on top of the question weights. Evaluated by the PCF component only (App 2).",
+      "primaryName": { "schemaName": "fp_Name", "displayName": "Rule", "maxLength": 200 },
+      "columns": [
+        { "type": "string", "schemaName": "fp_Code", "displayName": "Code", "maxLength": 40, "description": "Stable key, for example RR-FL-01." },
+        { "type": "choice", "schemaName": "fp_EquipmentType", "displayName": "Equipment type", "optionSet": "fp_equipmenttype", "required": true },
+        { "type": "memo", "schemaName": "fp_RuleJson", "displayName": "Rule (JSON)", "maxLength": 10000, "description": "An any / all tree of conditions over question codes, the same format as fp_rulejson on a question." },
+        { "type": "integer", "schemaName": "fp_BonusPoints", "displayName": "Bonus points", "min": 0, "max": 100, "description": "Added to the subtotal before the criticality multiplier when the rule is met." },
+        { "type": "string", "schemaName": "fp_Explanation", "displayName": "Explanation", "maxLength": 500, "description": "Shown in the score breakdown, so the inspector sees why the score went up." },
+        { "type": "boolean", "schemaName": "fp_IsActive", "displayName": "Active", "description": "Inactive rules are ignored, so a rule can be switched off without deleting it." }
+      ]
+    },
+    {
       "schemaName": "fp_Inspection",
       "displayName": "Inspection",
       "pluralName": "Inspections",

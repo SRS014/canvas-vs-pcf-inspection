@@ -1,0 +1,131 @@
+{
+  "$comment": "Fictional compound risk rules for the demo. Each rule adds bonus points when all its conditions are met by visible answers. Evaluated by the App 2 PCF component only.",
+  "riskRules": [
+    {
+      "code": "RR-FL-01",
+      "type": "Forklift",
+      "name": "Fluid leak with no fire extinguisher",
+      "bonus": 20,
+      "explanation": "A leak is a fire load; without an extinguisher there is no first response.",
+      "rule": {
+        "all": [
+          {
+            "q": "FL-13",
+            "op": "Equals",
+            "v": "Yes"
+          },
+          {
+            "q": "FL-30",
+            "op": "Equals",
+            "v": "No"
+          }
+        ]
+      }
+    },
+    {
+      "code": "RR-FL-02",
+      "type": "Forklift",
+      "name": "Hydraulic leak with no spill kit",
+      "bonus": 15,
+      "explanation": "Fluid on the floor that nobody can contain is a slip hazard for everyone nearby.",
+      "rule": {
+        "all": [
+          {
+            "q": "FL-01.1.1.1",
+            "op": "Equals",
+            "v": "Yes"
+          },
+          {
+            "q": "FL-01.1.1.1.1",
+            "op": "Equals",
+            "v": "No"
+          }
+        ]
+      }
+    },
+    {
+      "code": "RR-FL-03",
+      "type": "Forklift",
+      "name": "Brakes and warning devices both failed",
+      "bonus": 20,
+      "explanation": "The truck can't stop in distance and can't warn pedestrians either.",
+      "rule": {
+        "all": [
+          {
+            "q": "FL-20",
+            "op": "Equals",
+            "v": "No"
+          },
+          {
+            "q": "FL-21",
+            "op": "Equals",
+            "v": "No"
+          }
+        ]
+      }
+    },
+    {
+      "code": "RR-FL-04",
+      "type": "Forklift",
+      "name": "Damaged mast with stretched chains",
+      "bonus": 15,
+      "explanation": "Two lifting faults together raise the chance of a dropped load.",
+      "rule": {
+        "all": [
+          {
+            "q": "FL-12",
+            "op": "Equals",
+            "v": "Damaged"
+          },
+          {
+            "q": "FL-12.1",
+            "op": "Greater than",
+            "v": "3"
+          }
+        ]
+      }
+    },
+    {
+      "code": "RR-CV-01",
+      "type": "Conveyor",
+      "name": "Missing guards and blocked emergency stops",
+      "bonus": 25,
+      "explanation": "Exposed nip points with no reachable stop is the classic entrapment case.",
+      "rule": {
+        "all": [
+          {
+            "q": "CV-11",
+            "op": "Equals",
+            "v": "No"
+          },
+          {
+            "q": "CV-02",
+            "op": "Equals",
+            "v": "No"
+          }
+        ]
+      }
+    },
+    {
+      "code": "RR-CV-02",
+      "type": "Conveyor",
+      "name": "Hot motor with a torn belt",
+      "bonus": 15,
+      "explanation": "A torn belt adds drag to a motor that is already running hot.",
+      "rule": {
+        "all": [
+          {
+            "q": "CV-20",
+            "op": "Greater than",
+            "v": "80"
+          },
+          {
+            "q": "CV-10",
+            "op": "Equals",
+            "v": "Torn"
+          }
+        ]
+      }
+    }
+  ]
+}

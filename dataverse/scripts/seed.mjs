@@ -8,6 +8,7 @@ import { connect, logical, readJson } from "./dataverse.mjs";
 const schema = readJson("schema.json");
 const ref = readJson("seed/reference-data.json");
 const { questions } = readJson("seed/checklist-questions.json");
+const { riskRules } = readJson("seed/risk-rules.json");
 
 const choice = (optionSet, text) => {
   const os = schema.optionSets.find((o) => o.name === optionSet);
@@ -57,6 +58,21 @@ function prepareQuestions() {
     }
   });
   if (new Set(questions.map((q) => q.code)).size !== questions.length) problems.push("Duplicate question codes");
+  for (const r of riskRules) {
+    for (const leaf of JSON.stringify(r.rule).match(/"q":"[^"]+"/g) ?? []) {
+      const q = byCode.get(leaf.slice(5, -1));
+      if (!q) problems.push(`${r.code}: rule references unknown question ${leaf.slice(5, -1)}`);
+      else if (q.type !== r.type) problems.push(`${r.code}: ${q.code} is a ${q.type} question, rule is for ${r.type}`);
+    }
+    for (const op of JSON.stringify(r.rule).match(/"op":"[^"]+"/g) ?? []) {
+      try {
+        choice("fp_conditionoperator", op.slice(6, -1));
+      } catch (e) {
+        problems.push(`${r.code}: ${e.message}`);
+      }
+    }
+  }
+  if (new Set(riskRules.map((r) => r.code)).size !== riskRules.length) problems.push("Duplicate risk rule codes");
   return problems;
 }
 
@@ -67,7 +83,8 @@ function report() {
     console.log(
       `${type}: ${set.length} questions, ${set.filter((q) => !q.parent).length} root, ` +
         `deepest level ${maxDepth + 1}, ${set.filter((q) => q.critical).length} critical, ` +
-        `${set.filter((q) => q.rule).length} cross-question rule(s)`
+        `${set.filter((q) => q.rule).length} cross-question rule(s), ` +
+        `${riskRules.filter((r) => r.type === type).length} compound risk rule(s)`
     );
   }
 }
@@ -153,6 +170,19 @@ async function main() {
     await api("PATCH", `${qSet}(${questionIds[q.code]})`, bind("fp_question_parent", "fp_checklistquestion", questionIds[q.parent]));
   }
   console.log(`Checklist questions: ${questions.length} (parent links set)`);
+
+  for (const r of riskRules) {
+    await upsert("fp_riskrule", "fp_code", r.code, {
+      fp_name: r.name,
+      fp_code: r.code,
+      fp_equipmenttype: choice("fp_equipmenttype", r.type),
+      fp_rulejson: JSON.stringify(r.rule),
+      fp_bonuspoints: r.bonus,
+      fp_explanation: r.explanation,
+      fp_isactive: true,
+    });
+  }
+  console.log(`Risk rules: ${riskRules.length}`);
   console.log("Seed complete.");
 }
 
