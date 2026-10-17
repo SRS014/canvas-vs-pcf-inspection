@@ -1,7 +1,7 @@
 EditorState:
   ScreensOrder:
-    - HomeScreen
-    - StartScreen
-    - InspectScreen
-    - PhotoScreen
-    - ReviewScreen
+    - InspectionsHomeScreen
+    - NewInspectionScreen
+    - InspectionScreen
+    - PhotosScreen
+    - ReviewSubmitScreen

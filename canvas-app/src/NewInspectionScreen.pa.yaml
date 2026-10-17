@@ -1,5 +1,5 @@
 Screens:
-  StartScreen:
+  NewInspectionScreen:
     Properties:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
@@ -20,10 +20,12 @@ Screens:
             RadiusTopRight: =0
             Width: =Parent.Width
           Children:
-            - htmStartTopLine:
+            - htmStartTopBar:
                 Control: HtmlViewer
                 Properties:
                   HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
                   PaddingTop: =0
                   PaddingBottom: =0
                   PaddingLeft: =0
@@ -51,7 +53,7 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                 Children:
-                  - btnStartCancel:
+                  - btnStartCancelNav:
                       Control: ModernButton
                       Properties:
                         AccessibleLabel: ="Cancel and return to the inspection list"
@@ -59,11 +61,11 @@ Screens:
                         Color: =cPrimary
                         Height: =48
                         Icon: ="ArrowLeft"
-                        OnSelect: =Navigate(HomeScreen, ScreenTransition.None)
+                        OnSelect: =Navigate(InspectionsHomeScreen, ScreenTransition.None)
                         Size: =16
                         Text: ="Cancel"
                         Width: =120
-                  - imgStartLogo:
+                  - imgStartMark:
                       Control: Image
                       Properties:
                         Image: =BrandSymbol
@@ -81,15 +83,14 @@ Screens:
                       Properties:
                         AlignInContainer: =AlignInContainer.Center
                         DropShadow: =DropShadow.None
-                        Height: =52
+                        Height: =54
                         LayoutDirection: =LayoutDirection.Vertical
                         LayoutJustifyContent: =LayoutJustifyContent.Center
-                        LayoutMinHeight: =52
+                        LayoutMinHeight: =54
                       Children:
                         - txtStartEyebrow:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cPurple
                               FontWeight: =FontWeight.Semibold
@@ -100,20 +101,21 @@ Screens:
                               PaddingTop: =0
                               Size: =12
                               Text: ="NEW INSPECTION"
+                              Overflow: =Overflow.Hidden
                         - txtStartTitle:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
-                              Height: =30
-                              LayoutMinHeight: =30
+                              Height: =32
+                              LayoutMinHeight: =32
                               PaddingBottom: =0
                               PaddingLeft: =0
                               PaddingTop: =0
                               Size: =22
                               Text: ="Choose equipment to inspect"
+                              Overflow: =Overflow.Hidden
             - conStartBody:
                 Control: GroupContainer
                 Variant: AutoLayout
@@ -149,10 +151,13 @@ Screens:
                         RadiusTopRight: =8
                         Width: =360
                       Children:
-                        - txtStartSitesHeading:
+                        - txtStartSitesTitle:
                             Control: ModernText
                             Properties:
                               AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
@@ -160,10 +165,13 @@ Screens:
                               PaddingLeft: =0
                               Size: =18
                               Text: ="1   Site"
-                        - htmStartSitesHeadingLine:
+                              LayoutMinHeight: =36
+                        - htmStartSitesHeadingBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -204,9 +212,10 @@ Screens:
                                     Width: =320
                                     Y: =4
                               - txtStartSiteName:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cText
                                     FontWeight: =FontWeight.Semibold
                                     Height: =26
@@ -216,10 +225,12 @@ Screens:
                                     Wrap: =false
                                     X: =16
                                     Y: =14
+                                    Overflow: =Overflow.Hidden
                               - txtStartSiteMeta:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cMuted
                                     Height: =24
                                     Size: =14
@@ -227,10 +238,12 @@ Screens:
                                     Width: =Parent.TemplateWidth - 64
                                     X: =16
                                     Y: =40
+                                    Overflow: =Overflow.Hidden
                               - txtStartSiteCheck:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cPrimary
                                     FontWeight: =FontWeight.Semibold
                                     Size: =18
@@ -239,6 +252,8 @@ Screens:
                                     Width: =32
                                     X: =Parent.TemplateWidth - 44
                                     Y: =24
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
                               - btnStartSiteSelect:
                                   Control: ModernButton
                                   Properties:
@@ -274,10 +289,13 @@ Screens:
                         RadiusTopRight: =8
                         Width: =384
                       Children:
-                        - txtStartConfirmHeading:
+                        - txtStartConfirmTitle:
                             Control: ModernText
                             Properties:
                               AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
@@ -285,10 +303,13 @@ Screens:
                               PaddingLeft: =0
                               Size: =18
                               Text: ="3   Confirm and start"
-                        - htmStartConfirmHeadingLine:
+                              LayoutMinHeight: =36
+                        - htmStartConfirmHeadingBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -300,9 +321,10 @@ Screens:
                               FillPortions: =0
                               AlignInContainer: =AlignInContainer.Start
                         - txtStartConfirmEmpty:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
                               Height: =40
@@ -310,6 +332,8 @@ Screens:
                               Size: =16
                               Text: ="Your selection will appear here."
                               Visible: =IsBlank(locEquip)
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =40
                         - galStartSummary:
                             Control: Gallery
                             Variant: Vertical
@@ -335,9 +359,10 @@ Screens:
                               Visible: =!IsBlank(locEquip)
                             Children:
                               - txtStartSummaryLabel:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cMuted
                                     Height: =28
                                     PaddingLeft: =0
@@ -345,10 +370,12 @@ Screens:
                                     Text: =ThisItem.Label
                                     Width: =110
                                     Y: =4
+                                    Overflow: =Overflow.Hidden
                               - txtStartSummaryValue:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cText
                                     Height: =28
                                     Size: =16
@@ -357,6 +384,7 @@ Screens:
                                     Wrap: =false
                                     X: =112
                                     Y: =4
+                                    Overflow: =Overflow.Hidden
                         - conStartSpacer:
                             Control: GroupContainer
                             Variant: AutoLayout
@@ -365,9 +393,10 @@ Screens:
                               LayoutDirection: =LayoutDirection.Vertical
                               LayoutMinHeight: =0
                         - txtStartNoChecklist:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               BorderColor: =cWarning
                               BorderStyle: =BorderStyle.Solid
@@ -380,10 +409,13 @@ Screens:
                               Size: =14
                               Text: ="Warning · There is no checklist for " & Text(locEquip.'Equipment type') & " yet. Choose different equipment."
                               Visible: =!IsBlank(locEquip) && CountIf('Checklist questions', 'Equipment type' = locEquip.'Equipment type') = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =64
                         - txtStartError:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               BorderColor: =cError
                               BorderStyle: =BorderStyle.Solid
@@ -396,10 +428,13 @@ Screens:
                               Size: =14
                               Text: ="Error · The inspection couldn't be created. Your selection is kept; try again."
                               Visible: =locStartError
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =64
                         - txtStartReason:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
                               Height: =24
@@ -407,6 +442,8 @@ Screens:
                               Size: =14
                               Text: ="Choose a site and equipment to start"
                               Visible: =IsBlank(locEquip)
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
                         - btnStartGo:
                             Control: ModernButton
                             Properties:
@@ -463,7 +500,8 @@ Screens:
                                                     RiskOp: Text(ThisRecord.'Risk when operator'),
                                                     RiskVal: ThisRecord.'Risk when value',
                                                     Weight: Coalesce(ThisRecord.'Risk weight', 0),
-                                                    Critical: ThisRecord.'Critical stop' = 'Critical stop (Checklist questions)'.Yes
+                                                    Critical: ThisRecord.'Critical stop' = 'Critical stop (Checklist questions)'.Yes,
+                                                    Rec: ThisRecord
                                                 }
                                             )
                                         );
@@ -482,7 +520,7 @@ Screens:
                                         );
                                         Set(varStage, "Pre-use");
                                         UpdateContext({locStarting: false});
-                                        Navigate(InspectScreen, ScreenTransition.None),
+                                        Navigate(InspectionScreen, ScreenTransition.None),
                                         UpdateContext({locStarting: false, locStartError: true})
                                     )
                                 )
@@ -508,10 +546,13 @@ Screens:
                         RadiusTopLeft: =8
                         RadiusTopRight: =8
                       Children:
-                        - txtStartEquipHeading:
+                        - txtStartEquipTitle:
                             Control: ModernText
                             Properties:
                               AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cText
                               FontWeight: =FontWeight.Semibold
@@ -519,10 +560,13 @@ Screens:
                               PaddingLeft: =0
                               Size: =18
                               Text: ="2   Equipment" & If(IsBlank(locSiteId), "", "  at " & LookUp(Sites, Site = locSiteId).'Site name')
-                        - htmStartEquipHeadingLine:
+                              LayoutMinHeight: =36
+                        - htmStartEquipHeadingBar:
                             Control: HtmlViewer
                             Properties:
                               HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
                               PaddingTop: =0
                               PaddingBottom: =0
                               PaddingLeft: =0
@@ -534,9 +578,10 @@ Screens:
                               FillPortions: =0
                               AlignInContainer: =AlignInContainer.Start
                         - txtStartEquipPlaceholder:
-                            Control: ModernText
+                            Control: Label
                             Properties:
-                              AccessibleLabel: =Self.Text
+                              PaddingTop: =0
+                              PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch
                               Color: =cMuted
                               Height: =40
@@ -544,6 +589,8 @@ Screens:
                               Size: =16
                               Text: =If(IsBlank(locSiteId), "Choose a site first.", "No equipment at this site. Choose another site.")
                               Visible: =IsBlank(locSiteId) || galStartEquipment.AllItemsCount = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =40
                         - galStartEquipment:
                             Control: Gallery
                             Variant: Vertical
@@ -574,9 +621,10 @@ Screens:
                                     Width: =Parent.TemplateWidth
                                     Y: =4
                               - txtStartEquipName:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cText
                                     FontWeight: =FontWeight.Semibold
                                     Height: =26
@@ -586,10 +634,12 @@ Screens:
                                     Wrap: =false
                                     X: =16
                                     Y: =14
+                                    Overflow: =Overflow.Hidden
                               - txtStartEquipMeta:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cMuted
                                     Height: =24
                                     Size: =14
@@ -597,30 +647,44 @@ Screens:
                                     Width: =Parent.TemplateWidth - 230
                                     X: =16
                                     Y: =40
-                              - txtStartEquipCrit:
-                                  Control: ModernText
+                                    Overflow: =Overflow.Hidden
+                              - conStartEquipCritBadge:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
                                   Properties:
-                                    AccessibleLabel: =Self.Text
-                                    Align: =Align.Center
+                                    DropShadow: =DropShadow.None
                                     BorderColor: =cMuted
                                     BorderStyle: =BorderStyle.Solid
                                     BorderThickness: =1
-                                    Color: =cMuted
-                                    FontWeight: =FontWeight.Semibold
                                     Height: =28
                                     RadiusBottomLeft: =6
                                     RadiusBottomRight: =6
                                     RadiusTopLeft: =6
                                     RadiusTopRight: =6
-                                    Size: =12
-                                    Text: =Upper(Text(ThisItem.Criticality)) & " CRITICALITY"
                                     Width: =160
                                     X: =Parent.TemplateWidth - 210
                                     Y: =24
+                                  Children:
+                                    - txtStartEquipCrit:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Align: =Align.Center
+                                          Color: =cMuted
+                                          FontWeight: =FontWeight.Semibold
+                                          Size: =12
+                                          Text: =Upper(Text(ThisItem.Criticality)) & " CRITICALITY"
+                                          Overflow: =Overflow.Hidden
+                                          X: =0
+                                          Y: =0
+                                          Width: =Parent.Width
+                                          Height: =Parent.Height
                               - txtStartEquipCheck:
-                                  Control: ModernText
+                                  Control: Label
                                   Properties:
-                                    AccessibleLabel: =Self.Text
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
                                     Color: =cPrimary
                                     FontWeight: =FontWeight.Semibold
                                     Size: =18
@@ -629,6 +693,8 @@ Screens:
                                     Width: =32
                                     X: =Parent.TemplateWidth - 44
                                     Y: =24
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
                               - btnStartEquipSelect:
                                   Control: ModernButton
                                   Properties:
