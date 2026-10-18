@@ -191,7 +191,13 @@ Screens:
                         LayoutMinWidth: =600
                         LayoutMinHeight: =400
                         # Canvas passes everything in as JSON; the component never calls Dataverse.
-                        QuestionsJson: =JSON(DropColumns(colQ, Rec), JSONFormat.Compact)
+                        QuestionsJson: |-
+                          =// Name every column: explicit column selection can't see through JSON(), and a column
+                          // nothing names is never fetched (parent, show and risk conditions, options, rule).
+                          JSON(
+                              ShowColumns(colQ, QId, Code, QText, Help, ParentId, Stage, SortKey, AnswerType, Options, ShowOp, ShowVal, RiskOp, RiskVal, Weight, Critical, Rule),
+                              JSONFormat.Compact
+                          )
                         RulesJson: =JSON(colRules, JSONFormat.Compact)
                         # Keyed on the inspection, so a new inspection starts with a clean set of answers.
                         AnswersJson: |-
