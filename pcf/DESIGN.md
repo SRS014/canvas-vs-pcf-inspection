@@ -86,6 +86,7 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
   - In Canvas, `updateView` runs only when an input or the size changes, not after `notifyOutputChanged` (the test harness re-renders on both, which hid this). Clicks changed answers and marks but nothing re-rendered. A small store ([shared/live.ts](components/shared/live.ts)) now re-renders the view itself.
   - Inside an auto-layout container, `allocatedWidth` reports the Width property, not the laid-out width, so the question column got almost no width. Both views now fill 100% of the control's box, and PhotoAnnotator measures its photo area with a ResizeObserver.
   - The annotation toolbar wraps, so Undo and Delete selected stay visible. The Note tool asks for text when it has none.
+- 2026-10-18, owner test 2: passed on the published app (saved 16:10 UTC, components 0.1.4). The downloaded package matched the source on every screen. Merged to main.
 
 ## Build order and checkpoints
 
@@ -93,7 +94,7 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
 2. **InspectionChecklist UI** in the PCF test harness (`npm start`). *Done.*
 3. **PhotoAnnotator** in the test harness. *Done.*
 4. **Deploy** both components to the environment (owner signs in). *Done.*
-5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor. *Built; test run pending.*
+5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor. *Done: owner test passed 2026-10-18 on the published app, components 0.1.4.*
 6. **docs/how-pro-code-solved-it.md**: each limit A1–A10 against the technique that removed it, with evidence from both apps.
 
 ## To verify while building
