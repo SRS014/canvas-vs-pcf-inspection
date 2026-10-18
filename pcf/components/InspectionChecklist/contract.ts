@@ -106,9 +106,19 @@ export function parseRules(json: string | null | undefined): RiskRule[] {
     }));
 }
 
+/** Accepts an array of answers, or an object {Inspection, Answers} keyed on the inspection. */
 export function parseAnswers(json: string | null | undefined): Answers {
   const answers: Answers = {};
-  for (const a of parseArray<CanvasAnswer>(json)) {
+  let list: CanvasAnswer[] = parseArray<CanvasAnswer>(json);
+  if (list.length === 0 && json?.trim().startsWith("{")) {
+    try {
+      const wrapped = JSON.parse(json) as { Answers?: unknown };
+      if (Array.isArray(wrapped.Answers)) list = wrapped.Answers as CanvasAnswer[];
+    } catch {
+      list = [];
+    }
+  }
+  for (const a of list) {
     if (a?.QId && a.Value !== undefined && a.Value !== null && String(a.Value).trim() !== "") answers[a.QId] = String(a.Value);
   }
   return answers;

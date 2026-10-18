@@ -35,6 +35,7 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
     if (marksJson !== this.lastMarksJson) {
       this.lastMarksJson = marksJson;
       this.marks = parseMarks(marksJson);
+      void Promise.resolve().then(() => this.notifyOutputChanged());
     }
     const view = React.createElement(AnnotatorView, {
       src,
@@ -50,6 +51,10 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
 
   private onImageLoad = (img: HTMLImageElement): void => {
     this.image = img;
+    if (this.marks.length > 0) {
+      this.flattened = flatten(img, this.marks);
+      this.notifyOutputChanged();
+    }
   };
 
   private onChange = (marks: Mark[]): void => {

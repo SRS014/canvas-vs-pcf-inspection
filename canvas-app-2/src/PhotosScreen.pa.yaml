@@ -4,7 +4,7 @@ Screens:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
       OnVisible: |-
-        =UpdateContext({locMode: "View", locSelPhoto: Blank(), locSaving: false, locPhotoError: "", locResetPen: false, locResetAdd: false})
+        =UpdateContext({locMode: "View", locSelPhoto: Blank(), locSaving: false, locPhotoError: "", locResetAdd: false})
     Children:
       - conPhotoRoot:
           Control: GroupContainer
@@ -314,7 +314,7 @@ Screens:
                                     RadiusBottomRight: =6
                                     RadiusTopLeft: =6
                                     RadiusTopRight: =6
-                                    Visible: =!IsBlank(ThisItem.'Canvas pen strokes')
+                                    Visible: =!IsBlank(ThisItem.'Annotation data (JSON)')
                                     Width: =96
                                     X: =116
                                     Y: =56
@@ -394,7 +394,7 @@ Screens:
                                       =Switch(
                                           locMode,
                                           "Add", "New photo",
-                                          "Annotate", "ANNOTATING · draw on the photo",
+                                          "Annotate", "ANNOTATING · mark the defects on the photo",
                                           If(IsBlank(locSelPhoto), "Select a photo to view or annotate it", locSelPhoto.Caption)
                                       )
                                     Wrap: =false
@@ -410,27 +410,17 @@ Screens:
                                     Height: =48
                                     Icon: ="Edit"
                                     OnSelect: |-
-                                      =UpdateContext({locMode: "Annotate", locPhotoError: "", locResetPen: !locResetPen});
+                                      =// The component takes the photo as a data URI; JSON() adds quotes, which Mid() strips.
+                                      UpdateContext({
+                                          locPhotoUri: With({j: JSON(locSelPhoto.Photo.Full, JSONFormat.IncludeBinaryData)}, Mid(j, 2, Len(j) - 2)),
+                                          locMode: "Annotate",
+                                          locPhotoError: ""
+                                      });
                                       Reset(txtPhotoCaption)
                                     Size: =16
                                     Text: ="Annotate"
                                     Visible: =locMode = "View" && !IsBlank(locSelPhoto)
                                     Width: =140
-                              - btnPhotoClearStrokes:
-                                  Control: ModernButton
-                                  Properties:
-                                    AccessibleLabel: =Self.Text
-                                    Appearance: =ButtonAppearance.Subtle
-                                    Color: =cPrimary
-                                    DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
-                                    Height: =48
-                                    Layout: =ButtonLayout.TextOnly
-                                    OnSelect: |-
-                                      =UpdateContext({locResetPen: !locResetPen})
-                                    Size: =16
-                                    Text: ="Clear strokes"
-                                    Visible: =locMode = "Annotate"
-                                    Width: =130
                               - btnPhotoCancel:
                                   Control: ModernButton
                                   Properties:
@@ -483,7 +473,12 @@ Screens:
                                                   locSelPhoto: Patch(
                                                       'Inspection photos',
                                                       LookUp('Inspection photos', 'Inspection photo' = locSelPhoto.'Inspection photo'),
-                                                      {'Canvas pen strokes': penPhotoAnnotate.Image, Caption: Coalesce(Trim(txtPhotoCaption.Text), locSelPhoto.Caption)}
+                                                      {
+                                                          // The photo with the marks burned in, plus every mark as data.
+                                                          'Annotated photo': {Full: pcfPhotoAnnotator.AnnotatedImageDataUri, Value: pcfPhotoAnnotator.AnnotatedImageDataUri},
+                                                          'Annotation data (JSON)': pcfPhotoAnnotator.AnnotationJsonOut,
+                                                          Caption: Coalesce(Trim(txtPhotoCaption.Text), locSelPhoto.Caption)
+                                                      }
                                                   )
                                               });
                                               UpdateContext({locMode: "View"}),
@@ -523,8 +518,8 @@ Screens:
                               Height: =24
                               PaddingLeft: =0
                               Size: =14
-                              Text: ="Annotating again replaces the saved strokes. Strokes are stored as a separate image, not merged into the photo."
-                              Visible: =locMode = "View" && !IsBlank(locSelPhoto.'Canvas pen strokes')
+                              Text: ="Showing the annotated copy. The original photo is kept unchanged, and the marks stay editable."
+                              Visible: =locMode = "View" && !IsBlank(locSelPhoto.'Annotated photo')
                               Overflow: =Overflow.Hidden
                               LayoutMinHeight: =24
                         - conPhotoFrame:
@@ -566,7 +561,7 @@ Screens:
                                     RadiusBottomRight: =6
                                     RadiusTopLeft: =6
                                     RadiusTopRight: =6
-                                    Visible: =locMode <> "View" || !IsBlank(locSelPhoto)
+                                    Visible: =locMode = "Add" || (locMode = "View" && !IsBlank(locSelPhoto))
                                     Width: =Min(Parent.Width, (Parent.Height - If(locMode <> "View", 96, 0)) * 4 / 3)
                                     X: =(Parent.Width - Min(Parent.Width, (Parent.Height - If(locMode <> "View", 96, 0)) * 4 / 3)) / 2
                                   Children:
@@ -576,30 +571,21 @@ Screens:
                                           TabIndex: =0
                                           AccessibleLabel: =If(locMode = "Add", "New photo", locSelPhoto.Caption)
                                           Height: =Parent.Height
-                                          Image: =If(locMode = "Add", addPhotoPicker.Media, locSelPhoto.Photo.Full)
+                                          Image: =If(locMode = "Add", addPhotoPicker.Media, If(IsBlank(locSelPhoto.'Annotated photo'), locSelPhoto.Photo.Full, locSelPhoto.'Annotated photo'.Full))
                                           Width: =Parent.Width
-                                    - imgPhotoStrokes:
-                                        Control: Image
-                                        Properties:
-                                          TabIndex: =0
-                                          AccessibleLabel: ="Saved annotation strokes"
-                                          Height: =Parent.Height
-                                          Image: =locSelPhoto.'Canvas pen strokes'.Full
-                                          ImagePosition: =ImagePosition.Stretch
-                                          Visible: =locMode = "View" && !IsBlank(locSelPhoto.'Canvas pen strokes')
-                                          Width: =Parent.Width
-                                    - penPhotoAnnotate:
-                                        Control: PenInput
-                                        Properties:
-                                          AccessibleLabel: ="Draw on the photo to mark defects"
-                                          BorderThickness: =0
-                                          Color: =cError
-                                          Height: =Parent.Height
-                                          Reset: =locResetPen
-                                          ShowControls: =true
-                                          Size: =5
-                                          Visible: =locMode = "Annotate"
-                                          Width: =Parent.Width
+                              - pcfPhotoAnnotator:
+                                  Control: CodeComponent
+                                  ComponentName: fp_Fusion.PhotoAnnotator
+                                  Properties:
+                                    # App 2: markers, arrows, boxes, freehand and notes, replacing the transparent Pen input.
+                                    # The photo as a data URI, made when Annotate is pressed (JSON with binary data is behaviour-only).
+                                    ImageDataUri: =If(locMode = "Annotate", locPhotoUri, "")
+                                    AnnotationJson: =If(locMode = "Annotate", locSelPhoto.'Annotation data (JSON)', "")
+                                    Visible: =locMode = "Annotate"
+                                    X: =0
+                                    Y: =0
+                                    Width: =Parent.Width
+                                    Height: =Parent.Height - 64
                               - txtPhotoCaption:
                                   Control: ModernTextInput
                                   Properties:

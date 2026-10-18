@@ -46,49 +46,20 @@ App:
       // ---------- Checklist structure ----------
       Stages = ["Pre-use", "Visual and structural", "Operational test", "Safety sign-off"];
 
-      // Does an answer meet a show or risk condition?
-      Meets(answer: Text, op: Text, value: Text): Boolean =
-          If(
-              IsBlank(answer) || IsBlank(op), false,
-              op = "Equals", answer = value,
-              op = "Not equals", answer <> value,
-              op = "Greater than", IfError(Value(answer) > Value(value), false),
-              op = "Less than", IfError(Value(answer) < Value(value), false),
-              op = "One of", answer in Split(value, "|"),
-              false
-          );
-
-      AnswerOf(code: Text): Text = LookUp(colAns, ACode = code).AValue;
-
-      // Session answers live in colAns until Submit.
-      SetAnswer(qid: GUID, code: Text, newValue: Text): Void = {
-          If(
-              IsBlank(LookUp(colAns, AQId = qid)),
-              Collect(colAns, {AQId: qid, ACode: code, AValue: newValue}),
-              UpdateIf(colAns, AQId = qid, {AValue: newValue})
-          )
-      };
-      ClearAnswer(qid: GUID): Void = { RemoveIf(colAns, AQId = qid) };
-
-      // FL-32's cross-question rule, hard-coded. Canvas can't evaluate the generic
-      // rule tree stored in fp_rulejson (no recursion), so each such rule becomes code.
-      FL32Visible = (AnswerOf("FL-13") = "Yes" && AnswerOf("FL-30") = "No") || AnswerOf("FL-20") = "No";
-
-      // ---------- Visibility: one formula per level ----------
-      // Power Fx functions can't recurse, so the question tree is walked one depth at a time.
-      // This app supports five levels (depth 0-4). A sixth level needs a new formula here.
-      VisL0 = Filter(colQ, Depth = 0 && (Code <> "FL-32" || FL32Visible));
-      VisL1 = Filter(colQ, Depth = 1 && ParentId in VisL0.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
-      VisL2 = Filter(colQ, Depth = 2 && ParentId in VisL1.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
-      VisL3 = Filter(colQ, Depth = 3 && ParentId in VisL2.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
-      VisL4 = Filter(colQ, Depth = 4 && ParentId in VisL3.QId && Meets(LookUp(colAns, AQId = ParentId).AValue, ShowOp, ShowVal));
-      VisibleQ = Ungroup(Table({L: VisL0}, {L: VisL1}, {L: VisL2}, {L: VisL3}, {L: VisL4}), L);
+      // ---------- App 2: the checklist component owns visibility and scoring ----------
+      // InspectionChecklist walks the question tree by recursion (no depth limit), evaluates
+      // fp_rulejson and fp_riskrule generically, and reports its results through OnChange into
+      // colVis (visible question ids), colAns (answers with contributions) and colLines (every
+      // point in the score). App 1's per-level formulas, the hard-coded FL-32 rule and the answer
+      // functions are gone; the formulas below only read those collections.
+      VisibleQ = SortByColumns(Filter(colQ, QId in colVis.Id), "SortKey", SortOrder.Ascending);
 
       // ---------- Risk ----------
       Multiplier(criticality: Text): Number = Switch(criticality, "High", 1.5, "Medium", 1.25, 1);
       Band(score: Number, criticalStop: Boolean): Text =
           If(criticalStop || score >= 75, "Critical", score >= 50, "High", score >= 25, "Medium", "Low");
-      RiskItems = Filter(VisibleQ, Weight > 0 && Meets(LookUp(colAns, AQId = QId).AValue, RiskOp, RiskVal));
+      // Question lines and compound-rule lines from the component's explanation.
+      RiskItems = colLines;
       CriticalHit = CountRows(Filter(RiskItems, Critical)) > 0;
       RawPoints = Sum(RiskItems, Weight);
       LiveScore = Min(100, Round(RawPoints * Multiplier(varCtx.Criticality), 1));
@@ -102,17 +73,6 @@ App:
 
       // Visible questions with their session answers (used by Review and Submit).
       VisibleAnswers = AddColumns(VisibleQ, AValue, LookUp(colAns, AQId = QId).AValue);
-
-      // Stage tabs with live "answered/visible" counts.
-      StageTabs = ForAll(
-          Stages As s,
-          {
-              Value: s.Value,
-              Label: s.Value & "  " &
-                  CountRows(Filter(VisibleQ, Stage = s.Value && !IsBlank(LookUp(colAns, AQId = QId).AValue))) & "/" &
-                  CountRows(Filter(VisibleQ, Stage = s.Value))
-          }
-      );
     OnStart: |-
       =// Typed, empty session collections. They are filled when an inspection starts.
       ClearCollect(
@@ -142,8 +102,12 @@ App:
       Clear(colQ);
       ClearCollect(colRules, {Code: "", Name: "", Bonus: 0, Explanation: "", Rule: "", Active: true});
       Clear(colRules);
-      ClearCollect(colAns, {AQId: GUID(), ACode: "", AValue: ""});
+      ClearCollect(colAns, {AQId: GUID(), ACode: "", AValue: "", AContrib: 0});
       Clear(colAns);
+      ClearCollect(colVis, {Id: GUID()});
+      Clear(colVis);
+      ClearCollect(colLines, {Kind: "", Code: "", QText: "", Weight: 0, Critical: false});
+      Clear(colLines);
       Set(
           varCtx,
           {

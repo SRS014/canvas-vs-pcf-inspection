@@ -523,6 +523,8 @@ Screens:
                                             )
                                         );
                                         Clear(colAns);
+                                        Clear(colVis);
+                                        Clear(colLines);
                                         Set(
                                             varCtx,
                                             {

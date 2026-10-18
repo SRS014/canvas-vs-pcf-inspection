@@ -643,9 +643,7 @@ Screens:
                                     {
                                         insp: LookUp(Inspections, Inspection = varCtx.InspectionId),
                                         finalScore: LiveScore,
-                                        finalBand: LiveBand,
-                                        mult: Multiplier(varCtx.Criticality),
-                                        riskIds: RiskItems.QId
+                                        finalBand: LiveBand
                                     },
                                     IfError(
                                         // One batched write: clear this inspection's earlier answer rows (a retry
@@ -661,7 +659,8 @@ Screens:
                                                     Question: LookUp(colQ, QId = a.QId).Rec,
                                                     Value: a.AValue,
                                                     'Numeric value': If(a.AnswerType = "Number", Value(a.AValue)),
-                                                    'Risk contribution': If(a.QId in riskIds, a.Weight * mult, 0)
+                                                    // The component reports each answer's contribution after the multiplier.
+                                                    'Risk contribution': Coalesce(LookUp(colAns, AQId = a.QId).AContrib, 0)
                                                 }
                                             )
                                         );
@@ -684,6 +683,8 @@ Screens:
                                         Set(varBannerText, varCtx.Number & " submitted with risk " & Text(finalScore, "0.0") & " · " & finalBand & ".");
                                         Clear(colAns);
                                         Clear(colQ);
+                                        Clear(colVis);
+                                        Clear(colLines);
                                         UpdateContext({locSubmitting: false});
                                         Navigate(InspectionsHomeScreen, ScreenTransition.None),
                                         UpdateContext({locSubmitting: false, locSubmitError: true})

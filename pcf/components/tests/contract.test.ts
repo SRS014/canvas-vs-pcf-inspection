@@ -44,6 +44,11 @@ test("answers on a collapsed branch are dropped from AnswersOut", () => {
   assert.deepEqual(out.map((a) => a.Code), ["FL-01", "FL-03"]);
 });
 
+test("AnswersJson can be keyed on the inspection", () => {
+  assert.deepEqual(parseAnswers('{"Inspection":"INS-01005"}'), {});
+  assert.deepEqual(parseAnswers('{"Inspection":"x","Answers":[{"QId":"FL-01","Code":"FL-01","Value":"No"}]}'), { "FL-01": "No" });
+});
+
 test("bad input never throws", () => {
   assert.deepEqual(parseQuestions("not json"), []);
   assert.deepEqual(parseRules('[{"Code":"X","Rule":"{bad"}]'), []);

@@ -55,7 +55,13 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
       this.criticality = criticality;
       changed = true;
     }
-    if (changed || this.result === null) this.recalculate(false);
+    // Report outputs when Canvas sends new inputs too, so Canvas always holds the visible set
+    // and score for the current inspection, even before the first answer. Deferred, because
+    // notifying inside updateView would re-enter the render.
+    if (changed || this.result === null) {
+      this.recalculate(false);
+      void Promise.resolve().then(() => this.notifyOutputChanged());
+    }
 
     const view = React.createElement(ChecklistView, {
       questions: this.questions,
@@ -92,6 +98,7 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
       CriticalHit: r.criticalHit,
       AnsweredCount: r.answeredCount,
       VisibleCount: r.visible.length,
+      VisibleIdsJson: JSON.stringify(r.visible.map((q) => q.id)),
       ExplanationJson: JSON.stringify(r.lines.map((l) => ({ Kind: l.kind, Code: l.code, Label: l.label, Points: l.points, Critical: l.critical }))),
     };
   }
