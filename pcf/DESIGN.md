@@ -87,6 +87,12 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
   - Inside an auto-layout container, `allocatedWidth` reports the Width property, not the laid-out width, so the question column got almost no width. Both views now fill 100% of the control's box, and PhotoAnnotator measures its photo area with a ResizeObserver.
   - The annotation toolbar wraps, so Undo and Delete selected stay visible. The Note tool asks for text when it has none.
 - 2026-10-18, owner test 2: passed on the published app (saved 16:10 UTC, components 0.1.4). The downloaded package matched the source on every screen. Merged to main.
+- 2026-10-18, owner test 3 (Monitor trace): annotation works end to end (11 marks saved; the annotated JPEG was written to `fp_annotatedphoto`). Scoring did not:
+  - Every question was visible, and the risk score was 0. INS-01013 had FL-03 = No (a critical stop) and was submitted as 0.0, Low.
+  - Cause: explicit column selection. The `Checklist questions` query fetched 9 columns and dropped the parent, show and risk conditions, weight, options, help and rule. App 2 reads `colQ` only through `JSON(DropColumns(colQ, Rec))`, and the analyzer can't see which columns that uses. `JSON(colRules)` was fine because it names the whole collection.
+  - Fix: `QuestionsJson` uses `JSON(ShowColumns(colQ, …every column…))`.
+  - Lesson: any column that reaches a PCF only through JSON must be named somewhere the analyzer can see.
+- The 146 accessibility flags on classic Labels come back whenever Studio reloads the app. App 1's saved Labels are identical (YAML, metadata, `TabIndex -1`, `OnSelect false`), so this is the checker on a fresh session, not a property of App 2. The ModernText round trip only clears it until the next reload.
 
 ## Build order and checkpoints
 
