@@ -3,7 +3,17 @@ import { Button, Input, Text, ToggleButton, Toolbar, ToolbarDivider, makeStyles,
 import { COLORS, Mark, MarkType, Point, nextMarkerNumber } from "./marks";
 
 const useStyles = makeStyles({
-  root: { display: "flex", flexDirection: "column", gap: "8px", boxSizing: "border-box", fontFamily: tokens.fontFamilyBase },
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    width: "100%",
+    height: "100%",
+    boxSizing: "border-box",
+    fontFamily: tokens.fontFamilyBase,
+  },
+  toolbar: { flexWrap: "wrap", flexShrink: 0 },
+  hint: { color: "#51646E", marginLeft: "8px" },
   stage: { position: "relative", flexGrow: 1, minHeight: "0", backgroundColor: "#0F2530", borderRadius: "8px", overflow: "hidden" },
   img: { position: "absolute", userSelect: "none", pointerEvents: "none" },
   svg: { position: "absolute", touchAction: "none" },
@@ -23,8 +33,6 @@ export interface AnnotatorViewProps {
   src: string;
   marks: Mark[];
   readOnly: boolean;
-  width: number;
-  height: number;
   onChange: (marks: Mark[]) => void;
   onImageLoad: (img: HTMLImageElement) => void;
 }
@@ -33,7 +41,7 @@ let idCounter = 0;
 const newId = (): string => `m${Date.now().toString(36)}${(idCounter++).toString(36)}`;
 
 export const AnnotatorView: React.FC<AnnotatorViewProps> = (props) => {
-  const { src, marks, readOnly, width, height, onChange, onImageLoad } = props;
+  const { src, marks, readOnly, onChange, onImageLoad } = props;
   const styles = useStyles();
   const [tool, setTool] = React.useState<MarkType | "select">("marker");
   const [color, setColor] = React.useState(COLORS[0].value);
@@ -41,10 +49,23 @@ export const AnnotatorView: React.FC<AnnotatorViewProps> = (props) => {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [draft, setDraft] = React.useState<Mark | null>(null);
   const [natural, setNatural] = React.useState({ w: 0, h: 0 });
+  const [size, setSize] = React.useState({ w: 0, h: 0 });
+  const stageRef = React.useRef<HTMLDivElement>(null);
+
+  // Measure the photo area: the toolbar can wrap, so its height is not fixed.
+  React.useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return undefined;
+    const measure = () => setSize((s) => (s.w === el.clientWidth && s.h === el.clientHeight ? s : { w: el.clientWidth, h: el.clientHeight }));
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // Fit the photo inside the stage (object-fit: contain) and overlay the SVG on exactly that box.
-  const stageW = Math.max(0, width);
-  const stageH = Math.max(0, height - 56);
+  const stageW = size.w;
+  const stageH = size.h;
   const scale = natural.w && natural.h ? Math.min(stageW / natural.w, stageH / natural.h) : 0;
   const box = { w: natural.w * scale, h: natural.h * scale, x: (stageW - natural.w * scale) / 2, y: (stageH - natural.h * scale) / 2 };
 
@@ -137,8 +158,8 @@ export const AnnotatorView: React.FC<AnnotatorViewProps> = (props) => {
   };
 
   return (
-    <div className={styles.root} style={{ width, height }}>
-      <Toolbar aria-label="Annotation tools" size="small">
+    <div className={styles.root}>
+      <Toolbar className={styles.toolbar} aria-label="Annotation tools" size="small">
         {TOOLS.map((t) => (
           <ToggleButton key={t.type} checked={tool === t.type} disabled={readOnly} onClick={() => setTool(t.type)} appearance="subtle">
             {t.label}
@@ -183,8 +204,13 @@ export const AnnotatorView: React.FC<AnnotatorViewProps> = (props) => {
         <Text size={200} style={{ marginLeft: 8 }}>
           {marks.length} mark{marks.length === 1 ? "" : "s"}
         </Text>
+        {tool === "note" && noteText.trim() === "" && !readOnly && (
+          <Text size={200} className={styles.hint}>
+            Type the note text, then click the photo.
+          </Text>
+        )}
       </Toolbar>
-      <div className={styles.stage} style={{ width: stageW, height: stageH }}>
+      <div ref={stageRef} className={styles.stage}>
         {!src && <div className={styles.empty}>No photo selected.</div>}
         {src && (
           <>

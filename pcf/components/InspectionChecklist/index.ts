@@ -2,6 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
 import { fusionTheme } from "../shared/theme";
+import { Live, LiveStore } from "../shared/live";
 import { ChecklistView } from "./ChecklistView";
 import { answersOut, parseAnswers, parseCriticality, parseQuestions, parseRules, ParsedQuestion } from "./contract";
 import { evaluate, type Answers, type Result, type RiskRule } from "./engine/engine";
@@ -21,6 +22,8 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
   private lastRulesJson = "";
   private lastAnswersJson: string | null = null;
   private criticality: "Low" | "Medium" | "High" = "Low";
+  private readOnly = false;
+  private store = new LiveStore();
 
   public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void): void {
     this.notifyOutputChanged = notifyOutputChanged;
@@ -63,17 +66,21 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
       void Promise.resolve().then(() => this.notifyOutputChanged());
     }
 
-    const view = React.createElement(ChecklistView, {
+    this.readOnly = p.ReadOnly.raw === true;
+    const live = React.createElement(Live, { store: this.store, render: this.renderView });
+    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent", width: "100%", height: "100%" } }, live);
+  }
+
+  // The view fills the box Canvas gives the control. allocatedWidth is not used: inside an
+  // auto-layout container it reports the Width property, not the laid-out width.
+  private renderView = (): React.ReactElement =>
+    React.createElement(ChecklistView, {
       questions: this.questions,
       answers: this.answers,
       result: this.result!,
-      readOnly: p.ReadOnly.raw === true,
-      width: Number(context.mode.allocatedWidth) > 0 ? Number(context.mode.allocatedWidth) : 1000,
-      height: Number(context.mode.allocatedHeight) > 0 ? Number(context.mode.allocatedHeight) : 600,
+      readOnly: this.readOnly,
       onAnswer: this.onAnswer,
     });
-    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent" } }, view);
-  }
 
   private onAnswer = (questionId: string, value: string | undefined): void => {
     const next = { ...this.answers };
@@ -81,6 +88,7 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
     else next[questionId] = value;
     this.answers = next;
     this.recalculate(true);
+    this.store.emit();
   };
 
   private recalculate(notify: boolean): void {

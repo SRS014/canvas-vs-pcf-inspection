@@ -2,6 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
 import { fusionTheme } from "../shared/theme";
+import { Live, LiveStore } from "../shared/live";
 import { AnnotatorView } from "./AnnotatorView";
 import { Mark, flatten, parseMarks, serialiseMarks } from "./marks";
 
@@ -17,6 +18,9 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
   private lastSrc = "";
   private image: HTMLImageElement | null = null;
   private flattened = "";
+  private src = "";
+  private readOnly = false;
+  private store = new LiveStore();
 
   public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void): void {
     this.notifyOutputChanged = notifyOutputChanged;
@@ -37,17 +41,21 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
       this.marks = parseMarks(marksJson);
       void Promise.resolve().then(() => this.notifyOutputChanged());
     }
-    const view = React.createElement(AnnotatorView, {
-      src,
+    this.src = src;
+    this.readOnly = context.parameters.ReadOnly.raw === true;
+    const live = React.createElement(Live, { store: this.store, render: this.renderView });
+    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent", width: "100%", height: "100%" } }, live);
+  }
+
+  // The view fills the control's box and measures the photo area itself.
+  private renderView = (): React.ReactElement =>
+    React.createElement(AnnotatorView, {
+      src: this.src,
       marks: this.marks,
-      readOnly: context.parameters.ReadOnly.raw === true,
-      width: Number(context.mode.allocatedWidth) > 0 ? Number(context.mode.allocatedWidth) : 900,
-      height: Number(context.mode.allocatedHeight) > 0 ? Number(context.mode.allocatedHeight) : 600,
+      readOnly: this.readOnly,
       onChange: this.onChange,
       onImageLoad: this.onImageLoad,
     });
-    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent" } }, view);
-  }
 
   private onImageLoad = (img: HTMLImageElement): void => {
     this.image = img;
@@ -60,6 +68,7 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
   private onChange = (marks: Mark[]): void => {
     this.marks = marks;
     this.flattened = this.image && marks.length > 0 ? flatten(this.image, marks) : "";
+    this.store.emit();
     this.notifyOutputChanged();
   };
 

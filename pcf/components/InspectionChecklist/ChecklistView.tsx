@@ -31,10 +31,20 @@ const BAND_COLOR: Record<Band, string> = { Low: C.success, Medium: C.warning, Hi
 const STAGES = ["Pre-use", "Visual and structural", "Operational test", "Safety sign-off"];
 
 const useStyles = makeStyles({
-  root: { display: "flex", gap: "24px", boxSizing: "border-box", fontFamily: tokens.fontFamilyBase, color: C.text },
-  main: { flexGrow: 1, minWidth: "0", display: "flex", flexDirection: "column", gap: "12px" },
+  root: {
+    display: "flex",
+    gap: "24px",
+    width: "100%",
+    height: "100%",
+    boxSizing: "border-box",
+    fontFamily: tokens.fontFamilyBase,
+    color: C.text,
+  },
+  main: { flexGrow: 1, flexBasis: "0", minWidth: "0", minHeight: "0", display: "flex", flexDirection: "column", gap: "12px" },
+  tabs: { flexWrap: "wrap" },
   list: {
     flexGrow: 1,
+    minHeight: "0",
     overflowY: "auto",
     backgroundColor: "#FFFFFF",
     border: `1px solid ${C.border}`,
@@ -67,8 +77,6 @@ export interface ChecklistViewProps {
   answers: Answers;
   result: Result;
   readOnly: boolean;
-  width: number;
-  height: number;
   onAnswer: (questionId: string, value: string | undefined) => void;
 }
 
@@ -79,7 +87,7 @@ function depthOf(q: ParsedQuestion, byId: Map<string, ParsedQuestion>): number {
 }
 
 export const ChecklistView: React.FC<ChecklistViewProps> = (props) => {
-  const { questions, answers, result, readOnly, width, height, onAnswer } = props;
+  const { questions, answers, result, readOnly, onAnswer } = props;
   const styles = useStyles();
   const [stage, setStage] = React.useState<string>(STAGES[0]);
   const byId = React.useMemo(() => new Map(questions.map((q) => [q.id, q])), [questions]);
@@ -164,9 +172,9 @@ export const ChecklistView: React.FC<ChecklistViewProps> = (props) => {
   };
 
   return (
-    <div className={styles.root} style={{ width, height }}>
+    <div className={styles.root}>
       <div className={styles.main}>
-        <TabList selectedValue={stage} onTabSelect={(_, d) => setStage(String(d.value))} aria-label="Inspection stages">
+        <TabList className={styles.tabs} selectedValue={stage} onTabSelect={(_, d) => setStage(String(d.value))} aria-label="Inspection stages">
           {stages.map((s) => (
             <Tab key={s} value={s}>
               {`${s} ${count(s)}`}

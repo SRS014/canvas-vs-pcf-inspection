@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="Fusion" constructor="PhotoAnnotator" version="0.1.3" display-name-key="Photo annotator" description-key="Numbered markers, arrows, boxes, freehand and notes on a photo. Outputs the photo with marks burned in plus every mark as data." control-type="virtual">
+  <control namespace="Fusion" constructor="PhotoAnnotator" version="0.1.4" display-name-key="Photo annotator" description-key="Numbered markers, arrows, boxes, freehand and notes on a photo. Outputs the photo with marks burned in plus every mark as data." control-type="virtual">
     <external-service-usage enabled="false">
     </external-service-usage>
 

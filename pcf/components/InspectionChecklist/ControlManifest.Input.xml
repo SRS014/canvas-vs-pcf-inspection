@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="Fusion" constructor="InspectionChecklist" version="0.1.3" display-name-key="Inspection checklist" description-key="Recursive inspection checklist with cross-question rules and a live, explained risk score. Canvas passes data in as JSON; the component never calls Dataverse." control-type="virtual">
+  <control namespace="Fusion" constructor="InspectionChecklist" version="0.1.4" display-name-key="Inspection checklist" description-key="Recursive inspection checklist with cross-question rules and a live, explained risk score. Canvas passes data in as JSON; the component never calls Dataverse." control-type="virtual">
     <external-service-usage enabled="false">
     </external-service-usage>
 
