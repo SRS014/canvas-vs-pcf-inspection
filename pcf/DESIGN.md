@@ -78,14 +78,17 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
 ## Progress
 
 - 2026-10-17: `fp_riskrule` provisioned and seeded (6 rules). Both components written in one project ([components/](components/)), build clean (lint, type-check, bundle). 14 engine and contract tests pass against the seed data. Not yet run in the test harness or deployed.
+- 2026-10-18: Both components (0.1.3) checked in the harness and deployed in the `FusionPcfComponents` solution ([solution/](solution/)); 15 tests pass. App 2 wired to both components. It compiles clean with no accessibility or App checker issues, and Studio's control order matches the source on every screen. Waiting on the owner's Monitor test run.
+  - Studio quirk: classic Labels created from YAML are flagged as interactive (missing TabIndex, FocusedBorderThickness 0). The fix is a round trip: compile each Label once as a minimal `ModernText`, then compile the original Label YAML again.
+  - Renaming a screen and renaming it back (two compiles) rebuilds it in source order. This also cleared duplicate Label copies that Studio had kept on PhotosScreen.
 
 ## Build order and checkpoints
 
 1. **Engine first.** The visibility, rules and scoring engine with unit tests against the seed data. Checkpoint: the tests show the sixth level, FL-32 and the compound rules working. *Done.*
-2. **InspectionChecklist UI** in the PCF test harness (`npm start`).
-3. **PhotoAnnotator** in the test harness.
-4. **Deploy** both components to the environment (owner signs in).
-5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor.
+2. **InspectionChecklist UI** in the PCF test harness (`npm start`). *Done.*
+3. **PhotoAnnotator** in the test harness. *Done.*
+4. **Deploy** both components to the environment (owner signs in). *Done.*
+5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor. *Built; test run pending.*
 6. **docs/how-pro-code-solved-it.md**: each limit A1–A10 against the technique that removed it, with evidence from both apps.
 
 ## To verify while building

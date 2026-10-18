@@ -537,7 +537,6 @@ Screens:
                                                 Criticality: Text(eq.Criticality)
                                             }
                                         );
-                                        Set(varStage, "Pre-use");
                                         UpdateContext({locStarting: false});
                                         Navigate(InspectionScreen, ScreenTransition.None),
                                         UpdateContext({locStarting: false, locStartError: true})

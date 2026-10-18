@@ -120,7 +120,6 @@ App:
               Criticality: ""
           }
       );
-      Set(varStage, "Pre-use");
       Set(varBannerText, "")
     StartScreen: =InspectionsHomeScreen
     Theme: =PowerAppsTheme
