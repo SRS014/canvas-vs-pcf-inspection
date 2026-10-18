@@ -1,0 +1,622 @@
+Screens:
+  PhotosScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+      OnVisible: |-
+        =UpdateContext({locMode: "View", locSelPhoto: Blank(), locSaving: false, locPhotoError: "", locResetPen: false, locResetAdd: false})
+    Children:
+      - conPhotoRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =cWash
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - htmPhotoTopBar:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =6
+                  FillPortions: =0
+                  LayoutMinHeight: =6
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conPhotoHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =cWhite
+                  FillPortions: =0
+                  Height: =76
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =16
+                  LayoutMinHeight: =76
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnPhotoBackNav:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                        Height: =48
+                        Icon: ="ArrowLeft"
+                        OnSelect: =Navigate(InspectionScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Back to checklist"
+                        Width: =190
+                  - imgPhotoMark:
+                      Control: Image
+                      Properties:
+                        Image: =BrandSymbol
+                        ImagePosition: =ImagePosition.Fit
+                        Width: =40
+                        Height: =40
+                        LayoutMinWidth: =40
+                        LayoutMinHeight: =40
+                        AlignInContainer: =AlignInContainer.Center
+                        TabIndex: =0
+                        AccessibleLabel: ="The Fusion Platform"
+                  - conPhotoTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        DropShadow: =DropShadow.None
+                        Height: =72
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMinHeight: =72
+                      Children:
+                        - txtPhotoEyebrow:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              LayoutMinHeight: =18
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =12
+                              Text: =varCtx.Number & " · PHOTOS"
+                              Overflow: =Overflow.Hidden
+                        - txtPhotoTitle:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =32
+                              LayoutMinHeight: =32
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =22
+                              Text: ="Photos and annotation"
+                              Overflow: =Overflow.Hidden
+                        - txtPhotoContext:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =22
+                              LayoutMinHeight: =22
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =varCtx.EquipmentName & " · " & varCtx.AssetTag & " · " & varCtx.SiteName
+                              Wrap: =false
+                              Overflow: =Overflow.Hidden
+                  - addPhotoPicker:
+                      Control: AddMedia
+                      Properties:
+                        AccessibleLabel: ="Add a picture to this inspection"
+                        ChangePictureText: ="+  Add picture"
+                        Color: =cWhite
+                        DisabledColor: =cMuted
+                        DisabledFill: =cBorder
+                        DisplayMode: =If(locMode = "View" && !locSaving, DisplayMode.Edit, DisplayMode.Disabled)
+                        Fill: =cPrimary
+                        Font: =Font.'Segoe UI'
+                        Height: =48
+                        HoverFill: =ColorFade(cPrimary, -15%)
+                        OnChange: |-
+                          =If(
+                              !IsBlank(Self.Media),
+                              UpdateContext({locMode: "Add", locPhotoError: ""});
+                              Reset(txtPhotoCaption)
+                          )
+                        PressedFill: =ColorFade(cPrimary, -25%)
+                        Reset: =locResetAdd
+                        Size: =12
+                        Text: ="+  Add picture"
+                        UseMobileCamera: =true
+                        Width: =170
+            - conPhotoBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =24
+                Children:
+                  - conPhotoListCard:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =cWhite
+                        FillPortions: =0
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        LayoutMinWidth: =280
+                        PaddingBottom: =16
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        PaddingTop: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =360
+                      Children:
+                        - txtPhotoListTitle:
+                            Control: ModernText
+                            Properties:
+                              AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =36
+                              PaddingLeft: =0
+                              Size: =18
+                              Text: ="Photos (" & galPhotoList.AllItemsCount & ")"
+                              LayoutMinHeight: =36
+                        - htmPhotoListHeadingBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              Width: =56
+                              Height: =3
+                              LayoutMinWidth: =56
+                              LayoutMinHeight: =3
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Start
+                        - txtPhotoListEmpty:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =48
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="No photos yet. Use Add picture to attach one."
+                              Visible: =galPhotoList.AllItemsCount = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =48
+                        - galPhotoList:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="Photos for this inspection"
+                              Items: |-
+                                =Sort(
+                                    Filter('Inspection photos', Inspection.Inspection = varCtx.InspectionId),
+                                    'Created On',
+                                    SortOrder.Descending
+                                )
+                              LayoutMinHeight: =120
+                              LoadingSpinnerColor: =cPrimary
+                              Selectable: =false
+                              TemplatePadding: =0
+                              TemplateSize: =96
+                            Children:
+                              - conPhotoRowCard:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    BorderColor: =If(locSelPhoto.'Inspection photo' = ThisItem.'Inspection photo', cPrimary, cBorder)
+                                    BorderThickness: =If(locSelPhoto.'Inspection photo' = ThisItem.'Inspection photo', 2, 1)
+                                    DropShadow: =DropShadow.None
+                                    Fill: =If(locSelPhoto.'Inspection photo' = ThisItem.'Inspection photo', cPrimaryTint, cWhite)
+                                    Height: =88
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    Width: =Parent.TemplateWidth
+                                    Y: =4
+                              - imgPhotoThumb:
+                                  Control: Image
+                                  Properties:
+                                    TabIndex: =0
+                                    AccessibleLabel: =ThisItem.Caption
+                                    Height: =72
+                                    Image: =ThisItem.Photo
+                                    ImagePosition: =ImagePosition.Fill
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    Width: =96
+                                    X: =8
+                                    Y: =12
+                              - txtPhotoRowCaption:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cText
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =44
+                                    PaddingLeft: =0
+                                    Size: =16
+                                    Text: =ThisItem.Caption
+                                    VerticalAlign: =VerticalAlign.Top
+                                    Width: =Parent.TemplateWidth - 124
+                                    X: =116
+                                    Y: =12
+                                    Overflow: =Overflow.Hidden
+                              - conPhotoRowTagBadge:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    BorderColor: =cPurple
+                                    BorderStyle: =BorderStyle.Solid
+                                    BorderThickness: =1
+                                    Fill: =cPurpleTint
+                                    Height: =24
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    Visible: =!IsBlank(ThisItem.'Canvas pen strokes')
+                                    Width: =96
+                                    X: =116
+                                    Y: =56
+                                  Children:
+                                    - txtPhotoRowTag:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Align: =Align.Center
+                                          Color: =cPurple
+                                          FontWeight: =FontWeight.Semibold
+                                          Size: =12
+                                          Text: ="ANNOTATED"
+                                          Overflow: =Overflow.Hidden
+                                          X: =0
+                                          Y: =0
+                                          Width: =Parent.Width
+                                          Height: =Parent.Height
+                              - btnPhotoRowSelect:
+                                  Control: ModernButton
+                                  Properties:
+                                    AccessibleLabel: =ThisItem.Caption
+                                    Appearance: =ButtonAppearance.Transparent
+                                    DisplayMode: =If(locMode = "View" && !locSaving, DisplayMode.Edit, DisplayMode.Disabled)
+                                    Height: =88
+                                    Layout: =ButtonLayout.TextOnly
+                                    OnSelect: |-
+                                      =UpdateContext({locSelPhoto: ThisItem, locPhotoError: ""})
+                                    Text: =""
+                                    Width: =Parent.TemplateWidth
+                                    Y: =4
+                  - conPhotoViewer:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =cWhite
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        LayoutMinWidth: =480
+                        PaddingBottom: =16
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        PaddingTop: =8
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - conPhotoToolbar:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =64
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =8
+                              LayoutMinHeight: =64
+                            Children:
+                              - txtPhotoToolbarTitle:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =If(locMode = "Annotate", cPurple, If(IsBlank(locSelPhoto) && locMode = "View", cMuted, cText))
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinWidth: =200
+                                    PaddingLeft: =0
+                                    Size: =18
+                                    Text: |-
+                                      =Switch(
+                                          locMode,
+                                          "Add", "New photo",
+                                          "Annotate", "ANNOTATING · draw on the photo",
+                                          If(IsBlank(locSelPhoto), "Select a photo to view or annotate it", locSelPhoto.Caption)
+                                      )
+                                    Wrap: =false
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                                    LayoutMinHeight: =32
+                              - btnPhotoAnnotate:
+                                  Control: ModernButton
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    Appearance: =ButtonAppearance.Outline
+                                    Color: =cPrimary
+                                    Height: =48
+                                    Icon: ="Edit"
+                                    OnSelect: |-
+                                      =UpdateContext({locMode: "Annotate", locPhotoError: "", locResetPen: !locResetPen});
+                                      Reset(txtPhotoCaption)
+                                    Size: =16
+                                    Text: ="Annotate"
+                                    Visible: =locMode = "View" && !IsBlank(locSelPhoto)
+                                    Width: =140
+                              - btnPhotoClearStrokes:
+                                  Control: ModernButton
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    Appearance: =ButtonAppearance.Subtle
+                                    Color: =cPrimary
+                                    DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                                    Height: =48
+                                    Layout: =ButtonLayout.TextOnly
+                                    OnSelect: |-
+                                      =UpdateContext({locResetPen: !locResetPen})
+                                    Size: =16
+                                    Text: ="Clear strokes"
+                                    Visible: =locMode = "Annotate"
+                                    Width: =130
+                              - btnPhotoCancel:
+                                  Control: ModernButton
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    Appearance: =ButtonAppearance.Outline
+                                    Color: =cPrimary
+                                    DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                                    Height: =48
+                                    Layout: =ButtonLayout.TextOnly
+                                    OnSelect: |-
+                                      =If(locMode = "Add", UpdateContext({locResetAdd: !locResetAdd}));
+                                      UpdateContext({locMode: "View", locPhotoError: ""})
+                                    Size: =16
+                                    Text: ="Cancel"
+                                    Visible: =locMode <> "View"
+                                    Width: =110
+                              - btnPhotoSave:
+                                  Control: ModernButton
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    BasePaletteColor: =cPrimary
+                                    DisplayMode: =If(locSaving, DisplayMode.Disabled, DisplayMode.Edit)
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =48
+                                    Layout: =ButtonLayout.TextOnly
+                                    OnSelect: |-
+                                      =UpdateContext({locSaving: true, locPhotoError: ""});
+                                      If(
+                                          locMode = "Add",
+                                          IfError(
+                                              UpdateContext({
+                                                  locSelPhoto: Patch(
+                                                      'Inspection photos',
+                                                      Defaults('Inspection photos'),
+                                                      {
+                                                          Caption: Coalesce(
+                                                              Trim(txtPhotoCaption.Text),
+                                                              varCtx.Number & " photo " & (galPhotoList.AllItemsCount + 1)
+                                                          ),
+                                                          Inspection: LookUp(Inspections, Inspection = varCtx.InspectionId),
+                                                          Photo: {Full: addPhotoPicker.Media, Value: addPhotoPicker.Media}
+                                                      }
+                                                  )
+                                              });
+                                              UpdateContext({locMode: "View", locResetAdd: !locResetAdd}),
+                                              UpdateContext({locPhotoError: "The photo couldn't be saved. Your picture and caption are kept; try again."})
+                                          ),
+                                          IfError(
+                                              UpdateContext({
+                                                  locSelPhoto: Patch(
+                                                      'Inspection photos',
+                                                      LookUp('Inspection photos', 'Inspection photo' = locSelPhoto.'Inspection photo'),
+                                                      {'Canvas pen strokes': penPhotoAnnotate.Image, Caption: Coalesce(Trim(txtPhotoCaption.Text), locSelPhoto.Caption)}
+                                                  )
+                                              });
+                                              UpdateContext({locMode: "View"}),
+                                              UpdateContext({locPhotoError: "The annotation couldn't be saved. Your drawing is kept; try again."})
+                                          )
+                                      );
+                                      UpdateContext({locSaving: false})
+                                    Size: =16
+                                    Text: =If(locSaving, "Saving...", If(locMode = "Add", "Save photo", "Save annotation"))
+                                    Visible: =locMode <> "View"
+                                    Width: =170
+                        - txtPhotoError:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =cError
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =1
+                              Color: =cError
+                              Fill: =cErrorTint
+                              Height: =44
+                              PaddingLeft: =12
+                              Size: =14
+                              Text: ="Error · " & locPhotoError
+                              Visible: =!IsBlank(locPhotoError)
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =44
+                        - txtPhotoHelper:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="Annotating again replaces the saved strokes. Strokes are stored as a separate image, not merged into the photo."
+                              Visible: =locMode = "View" && !IsBlank(locSelPhoto.'Canvas pen strokes')
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
+                        - conPhotoFrame:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Fill: =cWhite
+                              LayoutMinHeight: =240
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                            Children:
+                              - txtPhotoNothing:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Center
+                                    Color: =cMuted
+                                    Height: =40
+                                    Size: =16
+                                    Text: =If(galPhotoList.AllItemsCount = 0, "Add a picture to get started.", "Select a photo to view or annotate it.")
+                                    Visible: =locMode = "View" && IsBlank(locSelPhoto)
+                                    Width: =Parent.Width
+                                    Y: =Parent.Height / 2 - 20
+                                    Overflow: =Overflow.Hidden
+                              - conPhotoLetterbox:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    BorderColor: =cPrimary
+                                    BorderThickness: =If(locMode = "Annotate", 2, 0)
+                                    DropShadow: =DropShadow.None
+                                    Fill: =cText
+                                    Height: =Min(Parent.Width, (Parent.Height - If(locMode <> "View", 96, 0)) * 4 / 3) * 3 / 4
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    Visible: =locMode <> "View" || !IsBlank(locSelPhoto)
+                                    Width: =Min(Parent.Width, (Parent.Height - If(locMode <> "View", 96, 0)) * 4 / 3)
+                                    X: =(Parent.Width - Min(Parent.Width, (Parent.Height - If(locMode <> "View", 96, 0)) * 4 / 3)) / 2
+                                  Children:
+                                    - imgPhotoMain:
+                                        Control: Image
+                                        Properties:
+                                          TabIndex: =0
+                                          AccessibleLabel: =If(locMode = "Add", "New photo", locSelPhoto.Caption)
+                                          Height: =Parent.Height
+                                          Image: =If(locMode = "Add", addPhotoPicker.Media, locSelPhoto.Photo.Full)
+                                          Width: =Parent.Width
+                                    - imgPhotoStrokes:
+                                        Control: Image
+                                        Properties:
+                                          TabIndex: =0
+                                          AccessibleLabel: ="Saved annotation strokes"
+                                          Height: =Parent.Height
+                                          Image: =locSelPhoto.'Canvas pen strokes'.Full
+                                          ImagePosition: =ImagePosition.Stretch
+                                          Visible: =locMode = "View" && !IsBlank(locSelPhoto.'Canvas pen strokes')
+                                          Width: =Parent.Width
+                                    - penPhotoAnnotate:
+                                        Control: PenInput
+                                        Properties:
+                                          AccessibleLabel: ="Draw on the photo to mark defects"
+                                          BorderThickness: =0
+                                          Color: =cError
+                                          Height: =Parent.Height
+                                          Reset: =locResetPen
+                                          ShowControls: =true
+                                          Size: =5
+                                          Visible: =locMode = "Annotate"
+                                          Width: =Parent.Width
+                              - txtPhotoCaption:
+                                  Control: ModernTextInput
+                                  Properties:
+                                    AccessibleLabel: =If(locMode = "Annotate", "Describe what you marked", "Caption")
+                                    Default: =If(locMode = "Annotate", locSelPhoto.Caption, "")
+                                    Appearance: =Appearance.Outline
+                                    BorderColor: =cMuted
+                                    Height: =48
+                                    MaxLength: =200
+                                    Placeholder: |-
+                                      =If(
+                                          locMode = "Annotate",
+                                          "Describe what you marked, for example: crack on left fork",
+                                          "Caption. Leave blank to use " & varCtx.Number & " photo " & (galPhotoList.AllItemsCount + 1)
+                                      )
+                                    Size: =16
+                                    Visible: =locMode <> "View"
+                                    Width: =Min(560, Parent.Width)
+                                    X: =(Parent.Width - Min(560, Parent.Width)) / 2
+                                    Y: =Parent.Height - 56

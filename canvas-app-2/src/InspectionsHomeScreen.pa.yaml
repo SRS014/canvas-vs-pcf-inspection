@@ -1,0 +1,840 @@
+Screens:
+  InspectionsHomeScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+    Children:
+      - conHomeRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            Width: =Parent.Width
+            Height: =Parent.Height
+            Fill: =cWash
+            DropShadow: =DropShadow.None
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - htmHomeTopBar:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =6
+                  FillPortions: =0
+                  LayoutMinHeight: =6
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conHomeHero:
+                Control: GroupContainer
+                Variant: ManualLayout
+                Properties:
+                  Height: =128
+                  FillPortions: =0
+                  LayoutMinHeight: =128
+                  AlignInContainer: =AlignInContainer.Stretch
+                  DropShadow: =DropShadow.None
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - htmHomeHeroWash:
+                      Control: HtmlViewer
+                      Properties:
+                        HtmlText: =HtmlWash(Parent.Height)
+                        AutoHeight: =true
+                        Size: =1
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        X: =0
+                        Y: =0
+                        Width: =Parent.Width
+                        Height: =Parent.Height
+                  - imgHomeLogo:
+                      Control: Image
+                      Properties:
+                        TabIndex: =0
+                        Image: =BrandSymbol
+                        ImagePosition: =ImagePosition.Fit
+                        X: =24
+                        Y: =32
+                        Width: =64
+                        Height: =64
+                        AccessibleLabel: ="The Fusion Platform"
+                  - txtHomeEyebrow:
+                      Control: Label
+                      Properties:
+                        Text: ="THE FUSION PLATFORM  ·  APP 2 OF 2  ·  CANVAS + PCF"
+                        X: =104
+                        Y: =22
+                        Width: =Parent.Width - 104 - 248
+                        Height: =22
+                        Size: =12
+                        FontWeight: =FontWeight.Bold
+                        Color: =cPurple
+                        PaddingLeft: =0
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Overflow: =Overflow.Hidden
+                  - txtHomeTitle:
+                      Control: Label
+                      Properties:
+                        Text: ="Equipment inspections"
+                        X: =104
+                        Y: =44
+                        Width: =Parent.Width - 104 - 248
+                        Height: =42
+                        Size: =28
+                        FontWeight: =FontWeight.Bold
+                        Color: =cText
+                        PaddingLeft: =0
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Overflow: =Overflow.Hidden
+                  - txtHomeSub:
+                      Control: Label
+                      Properties:
+                        Text: ="Multi-stage inspections across warehouse sites. Canvas screens with two React + TypeScript code components, on the same Dataverse tables."
+                        X: =104
+                        Y: =86
+                        Width: =Parent.Width - 104 - 248
+                        Height: =24
+                        Size: =15
+                        Color: =cMuted
+                        Wrap: =false
+                        PaddingLeft: =0
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Overflow: =Overflow.Hidden
+                  - btnHomeNew:
+                      Control: ModernButton
+                      Properties:
+                        Text: ="New inspection"
+                        Icon: ="Add"
+                        X: =Parent.Width - 24 - 200
+                        Y: =40
+                        Height: =48
+                        Width: =200
+                        Size: =16
+                        FontWeight: =FontWeight.Semibold
+                        BasePaletteColor: =cPrimary
+                        AccessibleLabel: ="Start a new inspection"
+                        OnSelect: |-
+                          =Set(varBannerText, "");
+                          Navigate(NewInspectionScreen, ScreenTransition.None)
+                  - conHomeHeroRule:
+                      Control: GroupContainer
+                      Variant: ManualLayout
+                      Properties:
+                        X: =0
+                        Y: =Parent.Height - 1
+                        Width: =Parent.Width
+                        Height: =1
+                        Fill: =cBorder
+                        DropShadow: =DropShadow.None
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+            - conHomeBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =1
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =16
+                  PaddingTop: =20
+                  PaddingBottom: =20
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                Children:
+                  - conHomeBanner:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Visible: =!IsBlank(varBannerText)
+                        Height: =56
+                        FillPortions: =0
+                        LayoutMinHeight: =56
+                        Fill: =cSuccessTint
+                        BorderColor: =cSuccess
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutGap: =12
+                        PaddingLeft: =16
+                        PaddingRight: =8
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtHomeBannerLabel:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Text: ="✓  Submitted"
+                              Size: =16
+                              FontWeight: =FontWeight.Bold
+                              Color: =cSuccess
+                              Width: =130
+                              LayoutMinWidth: =130
+                              Overflow: =Overflow.Hidden
+                              Height: =32
+                              LayoutMinHeight: =32
+                        - txtHomeBannerText:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Text: =varBannerText
+                              Size: =16
+                              Color: =cText
+                              FillPortions: =1
+                              LayoutMinWidth: =200
+                              Overflow: =Overflow.Hidden
+                              Height: =32
+                              LayoutMinHeight: =32
+                        - btnHomeBannerDismiss:
+                            Control: ModernButton
+                            Properties:
+                              Text: ="Dismiss"
+                              Layout: =ButtonLayout.TextOnly
+                              Appearance: =ButtonAppearance.Subtle
+                              Color: =cPrimary
+                              Height: =48
+                              Width: =110
+                              AccessibleLabel: ="Dismiss the submitted message"
+                              OnSelect: =Set(varBannerText, "")
+                  - galHomeKpis:
+                      Control: Gallery
+                      Variant: Horizontal
+                      Properties:
+                        Items: |-
+                          =With(
+                              {
+                                  submittedCount: CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted),
+                                  canvasCount: CountIf(Inspections, 'Built with' = [@'Built with'].'Canvas only'),
+                                  pcfCount: CountIf(Inspections, 'Built with' = [@'Built with'].'Canvas + PCF')
+                              },
+                              Table(
+                                  {Label: "Total inspections", Val: Text(CountIf(Inspections, true)), Sub: "", Alert: false},
+                                  {Label: "Drafts", Val: Text(CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Draft)), Sub: "", Alert: false},
+                                  {Label: "Submitted", Val: Text(submittedCount), Sub: "", Alert: false},
+                                  {
+                                      Label: "High + Critical",
+                                      Val: Text(CountIf(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted && ('Risk band' = [@'Risk band'].High || 'Risk band' = [@'Risk band'].Critical))),
+                                      Sub: "submitted inspections",
+                                      Alert: true
+                                  },
+                                  {
+                                      Label: "Average risk score",
+                                      Val: If(
+                                          submittedCount = 0,
+                                          "–",
+                                          Text(Average(Filter(Inspections, 'Status (fp_status)' = 'Inspection status'.Submitted), 'Risk score'), "0.0")
+                                      ),
+                                      Sub: If(submittedCount = 0, "no submitted inspections", "out of 100"),
+                                      Alert: false
+                                  },
+                                  {Label: "Built with", Val: "Canvas " & canvasCount, Sub: "Canvas + PCF  " & pcfCount, Alert: false}
+                              )
+                          )
+                        TemplateSize: =(Self.Width - 5 * 16) / 6
+                        TemplatePadding: =0
+                        Height: =112
+                        FillPortions: =0
+                        LayoutMinHeight: =112
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Selectable: =false
+                        ShowScrollbar: =false
+                        BorderThickness: =0
+                        TabIndex: =0
+                        AccessibleLabel: ="Inspection summary"
+                      Children:
+                        - conHomeKpiCard:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              X: =0
+                              Y: =0
+                              Width: =Parent.TemplateWidth - 16
+                              Height: =Parent.TemplateHeight
+                              Fill: =cWhite
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                        - htmHomeKpiBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 8)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              X: =0
+                              Y: =0
+                              Width: =Parent.TemplateWidth - 16
+                              Height: =3
+                        - txtHomeKpiLabel:
+                            Control: Label
+                            Properties:
+                              Text: =ThisItem.Label
+                              X: =16
+                              Y: =14
+                              Width: =Parent.TemplateWidth - 40
+                              Height: =22
+                              Size: =14
+                              Color: =cMuted
+                              Wrap: =false
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Overflow: =Overflow.Hidden
+                        - txtHomeKpiValue:
+                            Control: Label
+                            Properties:
+                              Text: =ThisItem.Val
+                              X: =16
+                              Y: =38
+                              Width: =Parent.TemplateWidth - 40
+                              Height: =42
+                              Size: =28
+                              FontWeight: =FontWeight.Bold
+                              Color: =If(ThisItem.Alert && ThisItem.Val <> "0", cError, cText)
+                              Wrap: =false
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Overflow: =Overflow.Hidden
+                        - txtHomeKpiSub:
+                            Control: Label
+                            Properties:
+                              Text: =ThisItem.Sub
+                              Visible: =!IsBlank(ThisItem.Sub)
+                              X: =16
+                              Y: =80
+                              Width: =Parent.TemplateWidth - 40
+                              Height: =22
+                              Size: =14
+                              Color: =If(ThisItem.Label = "Built with", cPurple, cMuted)
+                              FontWeight: =If(ThisItem.Label = "Built with", FontWeight.Semibold, FontWeight.Normal)
+                              Wrap: =false
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Overflow: =Overflow.Hidden
+                  - conHomeListCard:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        Fill: =cWhite
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        FillPortions: =1
+                        LayoutDirection: =LayoutDirection.Vertical
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - htmHomeListBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 8)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              Height: =3
+                              FillPortions: =0
+                              LayoutMinHeight: =3
+                              AlignInContainer: =AlignInContainer.Stretch
+                        - conHomeListTitleRow:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =52
+                              FillPortions: =0
+                              LayoutMinHeight: =52
+                              DropShadow: =DropShadow.None
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutGap: =12
+                              PaddingLeft: =16
+                              PaddingRight: =16
+                            Children:
+                              - txtHomeListTitle:
+                                  Control: ModernText
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    AutoHeight: =true
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="Inspections"
+                                    Size: =18
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cText
+                                    Width: =130
+                                    LayoutMinWidth: =120
+                                    Height: =32
+                                    LayoutMinHeight: =32
+                              - txtHomeListCaption:
+                                  Control: ModernText
+                                  Properties:
+                                    AccessibleLabel: =Self.Text
+                                    AutoHeight: =true
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="Newest first · read-only"
+                                    Size: =14
+                                    Color: =cMuted
+                                    FillPortions: =1
+                                    Height: =32
+                                    LayoutMinHeight: =32
+                        - conHomeColHeaders:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              Height: =36
+                              FillPortions: =0
+                              LayoutMinHeight: =36
+                              Fill: =cWash
+                              DropShadow: =DropShadow.None
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                            Children:
+                              - txtHomeColInspection:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="INSPECTION"
+                                    X: =16
+                                    Y: =4
+                                    Width: =200
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtHomeColEquipment:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="EQUIPMENT"
+                                    X: =232
+                                    Y: =4
+                                    Width: =200
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtHomeColSite:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="SITE"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =4
+                                    Width: =220
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtHomeColStatus:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="STATUS"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16 - 140 - 16
+                                    Y: =4
+                                    Width: =140
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtHomeColRisk:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="RISK"
+                                    X: =Parent.Width - 16 - 160 - 16 - 180 - 16
+                                    Y: =4
+                                    Width: =180
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtHomeColBuilt:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: ="BUILT WITH"
+                                    X: =Parent.Width - 16 - 160 - 16
+                                    Y: =4
+                                    Width: =160
+                                    Size: =12
+                                    FontWeight: =FontWeight.Bold
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                        - galHomeInspections:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              Items: =Sort(Inspections, 'Created On', SortOrder.Descending)
+                              TemplateSize: =64
+                              TemplatePadding: =0
+                              Height: =400
+                              FillPortions: =1
+                              LayoutMinHeight: =128
+                              Selectable: =false
+                              ShowScrollbar: =true
+                              BorderThickness: =0
+                              TabIndex: =0
+                              LoadingSpinner: =LoadingSpinner.Data
+                              LoadingSpinnerColor: =cPrimary
+                              AccessibleLabel: ="Inspections, newest first"
+                            Children:
+                              - txtHomeRowNumber:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =ThisItem.'Inspection number'
+                                    X: =16
+                                    Y: =8
+                                    Width: =200
+                                    Height: =26
+                                    Size: =16
+                                    FontWeight: =FontWeight.Semibold
+                                    Color: =cPrimary
+                                    Overflow: =Overflow.Hidden
+                              - txtHomeRowDate:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =Text(ThisItem.'Started on', "dd mmm yyyy, hh:mm")
+                                    X: =16
+                                    Y: =32
+                                    Width: =200
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                              - txtHomeRowEquipment:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =ThisItem.Equipment.'Equipment name'
+                                    X: =232
+                                    Y: =8
+                                    Width: =Max(120, Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16 - 232 - 16)
+                                    Height: =26
+                                    Size: =16
+                                    Color: =cText
+                                    Wrap: =false
+                                    Overflow: =Overflow.Hidden
+                              - txtHomeRowAsset:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =ThisItem.Equipment.'Asset tag'
+                                    X: =232
+                                    Y: =32
+                                    Width: =Max(120, Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16 - 232 - 16)
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                              - txtHomeRowSite:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =ThisItem.Site.'Site name'
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =8
+                                    Width: =220
+                                    Height: =26
+                                    Size: =16
+                                    Color: =cText
+                                    Wrap: =false
+                                    Overflow: =Overflow.Hidden
+                              - txtHomeRowSiteCode:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Text: =ThisItem.Site.'Site code'
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16 - 220 - 16
+                                    Y: =32
+                                    Width: =220
+                                    Height: =24
+                                    Size: =14
+                                    Color: =cMuted
+                                    Overflow: =Overflow.Hidden
+                              - conHomeRowStatusBadge:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16 - 140 - 16
+                                    Y: =16
+                                    Width: =104
+                                    Height: =32
+                                    Fill: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimaryTint, cWhite)
+                                    BorderColor: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimaryTint, cMuted)
+                                    BorderThickness: =1
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =16
+                                    RadiusTopRight: =16
+                                    RadiusBottomLeft: =16
+                                    RadiusBottomRight: =16
+                                  Children:
+                                    - txtHomeRowStatus:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Text: =Text(ThisItem.'Status (fp_status)')
+                                          Size: =14
+                                          FontWeight: =FontWeight.Semibold
+                                          Align: =Align.Center
+                                          Color: =If(ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted, cPrimary, cMuted)
+                                          Overflow: =Overflow.Hidden
+                                          X: =0
+                                          Y: =0
+                                          Width: =Parent.Width
+                                          Height: =Parent.Height
+                              - conHomeRowRiskBadge:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    X: =Parent.TemplateWidth - 16 - 160 - 16 - 180 - 16
+                                    Y: =16
+                                    Width: =168
+                                    Height: =32
+                                    Fill: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cWhite,
+                                          BandTint(Text(ThisItem.'Risk band'))
+                                      )
+                                    BorderColor: |-
+                                      =If(
+                                          ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cBorder,
+                                          BandColor(Text(ThisItem.'Risk band'))
+                                      )
+                                    BorderThickness: =If(Text(ThisItem.'Risk band') = "High", 2, 1)
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                  Children:
+                                    - txtHomeRowRisk:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Text: |-
+                                            =If(
+                                                ThisItem.'Status (fp_status)' = 'Inspection status'.Submitted,
+                                                If(Text(ThisItem.'Risk band') = "Critical", "⛔ ", "") &
+                                                Text(ThisItem.'Risk score', "0.0") & " · " & Text(ThisItem.'Risk band'),
+                                                "Not scored"
+                                            )
+                                          Size: =14
+                                          FontWeight: =FontWeight.Semibold
+                                          Align: =Align.Center
+                                          Color: |-
+                                            =If(
+                                                ThisItem.'Status (fp_status)' <> 'Inspection status'.Submitted, cMuted,
+                                                Text(ThisItem.'Risk band') = "Critical", cWhite,
+                                                BandColor(Text(ThisItem.'Risk band'))
+                                            )
+                                          Overflow: =Overflow.Hidden
+                                          X: =0
+                                          Y: =0
+                                          Width: =Parent.Width
+                                          Height: =Parent.Height
+                              - conHomeRowBuiltBadge:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Visible: =!IsBlank(ThisItem.'Built with')
+                                    X: =Parent.TemplateWidth - 16 - 160
+                                    Y: =18
+                                    Width: =130
+                                    Height: =28
+                                    Fill: =cLavender
+                                    BorderColor: =cPurple
+                                    BorderThickness: =1
+                                    BorderStyle: =BorderStyle.Solid
+                                    RadiusTopLeft: =6
+                                    RadiusTopRight: =6
+                                    RadiusBottomLeft: =6
+                                    RadiusBottomRight: =6
+                                  Children:
+                                    - txtHomeRowBuilt:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Text: =Upper(Text(ThisItem.'Built with'))
+                                          Size: =12
+                                          FontWeight: =FontWeight.Bold
+                                          Align: =Align.Center
+                                          Color: =cPurple
+                                          Overflow: =Overflow.Hidden
+                                          X: =0
+                                          Y: =0
+                                          Width: =Parent.Width
+                                          Height: =Parent.Height
+                              - conHomeRowDivider:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    X: =16
+                                    Y: =Parent.TemplateHeight - 1
+                                    Width: =Parent.TemplateWidth - 32
+                                    Height: =1
+                                    Fill: =cBorder
+                                    DropShadow: =DropShadow.None
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                        - txtHomeEmpty:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Visible: =galHomeInspections.AllItemsCount = 0
+                              Text: ="No inspections yet. Start one with New inspection."
+                              Size: =16
+                              Color: =cMuted
+                              Align: =Align.Center
+                              Height: =48
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =48
+            - htmHomeFooterRule:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(2, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =2
+                  FillPortions: =0
+                  LayoutMinHeight: =2
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conHomeFooterRow:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Height: =40
+                  FillPortions: =0
+                  LayoutMinHeight: =40
+                  Fill: =cWhite
+                  DropShadow: =DropShadow.None
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutGap: =12
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - txtHomeFooterBrandText:
+                      Control: ModernText
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        AutoHeight: =true
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Text: ="The Fusion Platform by Sohan"
+                        Size: =14
+                        FontWeight: =FontWeight.Bold
+                        Color: =cPrimary
+                        Width: =220
+                        LayoutMinWidth: =220
+                        PaddingLeft: =0
+                        Height: =32
+                        LayoutMinHeight: =32
+                  - txtHomeFooterTaglineText:
+                      Control: ModernText
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        AutoHeight: =true
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Text: =BrandTagline
+                        Size: =14
+                        Color: =cMuted
+                        FillPortions: =1
+                        Wrap: =false
+                        Height: =32
+                        LayoutMinHeight: =32
+                  - txtHomeFooterProjectText:
+                      Control: ModernText
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        AutoHeight: =true
+                        PaddingTop: =0
+                        PaddingBottom: =0
+                        Text: ="Canvas vs PCF  ·  App 2 of 2"
+                        Size: =14
+                        Color: =cMuted
+                        Align: =Align.Right
+                        Width: =240
+                        LayoutMinWidth: =200
+
+                        Height: =32
+                        LayoutMinHeight: =32

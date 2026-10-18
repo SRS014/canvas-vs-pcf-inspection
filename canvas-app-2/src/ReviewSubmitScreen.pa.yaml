@@ -1,0 +1,693 @@
+Screens:
+  ReviewSubmitScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+      OnVisible: |-
+        =UpdateContext({locSubmitting: false, locSubmitError: false})
+    Children:
+      - conRevRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =cWash
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - htmRevTopBar:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =6
+                  FillPortions: =0
+                  LayoutMinHeight: =6
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conRevHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =cWhite
+                  FillPortions: =0
+                  Height: =76
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =16
+                  LayoutMinHeight: =76
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnRevBackNav:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        DisplayMode: =If(locSubmitting, DisplayMode.Disabled, DisplayMode.Edit)
+                        Height: =48
+                        Icon: ="ArrowLeft"
+                        OnSelect: =Navigate(InspectionScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Back to checklist"
+                        Width: =190
+                  - imgRevMark:
+                      Control: Image
+                      Properties:
+                        Image: =BrandSymbol
+                        ImagePosition: =ImagePosition.Fit
+                        Width: =40
+                        Height: =40
+                        LayoutMinWidth: =40
+                        LayoutMinHeight: =40
+                        AlignInContainer: =AlignInContainer.Center
+                        TabIndex: =0
+                        AccessibleLabel: ="The Fusion Platform"
+                  - conRevTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        DropShadow: =DropShadow.None
+                        Height: =72
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMinHeight: =72
+                      Children:
+                        - txtRevEyebrow:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              LayoutMinHeight: =18
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =12
+                              Text: =varCtx.Number & " · REVIEW"
+                              Overflow: =Overflow.Hidden
+                        - txtRevTitle:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =32
+                              LayoutMinHeight: =32
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =22
+                              Text: ="Review and submit"
+                              Overflow: =Overflow.Hidden
+                        - txtRevContext:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =22
+                              LayoutMinHeight: =22
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: |-
+                                =varCtx.EquipmentName & " · " & varCtx.AssetTag & " · " & varCtx.SiteName & " · " &
+                                varCtx.EquipType & " · " & varCtx.Criticality & " x" & Text(Multiplier(varCtx.Criticality), "0.00")
+                              Wrap: =false
+                              Overflow: =Overflow.Hidden
+            - conRevBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =24
+                Children:
+                  - conRevAnswersCard:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =cWhite
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutMinWidth: =520
+                        PaddingBottom: =8
+                        PaddingLeft: =16
+                        PaddingRight: =16
+                        PaddingTop: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                      Children:
+                        - txtRevAnswersTitle:
+                            Control: ModernText
+                            Properties:
+                              AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              PaddingLeft: =0
+                              Size: =18
+                              Text: ="Answers"
+                              Height: =32
+                              LayoutMinHeight: =32
+                        - htmRevAnswersHeadingBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              Width: =56
+                              Height: =3
+                              LayoutMinWidth: =56
+                              LayoutMinHeight: =3
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Start
+                        - txtRevAnswersSummary:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: =AnsweredCount & " of " & CountRows(VisibleQ) & " visible questions answered"
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
+                        - txtRevNoAnswers:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              Align: =Align.Center
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =64
+                              Size: =16
+                              Text: ="No answers yet. Go back to the checklist to answer questions."
+                              Visible: =AnsweredCount = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =64
+                        - galRevAnswers:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="Answers by stage"
+                              Items: |-
+                                =SortByColumns(
+                                    Ungroup(
+                                        Table(
+                                            {
+                                                G: ForAll(
+                                                    Stages As s,
+                                                    {
+                                                        Kind: "Stage",
+                                                        StageIdx: StageIndex(s.Value),
+                                                        SortKey: -1,
+                                                        Code: "",
+                                                        QText: s.Value & "   " &
+                                                            CountRows(Filter(VisibleAnswers, Stage = s.Value && !IsBlank(AValue))) & " of " &
+                                                            CountRows(Filter(VisibleAnswers, Stage = s.Value)) & " answered",
+                                                        Depth: 0,
+                                                        AValue: "",
+                                                        Critical: false
+                                                    }
+                                                )
+                                            },
+                                            {
+                                                G: ForAll(
+                                                    VisibleAnswers As q,
+                                                    {
+                                                        Kind: "Question",
+                                                        StageIdx: StageIndex(q.Stage),
+                                                        SortKey: q.SortKey,
+                                                        Code: q.Code,
+                                                        QText: q.QText,
+                                                        Depth: q.Depth,
+                                                        AValue: q.AValue,
+                                                        Critical: q.Critical
+                                                    }
+                                                )
+                                            }
+                                        ),
+                                        G
+                                    ),
+                                    "StageIdx", SortOrder.Ascending,
+                                    "SortKey", SortOrder.Ascending
+                                )
+                              LayoutMinHeight: =160
+                              Selectable: =false
+                              TemplatePadding: =0
+                              TemplateSize: =56
+                            Children:
+                              - txtRevRowStage:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cPrimary
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =36
+                                    PaddingLeft: =0
+                                    Size: =18
+                                    Text: =ThisItem.QText
+                                    Visible: =ThisItem.Kind = "Stage"
+                                    Width: =Parent.TemplateWidth
+                                    Y: =14
+                                    Overflow: =Overflow.Hidden
+                              - txtRevRowCode:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cPurple
+                                    FontWeight: =FontWeight.Semibold
+                                    PaddingLeft: =0
+                                    Size: =14
+                                    Text: =ThisItem.Code
+                                    Visible: =ThisItem.Kind = "Question"
+                                    Width: =130
+                                    X: =ThisItem.Depth * 24
+                                    Y: =12
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - txtRevRowText:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cText
+                                    Height: =48
+                                    PaddingLeft: =0
+                                    Text: =ThisItem.QText & If(ThisItem.Critical, "   · CRITICAL STOP", "")
+                                    Visible: =ThisItem.Kind = "Question"
+                                    Width: =Parent.TemplateWidth - (ThisItem.Depth * 24 + 130) - 256
+                                    X: =ThisItem.Depth * 24 + 130
+                                    Y: =4
+                                    Overflow: =Overflow.Hidden
+                                    Size: =15
+                              - txtRevRowValue:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Right
+                                    Color: =If(IsBlank(ThisItem.AValue), cMuted, cText)
+                                    FontWeight: =If(IsBlank(ThisItem.AValue), FontWeight.Normal, FontWeight.Semibold)
+                                    Size: =16
+                                    Text: =If(IsBlank(ThisItem.AValue), "○ Not answered", ThisItem.AValue)
+                                    Visible: =ThisItem.Kind = "Question"
+                                    Width: =220
+                                    Wrap: =false
+                                    X: =Parent.TemplateWidth - 240
+                                    Y: =12
+                                    Overflow: =Overflow.Hidden
+                                    Height: =32
+                              - conRevRowDivider:
+                                  Control: GroupContainer
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Fill: =If(ThisItem.Kind = "Stage", cPrimary, cBorder)
+                                    Height: =1
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =Parent.TemplateWidth
+                                    Y: =Parent.TemplateHeight - 1
+                  - conRevScorePanel:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =cWhite
+                        FillPortions: =0
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        LayoutMinWidth: =340
+                        PaddingBottom: =16
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =400
+                      Children:
+                        - txtRevScoreKicker:
+                            Control: ModernText
+                            Properties:
+                              AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =20
+                              PaddingLeft: =0
+                              Size: =12
+                              Text: ="RISK SCORE"
+                              LayoutMinHeight: =20
+                        - htmRevScoreEyebrowBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              Width: =56
+                              Height: =3
+                              LayoutMinWidth: =56
+                              LayoutMinHeight: =3
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Start
+                        - txtRevScore:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =48
+                              LayoutMinHeight: =48
+                              PaddingLeft: =0
+                              Size: =32
+                              Text: =Text(LiveScore, "0.0") & " / 100"
+                              Overflow: =Overflow.Hidden
+                        - conRevBadgeBadge:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =BandColor(LiveBand)
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =If(LiveBand = "High", 2, 1)
+                              Fill: =BandTint(LiveBand)
+                              Height: =48
+                              LayoutMinHeight: =48
+                              RadiusBottomLeft: =6
+                              RadiusBottomRight: =6
+                              RadiusTopLeft: =6
+                              RadiusTopRight: =6
+                              FillPortions: =0
+                              LayoutMinWidth: =0
+                            Children:
+                              - txtRevBadge:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Center
+                                    Color: =If(LiveBand = "Critical", cWhite, BandColor(LiveBand))
+                                    FontWeight: =FontWeight.Semibold
+                                    Size: =18
+                                    Text: =If(LiveBand = "Critical", "⛔ ", "") & Upper(LiveBand) & If(CriticalHit, " · critical stop", "")
+                                    Overflow: =Overflow.Hidden
+                                    X: =0
+                                    Y: =0
+                                    Width: =Parent.Width
+                                    Height: =Parent.Height
+                        - txtRevContribHeading:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =28
+                              PaddingLeft: =0
+                              Size: =16
+                              Text: ="Contributing questions"
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =28
+                        - txtRevContribNone:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="No answers meet a risk condition."
+                              Visible: =CountRows(RiskItems) = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
+                        - galRevContrib:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="Questions contributing to the score"
+                              Items: =SortByColumns(RiskItems, "Weight", SortOrder.Descending)
+                              LayoutMinHeight: =96
+                              Selectable: =false
+                              TemplatePadding: =0
+                              TemplateSize: =48
+                            Children:
+                              - txtRevContribText:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =If(ThisItem.Critical, cError, cText)
+                                    Height: =44
+                                    PaddingLeft: =0
+                                    Size: =14
+                                    Text: =ThisItem.Code & "  " & ThisItem.QText & If(ThisItem.Critical, "  · CRITICAL STOP", "")
+                                    VerticalAlign: =VerticalAlign.Top
+                                    Width: =Parent.TemplateWidth - 56
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                              - txtRevContribWeight:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Right
+                                    Color: =cText
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =28
+                                    Size: =16
+                                    Text: ="+" & ThisItem.Weight
+                                    Width: =56
+                                    X: =Parent.TemplateWidth - 56
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                        - galRevCalc:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="Score calculation"
+                              FillPortions: =0
+                              Height: =150
+                              Items: |-
+                                =Filter(
+                                    Table(
+                                        {Label: "Subtotal", Val: Text(RawPoints), Show: true},
+                                        {Label: "x Criticality (" & varCtx.Criticality & ")", Val: Text(Multiplier(varCtx.Criticality), "0.00"), Show: true},
+                                        {Label: "Capped at 100", Val: "100", Show: RawPoints * Multiplier(varCtx.Criticality) > 100},
+                                        {Label: "Critical stop override", Val: "Forces Critical", Show: CriticalHit},
+                                        {Label: "Final score", Val: Text(LiveScore, "0.0") & " · " & LiveBand, Show: true}
+                                    ),
+                                    Show
+                                )
+                              LayoutMinHeight: =150
+                              Selectable: =false
+                              ShowScrollbar: =false
+                              TemplatePadding: =0
+                              TemplateSize: =30
+                            Children:
+                              - txtRevCalcLabel:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =If(ThisItem.Label = "Final score", cText, cMuted)
+                                    FontWeight: =If(ThisItem.Label = "Final score", FontWeight.Semibold, FontWeight.Normal)
+                                    Height: =26
+                                    PaddingLeft: =0
+                                    Size: =14
+                                    Text: =ThisItem.Label
+                                    Width: =Parent.TemplateWidth - 150
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                              - txtRevCalcValue:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Right
+                                    Color: =cText
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =26
+                                    Text: =ThisItem.Val
+                                    X: =Parent.TemplateWidth - 150
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                                    Size: =15
+                        - txtRevUnanswered:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =4
+                              PaddingBottom: =4
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =cWarning
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =1
+                              Color: =cWarning
+                              Fill: =cWarningTint
+                              Height: =56
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              Size: =14
+                              Text: ="Warning · " & (CountRows(VisibleQ) - AnsweredCount) & " visible questions are unanswered. You can still submit."
+                              Visible: =AnsweredCount > 0 && CountRows(VisibleQ) - AnsweredCount > 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =56
+                        - txtRevSubmitError:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =4
+                              PaddingBottom: =4
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =cError
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =1
+                              Color: =cError
+                              Fill: =cErrorTint
+                              Height: =72
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              Size: =14
+                              Text: ="Error · Submit didn't finish. The inspection is still a Draft and your answers are kept. Try again."
+                              Visible: =locSubmitError
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =72
+                        - txtRevSubmitReason:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="Answer at least one question to submit"
+                              Visible: =AnsweredCount = 0
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
+                        - btnRevSubmit:
+                            Control: ModernButton
+                            Properties:
+                              AccessibleLabel: =Self.Text
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BasePaletteColor: =cPrimary
+                              DisplayMode: =If(locSubmitting || AnsweredCount = 0, DisplayMode.Disabled, DisplayMode.Edit)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =56
+                              OnSelect: |-
+                                =UpdateContext({locSubmitting: true, locSubmitError: false});
+                                With(
+                                    {
+                                        insp: LookUp(Inspections, Inspection = varCtx.InspectionId),
+                                        finalScore: LiveScore,
+                                        finalBand: LiveBand,
+                                        mult: Multiplier(varCtx.Criticality),
+                                        riskIds: RiskItems.QId
+                                    },
+                                    IfError(
+                                        // One batched write: clear this inspection's earlier answer rows (a retry
+                                        // after a partial failure), then create one row per visible, answered question.
+                                        RemoveIf('Inspection answers', Inspection.Inspection = varCtx.InspectionId);
+                                        Collect(
+                                            'Inspection answers',
+                                            ForAll(
+                                                Filter(VisibleAnswers, !IsBlank(AValue)) As a,
+                                                {
+                                                    'Question code': a.Code,
+                                                    Inspection: insp,
+                                                    Question: LookUp(colQ, QId = a.QId).Rec,
+                                                    Value: a.AValue,
+                                                    'Numeric value': If(a.AnswerType = "Number", Value(a.AValue)),
+                                                    'Risk contribution': If(a.QId in riskIds, a.Weight * mult, 0)
+                                                }
+                                            )
+                                        );
+                                        Patch(
+                                            Inspections,
+                                            insp,
+                                            {
+                                                'Status (fp_status)': 'Inspection status'.Submitted,
+                                                'Risk score': finalScore,
+                                                'Risk band': Switch(
+                                                    finalBand,
+                                                    "Low", [@'Risk band'].Low,
+                                                    "Medium", [@'Risk band'].Medium,
+                                                    "High", [@'Risk band'].High,
+                                                    [@'Risk band'].Critical
+                                                ),
+                                                'Submitted on': Now()
+                                            }
+                                        );
+                                        Set(varBannerText, varCtx.Number & " submitted with risk " & Text(finalScore, "0.0") & " · " & finalBand & ".");
+                                        Clear(colAns);
+                                        Clear(colQ);
+                                        UpdateContext({locSubmitting: false});
+                                        Navigate(InspectionsHomeScreen, ScreenTransition.None),
+                                        UpdateContext({locSubmitting: false, locSubmitError: true})
+                                    )
+                                )
+                              Size: =16
+                              Text: =If(locSubmitting, "Submitting...", "Submit inspection")

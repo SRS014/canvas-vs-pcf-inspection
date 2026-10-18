@@ -1,0 +1,709 @@
+Screens:
+  InspectionScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+    Children:
+      - conInspRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =cWash
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - htmInspTopBar:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =6
+                  FillPortions: =0
+                  LayoutMinHeight: =6
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conInspHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =cWhite
+                  FillPortions: =0
+                  Height: =76
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =16
+                  LayoutMinHeight: =76
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnInspExit:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: ="Abandon this inspection"
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        Height: =48
+                        Icon: ="Dismiss"
+                        OnSelect: |-
+                          =If(
+                              Confirm(
+                                  "Your answers will be lost. The Draft inspection stays on the home list without a score.",
+                                  {
+                                      Title: "Abandon " & varCtx.Number & "?",
+                                      ConfirmButton: "Abandon inspection",
+                                      CancelButton: "Keep inspecting"
+                                  }
+                              ),
+                              Clear(colAns);
+                              Clear(colQ);
+                              Navigate(InspectionsHomeScreen, ScreenTransition.None)
+                          )
+                        Size: =16
+                        Text: ="Abandon"
+                        Width: =128
+                  - imgInspMark:
+                      Control: Image
+                      Properties:
+                        Image: =BrandSymbol
+                        ImagePosition: =ImagePosition.Fit
+                        Width: =40
+                        Height: =40
+                        LayoutMinWidth: =40
+                        LayoutMinHeight: =40
+                        AlignInContainer: =AlignInContainer.Center
+                        TabIndex: =0
+                        AccessibleLabel: ="The Fusion Platform"
+                  - conInspTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        DropShadow: =DropShadow.None
+                        Height: =72
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMinHeight: =72
+                      Children:
+                        - txtInspEyebrow:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              LayoutMinHeight: =18
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =12
+                              Text: ="DRAFT INSPECTION"
+                              Overflow: =Overflow.Hidden
+                        - txtInspTitle:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =32
+                              LayoutMinHeight: =32
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =22
+                              Text: =varCtx.Number
+                              Overflow: =Overflow.Hidden
+                        - txtInspContext:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =22
+                              LayoutMinHeight: =22
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: |-
+                                =varCtx.EquipmentName & " · " & varCtx.AssetTag & " · " & varCtx.SiteName & " · " &
+                                varCtx.EquipType & " · " & varCtx.Criticality & " x" & Text(Multiplier(varCtx.Criticality), "0.00")
+                              Wrap: =false
+                              Overflow: =Overflow.Hidden
+                  - btnInspPhotos:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        Appearance: =ButtonAppearance.Outline
+                        Color: =cPrimary
+                        Height: =48
+                        Icon: ="Camera"
+                        OnSelect: =Navigate(PhotosScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Photos"
+                        Width: =128
+                  - btnInspReview:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        BasePaletteColor: =cPrimary
+                        FontWeight: =FontWeight.Semibold
+                        Height: =48
+                        Icon: ="ClipboardTaskListLtr"
+                        OnSelect: =Navigate(ReviewSubmitScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Review"
+                        Width: =140
+            - conInspBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =16
+                Children:
+                  - conInspMain:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =12
+                        LayoutMinWidth: =560
+                      Children:
+                        - tabInspStages:
+                            Control: ModernTabList
+                            Properties:
+                              AccessibleLabel: ="Inspection stages"
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Appearance: =TabListAppearance.Subtle
+                              BasePaletteColor: =cPrimary
+                              Default: =LookUp(StageTabs, Value = varStage)
+                              Height: =56
+                              ItemDisplayText: =ThisItem.Label
+                              Items: =StageTabs
+                              LayoutMinHeight: =56
+                              OnChange: =If(Self.Selected.Value <> varStage, Set(varStage, Self.Selected.Value))
+                              Size: =16
+                        - conInspQuestionCard:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              BorderColor: =cBorder
+                              BorderThickness: =1
+                              DropShadow: =DropShadow.None
+                              Fill: =cWhite
+                              LayoutDirection: =LayoutDirection.Vertical
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - txtInspStageEmpty:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Center
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    Color: =cMuted
+                                    Height: =80
+                                    Size: =16
+                                    Text: |-
+                                      =If(
+                                          CountRows(colQ) = 0,
+                                          "This equipment type has no checklist questions. You can still add photos, review, or abandon.",
+                                          "No questions in " & varStage & " for this equipment. Answers in other stages are kept."
+                                      )
+                                    Visible: =galInspQuestions.AllItemsCount = 0
+                                    Overflow: =Overflow.Hidden
+                                    LayoutMinHeight: =80
+                              - galInspQuestions:
+                                  Control: Gallery
+                                  Variant: Vertical
+                                  Properties:
+                                    TabIndex: =0
+                                    AccessibleLabel: ="Checklist questions for the selected stage"
+                                    Items: =SortByColumns(Filter(VisibleQ, Stage = varStage), "SortKey", SortOrder.Ascending)
+                                    LayoutMinHeight: =200
+                                    Selectable: =false
+                                    TemplatePadding: =0
+                                    TemplateSize: =112
+                                  Children:
+                                    - conInspConnector:
+                                        Control: GroupContainer
+                                        Variant: ManualLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          Fill: =cBorder
+                                          Height: =Parent.TemplateHeight
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                          Visible: =ThisItem.Depth > 0
+                                          Width: =2
+                                          X: =ThisItem.Depth * 32 - 8
+                                    - txtInspQCode:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Color: =cMuted
+                                          Height: =24
+                                          PaddingLeft: =0
+                                          Size: =14
+                                          Text: =ThisItem.Code & "   ·   level " & (ThisItem.Depth + 1)
+                                          Width: =220
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =8
+                                          Overflow: =Overflow.Hidden
+                                    - conInspQCriticalBadge:
+                                        Control: GroupContainer
+                                        Variant: ManualLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          BorderColor: =cPurple
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =1
+                                          Fill: =cPurpleTint
+                                          Height: =24
+                                          RadiusBottomLeft: =6
+                                          RadiusBottomRight: =6
+                                          RadiusTopLeft: =6
+                                          RadiusTopRight: =6
+                                          Visible: =ThisItem.Critical
+                                          Width: =112
+                                          X: =16 + ThisItem.Depth * 32 + 224
+                                          Y: =8
+                                        Children:
+                                          - txtInspQCritical:
+                                              Control: Label
+                                              Properties:
+                                                PaddingTop: =0
+                                                PaddingBottom: =0
+                                                Align: =Align.Center
+                                                Color: =cPurple
+                                                FontWeight: =FontWeight.Semibold
+                                                Size: =12
+                                                Text: ="CRITICAL STOP"
+                                                Overflow: =Overflow.Hidden
+                                                X: =0
+                                                Y: =0
+                                                Width: =Parent.Width
+                                                Height: =Parent.Height
+                                    - txtInspQText:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Color: =cText
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =48
+                                          PaddingLeft: =0
+                                          Size: =16
+                                          Text: =ThisItem.QText
+                                          VerticalAlign: =VerticalAlign.Top
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32) - 360
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =32
+                                          Overflow: =Overflow.Hidden
+                                    - txtInspQHelp:
+                                        Control: Label
+                                        Properties:
+                                          PaddingTop: =0
+                                          PaddingBottom: =0
+                                          Color: =cMuted
+                                          Height: =26
+                                          Italic: =true
+                                          PaddingLeft: =0
+                                          Size: =14
+                                          Text: =ThisItem.Help
+                                          Visible: =!IsBlank(ThisItem.Help)
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32) - 360
+                                          Wrap: =false
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =80
+                                          Overflow: =Overflow.Hidden
+                                    - btnInspYes:
+                                        Control: ModernButton
+                                        Properties:
+                                          AccessibleLabel: =ThisItem.Code & " Yes"
+                                          Appearance: =If(LookUp(colAns, AQId = ThisItem.QId).AValue = "Yes", ButtonAppearance.Primary, ButtonAppearance.Outline)
+                                          BasePaletteColor: =cPrimary
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =48
+                                          Layout: =ButtonLayout.TextOnly
+                                          OnSelect: =SetAnswer(ThisItem.QId, ThisItem.Code, "Yes")
+                                          Size: =16
+                                          Text: ="Yes"
+                                          Visible: =ThisItem.AnswerType = "Yes/No"
+                                          Width: =112
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                    - btnInspNo:
+                                        Control: ModernButton
+                                        Properties:
+                                          AccessibleLabel: =ThisItem.Code & " No"
+                                          Appearance: =If(LookUp(colAns, AQId = ThisItem.QId).AValue = "No", ButtonAppearance.Primary, ButtonAppearance.Outline)
+                                          BasePaletteColor: =cPrimary
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =48
+                                          Layout: =ButtonLayout.TextOnly
+                                          OnSelect: =SetAnswer(ThisItem.QId, ThisItem.Code, "No")
+                                          Size: =16
+                                          Text: ="No"
+                                          Visible: =ThisItem.AnswerType = "Yes/No"
+                                          Width: =112
+                                          X: =Parent.TemplateWidth - 220
+                                          Y: =32
+                                    - btnInspClear:
+                                        Control: ModernButton
+                                        Properties:
+                                          AccessibleLabel: ="Clear answer to " & ThisItem.Code
+                                          Appearance: =ButtonAppearance.Subtle
+                                          Color: =cPrimary
+                                          Height: =48
+                                          Layout: =ButtonLayout.TextOnly
+                                          OnSelect: =ClearAnswer(ThisItem.QId)
+                                          Size: =14
+                                          Text: ="Clear"
+                                          Visible: =ThisItem.AnswerType = "Yes/No" && !IsBlank(LookUp(colAns, AQId = ThisItem.QId).AValue)
+                                          Width: =84
+                                          X: =Parent.TemplateWidth - 100
+                                          Y: =32
+                                    - ddInspChoice:
+                                        Control: ModernDropdown
+                                        Properties:
+                                          AccessibleLabel: =ThisItem.QText
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          Default: |-
+                                            =LookUp(
+                                                Split("No answer|" & ThisItem.Options, "|"),
+                                                Value = Coalesce(LookUp(colAns, AQId = ThisItem.QId).AValue, "No answer")
+                                            )
+                                          Height: =48
+                                          ItemDisplayText: =ThisItem.Value
+                                          Items: =Split("No answer|" & ThisItem.Options, "|")
+                                          OnChange: |-
+                                            =If(
+                                                Self.Selected.Value <> Coalesce(LookUp(colAns, AQId = ThisItem.QId).AValue, "No answer"),
+                                                If(
+                                                    Self.Selected.Value = "No answer",
+                                                    ClearAnswer(ThisItem.QId),
+                                                    SetAnswer(ThisItem.QId, ThisItem.Code, Self.Selected.Value)
+                                                )
+                                            )
+                                          Size: =16
+                                          Visible: =ThisItem.AnswerType = "Choice"
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                    - numInspNumber:
+                                        Control: ModernNumberInput
+                                        Properties:
+                                          AccessibleLabel: =ThisItem.QText
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          Default: |-
+                                            =If(
+                                                ThisItem.AnswerType = "Number",
+                                                IfError(Value(LookUp(colAns, AQId = ThisItem.QId).AValue), Blank())
+                                            )
+                                          Height: =48
+                                          HintText: ="Enter a number"
+                                          OnChange: |-
+                                            =If(
+                                                IsBlank(Self.Value),
+                                                ClearAnswer(ThisItem.QId),
+                                                Text(Self.Value) <> LookUp(colAns, AQId = ThisItem.QId).AValue,
+                                                SetAnswer(ThisItem.QId, ThisItem.Code, Text(Self.Value))
+                                            )
+                                          Size: =16
+                                          Visible: =ThisItem.AnswerType = "Number"
+                                          Width: =160
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =32
+                                    - txtInspText:
+                                        Control: ModernTextInput
+                                        Properties:
+                                          AccessibleLabel: =ThisItem.QText
+                                          Appearance: =Appearance.Outline
+                                          BorderColor: =cMuted
+                                          Default: =LookUp(colAns, AQId = ThisItem.QId).AValue
+                                          Height: =80
+                                          OnChange: |-
+                                            =If(
+                                                IsBlank(Trim(Self.Text)),
+                                                ClearAnswer(ThisItem.QId),
+                                                SetAnswer(ThisItem.QId, ThisItem.Code, Trim(Self.Text))
+                                            )
+                                          Placeholder: ="Type your comments"
+                                          Size: =16
+                                          TriggerOutput: =TriggerOutput.FocusOut
+                                          Type: =TextInputType.Multiline
+                                          Visible: =ThisItem.AnswerType = "Text"
+                                          X: =Parent.TemplateWidth - 340
+                                          Y: =16
+                                    - conInspRowDivider:
+                                        Control: GroupContainer
+                                        Variant: ManualLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          Fill: =cBorder
+                                          Height: =1
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                          Width: =Parent.TemplateWidth - (16 + ThisItem.Depth * 32)
+                                          X: =16 + ThisItem.Depth * 32
+                                          Y: =Parent.TemplateHeight - 1
+                  - conInspRisk:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =cBorder
+                        BorderThickness: =1
+                        DropShadow: =DropShadow.None
+                        Fill: =cWhite
+                        FillPortions: =0
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =10
+                        LayoutMinWidth: =300
+                        PaddingBottom: =20
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =20
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =340
+                      Children:
+                        - txtInspRiskKicker:
+                            Control: ModernText
+                            Properties:
+                              AccessibleLabel: =Self.Text
+                              AutoHeight: =true
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =20
+                              PaddingLeft: =0
+                              Size: =12
+                              Text: ="LIVE RISK"
+                              LayoutMinHeight: =20
+                        - htmInspRiskEyebrowBar:
+                            Control: HtmlViewer
+                            Properties:
+                              HtmlText: =HtmlLine(3, 0)
+                              AutoHeight: =true
+                              Size: =1
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              Width: =56
+                              Height: =3
+                              LayoutMinWidth: =56
+                              LayoutMinHeight: =3
+                              FillPortions: =0
+                              AlignInContainer: =AlignInContainer.Start
+                        - txtInspRiskScore:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =60
+                              LayoutMinHeight: =60
+                              PaddingLeft: =0
+                              Size: =40
+                              Text: =Text(LiveScore, "0.0") & " / 100"
+                              Overflow: =Overflow.Hidden
+                        - conInspRiskBadgeBadge:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =BandColor(LiveBand)
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =If(LiveBand = "High", 2, 1)
+                              Fill: =BandTint(LiveBand)
+                              Height: =48
+                              LayoutMinHeight: =48
+                              RadiusBottomLeft: =6
+                              RadiusBottomRight: =6
+                              RadiusTopLeft: =6
+                              RadiusTopRight: =6
+                              FillPortions: =0
+                              LayoutMinWidth: =0
+                            Children:
+                              - txtInspRiskBadge:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Center
+                                    Color: =If(LiveBand = "Critical", cWhite, BandColor(LiveBand))
+                                    FontWeight: =FontWeight.Semibold
+                                    Size: =18
+                                    Text: =If(LiveBand = "Critical", "⛔ ", "") & Upper(LiveBand) & If(CriticalHit, " · critical stop", "")
+                                    Overflow: =Overflow.Hidden
+                                    X: =0
+                                    Y: =0
+                                    Width: =Parent.Width
+                                    Height: =Parent.Height
+                        - galInspDerivation:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="How the score is calculated"
+                              FillPortions: =0
+                              Height: =124
+                              Items: |-
+                                =Filter(
+                                    Table(
+                                        {Label: "Subtotal", Val: Text(RawPoints), Show: true},
+                                        {Label: "Criticality (" & varCtx.Criticality & ")", Val: "x" & Text(Multiplier(varCtx.Criticality), "0.00"), Show: true},
+                                        {Label: "Capped at 100", Val: "100", Show: RawPoints * Multiplier(varCtx.Criticality) > 100},
+                                        {Label: "Critical stop", Val: "Forces Critical", Show: CriticalHit}
+                                    ),
+                                    Show
+                                )
+                              LayoutMinHeight: =124
+                              Selectable: =false
+                              ShowScrollbar: =false
+                              TemplatePadding: =0
+                              TemplateSize: =30
+                            Children:
+                              - txtInspDerivLabel:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cMuted
+                                    Height: =26
+                                    PaddingLeft: =0
+                                    Size: =14
+                                    Text: =ThisItem.Label
+                                    Width: =Parent.TemplateWidth - 120
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                              - txtInspDerivValue:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Align: =Align.Right
+                                    Color: =cText
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =26
+                                    Size: =14
+                                    Text: =ThisItem.Val
+                                    Width: =120
+                                    X: =Parent.TemplateWidth - 120
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                        - txtInspStopsHeading:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =28
+                              PaddingLeft: =0
+                              Size: =16
+                              Text: ="Critical stops"
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =28
+                        - txtInspStopsNone:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="None triggered"
+                              Visible: =!CriticalHit
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
+                        - galInspStops:
+                            Control: Gallery
+                            Variant: Vertical
+                            Properties:
+                              TabIndex: =0
+                              AccessibleLabel: ="Triggered critical stops"
+                              Items: =Filter(RiskItems, Critical)
+                              LayoutMinHeight: =52
+                              Selectable: =false
+                              TemplatePadding: =0
+                              TemplateSize: =52
+                              Visible: =CriticalHit
+                            Children:
+                              - txtInspStopItem:
+                                  Control: Label
+                                  Properties:
+                                    PaddingTop: =0
+                                    PaddingBottom: =0
+                                    Color: =cError
+                                    Height: =48
+                                    PaddingLeft: =0
+                                    Size: =14
+                                    Text: ="⛔ " & ThisItem.Code & "  " & ThisItem.QText
+                                    VerticalAlign: =VerticalAlign.Top
+                                    Width: =Parent.TemplateWidth
+                                    Y: =2
+                                    Overflow: =Overflow.Hidden
+                        - conInspRiskSpacer:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =0
+                              Visible: =!CriticalHit
+                        - txtInspAnswered:
+                            Control: Label
+                            Properties:
+                              PaddingTop: =0
+                              PaddingBottom: =0
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =24
+                              PaddingLeft: =0
+                              Size: =14
+                              Text: ="Answered " & AnsweredCount & " of " & CountRows(VisibleQ) & " visible questions"
+
+                              Overflow: =Overflow.Hidden
+                              LayoutMinHeight: =24
