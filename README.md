@@ -1,72 +1,94 @@
-# Canvas vs Pro-Code: where low-code stops and a PCF component takes over
+# Canvas vs PCF: one inspection app, built twice
 
-A portfolio project by **Sohanur Rahman Sohan**, Power Platform Developer & Solution Builder at The Fusion Platform.
+A portfolio project by **Sohanur Rahman Sohan**, Power Platform Developer & Solution Builder.
 
-> Fuse ideas. Build smarter. Integrate better.
+One equipment-inspection process, built twice on the same Dataverse data. **App 1** is a Canvas app pushed as far as Power Fx reasonably goes. **App 2** keeps the same screens and moves the parts that hit a wall (a recursive checklist, rule-based risk scoring and photo annotation) into two React + TypeScript code components built with the Power Apps component framework (PCF). The goal isn't "pro-code wins". It's to show, with two working apps and test evidence, exactly where the line is and what it costs to cross it.
 
-One business problem, built twice. First as a **Canvas app**, pushed as far as Canvas reasonably goes. Then the parts that hit a wall are rebuilt as a **Power Apps component framework (PCF) code component** in React and TypeScript, which runs inside the same Canvas app on the same Dataverse data.
-
-The point is not "pro-code is better". It's to show, with two working apps, exactly where the line is.
+![Solution architecture](docs/architecture.png)
 
 ## The problem
 
-A manufacturing company inspects equipment (forklifts and conveyors) across several warehouse sites. Inspectors need:
+A fictional manufacturer inspects forklifts and conveyors across three warehouse sites. Inspectors need:
 
-1. **A dynamic, nested checklist.** Questions appear and disappear based on earlier answers, sometimes six levels deep, and some depend on answers in a different branch.
-2. **Inline photo annotation.** Take a photo, then mark the problem directly on it.
-3. **A live risk score** that recalculates as the inspector answers, with critical stops and compounding hazards.
-4. **Dataverse** as the system of record.
+1. **A nested checklist that adapts.** Questions appear based on earlier answers, up to six levels deep, and some depend on answers in another branch.
+2. **A live risk score** with weights, an equipment-criticality multiplier, critical stops that force the top band, and compound hazards (two findings together score more than each alone).
+3. **Photo annotation.** Mark the defect on the photo itself, with numbered markers, arrows, boxes and notes.
+4. **Dataverse** as the system of record, with checklist templates and risk rules stored as data, so changing a template doesn't need a new app version.
 
-## The story
+## How the two apps work
 
-| Step | What happens | Where to look |
+| | App 1 · Canvas only | App 2 · Canvas + PCF |
 | --- | --- | --- |
-| 1. Model the data | Six Dataverse tables. The checklist is a tree of rows with show conditions and risk rules, so templates change without changing an app. | [docs/data-model.md](docs/data-model.md) |
-| 2. Build it in Canvas | Inspection list, guided start, stage-by-stage checklist with conditional visibility, photo capture, live score, submit to Dataverse. | [canvas-app/](canvas-app/) |
-| 3. Find the wall | What became unmanageable, slow or impossible, with evidence from the build. | [docs/where-canvas-stopped.md](docs/where-canvas-stopped.md) |
-| 4. Go pro-code | A React + TypeScript PCF component for the recursive checklist, an annotation canvas and a rules-based risk engine, embedded in the Canvas app. | [pcf/](pcf/) *(App 2)* |
-| 5. Map limit to solution | Each Canvas limit, and the specific pro-code technique that removes it. | [docs/how-pro-code-solved-it.md](docs/how-pro-code-solved-it.md) *(after App 2)* |
+| Screens | Inspections list, guided start, staged checklist, photos, review and submit | The same five screens |
+| Conditional questions | One named formula per level (`VisL0`–`VisL4`). Power Fx functions can't recurse, so depth is fixed at five | `InspectionChecklist` walks the tree recursively, so there's no depth limit |
+| Cross-branch rules | Hard-coded formula for the one rule-gated question | Any `any`/`all` rule tree stored as JSON on the question row |
+| Risk score | Weights, multiplier, cap and critical stops | The same, plus compound rules from the `fp_riskrule` table and a line-by-line explanation |
+| Photo annotation | Pen input: freehand strokes, saved apart from the photo | `PhotoAnnotator`: markers, arrows, boxes, freehand and notes, saved as a flattened JPEG plus editable mark data |
+| Data access | Power Fx reads and `Patch` | The same. Canvas still owns every Dataverse call |
 
-## Architecture in one picture
+**The boundary in App 2.** Code components in canvas apps have no Dataverse Web API (`context.webAPI`). So the Canvas app loads questions, rules and answers, passes them to the component as JSON input properties, and reads answers, score, band and explanation back from output properties in `OnChange`. The component owns interaction and logic; Canvas owns data. Details: [pcf/DESIGN.md](pcf/DESIGN.md).
 
-```mermaid
-flowchart LR
-    subgraph Canvas["Canvas app (Power Fx)"]
-        Nav[Screens, navigation, Dataverse reads and Patch]
-        PCF["PCF component (React + TS)<br/>checklist, annotation, risk engine"]
-    end
-    DV[(Dataverse<br/>6 tables)]
-    Nav -- "questions, answers in (input properties)" --> PCF
-    PCF -- "answers, score, annotations out (output properties)" --> Nav
-    Nav <--> DV
-```
+**A lesson from testing.** In App 2's first traced run every question was visible and nothing scored. Power Apps' explicit column selection fetches only the columns the app visibly uses, and the questions reached the component only through `JSON(DropColumns(colQ, Rec))`, so the parent, condition and weight columns were never requested. Naming every column with `ShowColumns` fixed it. Anything a code component reads through JSON has to be named somewhere the analyzer can see.
 
-PCF code components in canvas apps can't call the Dataverse Web API (`context.webAPI` isn't available there). So the Canvas app keeps owning data access, and the component owns the interaction-heavy UI and logic. That boundary is a design decision, not a workaround, and the docs explain it.
+## Tech stack
+
+| Layer | Used |
+| --- | --- |
+| Apps | Power Apps canvas apps, Power Fx (named formulas, user-defined functions) |
+| Code components | Power Apps component framework (virtual React controls), React 16 (platform), TypeScript, Fluent UI v9 |
+| Data | Dataverse: 7 tables, choice columns, image columns, a self-referencing lookup |
+| Tooling | Power Platform CLI (`pac`), .NET SDK (solution project), Node.js (provisioning and tests), canvas-apps authoring MCP, Monitor |
+| ALM | Git and GitHub, unmanaged solutions in a Developer environment |
 
 ## Repository layout
 
 ```
-dataverse/   schema.json, seed data, provision and seed scripts (Node, Dataverse Web API)
-canvas-app/  App 1: build plan and the validated .pa.yaml source
-pcf/         App 2: the React + TypeScript code component
-docs/        data model, "Where Canvas stopped", "How pro-code solved it", the write-up
+dataverse/     schema.json, seed data, provision and seed scripts (Node, Dataverse Web API)
+canvas-app/    App 1: design notes and the .pa.yaml source
+canvas-app-2/  App 2: the .pa.yaml source
+pcf/           App 2: the two code components, their tests and the solution project
+docs/          data model, "Where Canvas stopped", architecture diagram
 ```
 
-## Run it yourself
+## Install it in your own environment
 
-1. **Dataverse.** Follow [docs/data-model.md#provisioning](docs/data-model.md#provisioning). Two commands create the solution and load fictional demo data.
-2. **Canvas app.** See [canvas-app/](canvas-app/).
-3. **PCF components.** See [pcf/](pcf/): `npm test`, `npm run build`, `npm start`. Deployment comes with the App 2 canvas app.
+Everything runs on a free Power Apps Developer Plan environment. All data is fictional.
 
-Everything is built to run on a free Power Apps Developer Plan environment.
+1. **Dataverse tables and demo data.** Needs Node.js 20 or later.
+   ```bash
+   cd dataverse
+   npm install
+   npm run validate
+   DATAVERSE_URL=https://yourorg.crm.dynamics.com npm run provision
+   DATAVERSE_URL=https://yourorg.crm.dynamics.com npm run seed
+   ```
+   Sign-in uses the device-code flow in your browser; no password or secret goes into the scripts. See [docs/data-model.md](docs/data-model.md).
+2. **Code components.** Needs Node.js 24 (the tests run TypeScript directly), the .NET SDK and the Power Platform CLI.
+   ```bash
+   cd pcf/components && npm install && npm test
+   cd ../solution && dotnet build -c Release
+   pac auth create --environment https://yourorg.crm.dynamics.com --deviceCode
+   pac solution import --path bin/Release/solution.zip --publish-changes
+   ```
+   In the Power Platform admin center, turn on **Allow publishing of canvas apps with code components** for the environment. See [pcf/README.md](pcf/README.md).
+3. **Canvas apps.** For each app, create a blank tablet canvas app in the `CanvasVsPcfInspection` solution, turn on co-authoring and add the `fp_` tables. Then paste each screen's YAML from [canvas-app/src](canvas-app/src) (App 1) or [canvas-app-2/src](canvas-app-2/src) (App 2) into Studio with **Paste code**, or compile the folder with the canvas-apps authoring tools. App 2 also needs the code components from step 2. See [canvas-app/README.md](canvas-app/README.md).
+
+## Screenshots
+
+Screenshots coming soon.
+
+## Further reading
+
+- [docs/data-model.md](docs/data-model.md): tables, the checklist tree and the risk model
+- [docs/where-canvas-stopped.md](docs/where-canvas-stopped.md): App 1's limits, with evidence from the build and three traced test runs
+- [pcf/DESIGN.md](pcf/DESIGN.md): App 2's design, progress log and lessons
 
 ## Status
 
-- [x] Data model, provisioning and seed scripts (provisioned in a Developer environment)
-- [x] App 1: Canvas app, 5 screens, compiled clean against a live Studio session and signed off after three Monitor-traced test runs (2026-10-17)
-- [x] "Where Canvas stopped": build evidence (A1–A10) and runtime checks (B1–B7)
-- [ ] App 2: PCF component (in progress)
-- [ ] "How pro-code solved it"
-- [ ] Portfolio write-up
+- [x] Data model, provisioning and seed scripts
+- [x] App 1: Canvas app, signed off after three Monitor-traced test runs
+- [x] App 2: two code components (15 unit tests) and the Canvas app, merged to main
+- [ ] App 2: final traced test after the column-selection fix
+- [ ] Screenshots and the "How pro-code solved it" write-up
 
 All company, site and equipment names are fictional.

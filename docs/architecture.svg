@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="770" viewBox="0 0 1280 770" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+  <title>Canvas vs PCF inspection: solution architecture</title>
+  <desc>Inspectors use two canvas apps in a Power Platform Developer environment. App 1 is Canvas only. App 2 hosts two React and TypeScript PCF code components. Both apps read and write seven Dataverse tables. Source, schema and build scripts live in GitHub and are deployed with Node scripts and the Power Platform CLI.</desc>
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#209CCB"/><stop offset="0.5" stop-color="#742774"/><stop offset="1" stop-color="#E3008C"/>
+    </linearGradient>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0B5F7E"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#51646E"/>
+    </marker>
+    <style>
+      .h { font-family: Manrope, 'Segoe UI', Arial, sans-serif; font-weight: 700; fill: #0F2530; }
+      .t { fill: #0F2530; font-size: 13px; }
+      .m { fill: #51646E; font-size: 12px; }
+      .mono { font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 12px; fill: #0B5F7E; }
+      .card { fill: #FFFFFF; stroke: #CBE2EC; stroke-width: 1.5; }
+      .pcf { fill: #E3F0F5; stroke: #0B5F7E; stroke-width: 1.5; }
+      .zone { fill: none; stroke: #209CCB; stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .lbl { font-size: 11px; fill: #0B5F7E; font-weight: 600; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="770" fill="#EDF7FB"/>
+  <rect width="1280" height="6" fill="url(#brand)"/>
+  <text x="40" y="48" class="h" font-size="22">Canvas vs PCF inspection: solution architecture</text>
+  <text x="40" y="72" class="m" font-size="13">One inspection process built twice on the same Dataverse data: App 1 in Canvas only, App 2 with React + TypeScript code components.</text>
+
+  <!-- Users -->
+  <rect x="40" y="130" width="170" height="96" rx="10" class="card"/>
+  <text x="58" y="160" class="h" font-size="15">Inspector</text>
+  <text x="58" y="182" class="m">Tablet, browser or</text>
+  <text x="58" y="198" class="m">Power Apps mobile</text>
+  <text x="58" y="214" class="m">Signs in with Entra ID</text>
+
+  <rect x="40" y="476" width="170" height="96" rx="10" class="card"/>
+  <text x="58" y="506" class="h" font-size="15">Maker / owner</text>
+  <text x="58" y="528" class="m">Edits checklist and</text>
+  <text x="58" y="544" class="m">rule rows, builds and</text>
+  <text x="58" y="560" class="m">deploys from Git</text>
+
+  <!-- Environment zone -->
+  <rect x="250" y="100" width="690" height="610" rx="14" class="zone"/>
+  <text x="268" y="124" class="lbl">POWER PLATFORM DEVELOPER ENVIRONMENT</text>
+
+  <!-- App 1 -->
+  <rect x="270" y="140" width="310" height="200" rx="10" class="card"/>
+  <text x="288" y="168" class="h" font-size="16">App 1 · Canvas only</text>
+  <text x="288" y="192" class="t">5 screens, Power Fx</text>
+  <text x="288" y="212" class="m">Visibility: one named formula per level</text>
+  <text x="288" y="228" class="m">(fixed at 5 levels, no recursion)</text>
+  <text x="288" y="248" class="m">Risk: weights, multiplier, critical stops</text>
+  <text x="288" y="268" class="m">Photos: Pen input strokes, saved apart</text>
+  <text x="288" y="284" class="m">from the photo</text>
+  <text x="288" y="318" class="mono">canvas-app/src/*.pa.yaml</text>
+
+  <!-- App 2 -->
+  <rect x="610" y="140" width="310" height="330" rx="10" class="card"/>
+  <text x="628" y="168" class="h" font-size="16">App 2 · Canvas + PCF</text>
+  <text x="628" y="192" class="t">Same 5 screens; Canvas owns all</text>
+  <text x="628" y="208" class="t">Dataverse reads and writes</text>
+
+  <rect x="628" y="232" width="274" height="104" rx="8" class="pcf"/>
+  <text x="642" y="256" class="h" font-size="13">InspectionChecklist (React + TS)</text>
+  <text x="642" y="276" class="m">Recursive visibility, any depth</text>
+  <text x="642" y="292" class="m">Rule trees stored as JSON rows</text>
+  <text x="642" y="308" class="m">Risk engine + compound rules</text>
+  <text x="642" y="324" class="m">Explained score, live</text>
+
+  <rect x="628" y="348" width="274" height="72" rx="8" class="pcf"/>
+  <text x="642" y="372" class="h" font-size="13">PhotoAnnotator (React + TS)</text>
+  <text x="642" y="392" class="m">Markers, arrows, boxes, notes</text>
+  <text x="642" y="408" class="m">Flattened JPEG + editable mark JSON</text>
+  <text x="628" y="452" class="mono">pcf/components · Fluent UI v9</text>
+
+  <!-- Contract arrows inside App 2 -->
+
+  <!-- Dataverse -->
+  <rect x="270" y="500" width="650" height="190" rx="10" class="card"/>
+  <text x="288" y="528" class="h" font-size="16">Dataverse · 7 tables</text>
+  <text x="288" y="552" class="t">Reference</text>
+  <text x="288" y="572" class="mono">fp_site · fp_equipment</text>
+  <text x="288" y="602" class="t">Templates (data, not app logic)</text>
+  <text x="288" y="622" class="mono">fp_checklistquestion (self-parent tree)</text>
+  <text x="288" y="640" class="mono">fp_riskrule (compound rules)</text>
+  <text x="620" y="552" class="t">Transactions</text>
+  <text x="620" y="572" class="mono">fp_inspection</text>
+  <text x="620" y="590" class="mono">fp_inspectionanswer</text>
+  <text x="620" y="608" class="mono">fp_inspectionphoto (image columns)</text>
+  <text x="620" y="640" class="m">Security roles control table access;</text>
+  <text x="620" y="656" class="m">no Power Automate flows: apps Patch</text>
+  <text x="620" y="672" class="m">rows directly</text>
+
+  <!-- Arrows: users to apps -->
+  <line x1="210" y1="170" x2="268" y2="190" stroke="#0B5F7E" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M125,130 L125,88 L765,88 L765,138" fill="none" stroke="#0B5F7E" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- apps to Dataverse -->
+  <line x1="425" y1="340" x2="425" y2="498" stroke="#0B5F7E" stroke-width="2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="433" y="420" class="lbl">Power Fx reads, Patch</text>
+  <line x1="765" y1="470" x2="765" y2="498" stroke="#0B5F7E" stroke-width="2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+
+  <!-- Contract label -->
+  <rect x="955" y="232" width="290" height="188" rx="10" class="card"/>
+  <text x="973" y="258" class="h" font-size="14">Canvas ↔ component contract</text>
+  <text x="973" y="282" class="t">In: questions, rules, answers as JSON</text>
+  <text x="973" y="300" class="t">Out: answers, score, band, visible ids,</text>
+  <text x="973" y="316" class="t">explanation (read in OnChange)</text>
+  <text x="973" y="342" class="m">No context.webAPI in canvas apps, so</text>
+  <text x="973" y="358" class="m">the component never calls Dataverse.</text>
+  <text x="973" y="384" class="m">Lesson: name every column that reaches</text>
+  <text x="973" y="400" class="m">a component through JSON (ShowColumns).</text>
+  <line x1="953" y1="320" x2="904" y2="300" stroke="#0B5F7E" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+  <!-- ALM -->
+  <rect x="970" y="476" width="275" height="234" rx="10" class="card"/>
+  <text x="988" y="504" class="h" font-size="15">ALM · GitHub</text>
+  <text x="988" y="528" class="m">schema.json + seed data</text>
+  <text x="988" y="546" class="mono">npm run provision / seed</text>
+  <text x="988" y="566" class="m">Canvas source (.pa.yaml),</text>
+  <text x="988" y="582" class="m">compiled into Studio</text>
+  <text x="988" y="602" class="m">PCF solution project</text>
+  <text x="988" y="620" class="mono">pac solution import</text>
+  <text x="988" y="646" class="m">Unmanaged solutions:</text>
+  <text x="988" y="662" class="mono">CanvasVsPcfInspection</text>
+  <text x="988" y="680" class="mono">FusionPcfComponents</text>
+  <text x="988" y="698" class="m">Device-code sign-in, no secrets</text>
+
+  <line x1="968" y1="590" x2="922" y2="590" stroke="#51646E" stroke-width="2" marker-end="url(#arrg)"/>
+  <path d="M125,572 L125,730 L1107,730 L1107,714" fill="none" stroke="#51646E" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrg)"/>
+
+  <text x="150" y="752" class="m" font-size="11">All company, site and equipment names are fictional demo data.</text>
+</svg>
