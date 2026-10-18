@@ -36,3 +36,19 @@ In `npm start`, paste a sample into the inputs:
 - **Criticality**: `High`, `Medium` or `Low`
 
 The samples use the same field names as App 1's `colQ` collection, which is what App 2 will pass.
+
+## Deploy
+
+`pac pcf push` accepts one component per project, so both components ship in a small solution project, [solution/](solution/) (`FusionPcfComponents`, publisher Sohan, prefix `fp`):
+
+```
+cd pcf/solution
+dotnet build -c Release          # builds pcf/components and packs bin/Release/solution.zip (unmanaged)
+pac auth create --environment https://<org>.crm.dynamics.com --deviceCode
+pac solution import --path bin/Release/solution.zip --publish-changes
+```
+
+The manifests declare Fluent 9.46.2, the highest version the platform accepts in a manifest; the platform loads a newer compatible Fluent at runtime. The environment setting **Allow publishing of canvas apps with code components** must be on. Then, in the canvas app: **Insert → Get more components → Code**.
+
+Deployed to the Developer environment on 2026-10-18 (version 0.1.1) and added to the `CanvasVsPcfInspection` solution.
+

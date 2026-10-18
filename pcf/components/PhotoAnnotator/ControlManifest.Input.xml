@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="Fusion" constructor="PhotoAnnotator" version="0.1.0" display-name-key="Photo annotator" description-key="Numbered markers, arrows, boxes, freehand and notes on a photo. Outputs the photo with marks burned in plus every mark as data." control-type="virtual">
+  <control namespace="Fusion" constructor="PhotoAnnotator" version="0.1.1" display-name-key="Photo annotator" description-key="Numbered markers, arrows, boxes, freehand and notes on a photo. Outputs the photo with marks burned in plus every mark as data." control-type="virtual">
     <external-service-usage enabled="false">
     </external-service-usage>
 
@@ -17,7 +17,7 @@
     <resources>
       <code path="index.ts" order="1" />
       <platform-library name="React" version="16.14.0" />
-      <platform-library name="Fluent" version="9.68.0" />
+      <platform-library name="Fluent" version="9.46.2" />
     </resources>
   </control>
 </manifest>
