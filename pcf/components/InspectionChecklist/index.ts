@@ -1,5 +1,7 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
+import { FluentProvider } from "@fluentui/react-components";
+import { fusionTheme } from "../shared/theme";
 import { ChecklistView } from "./ChecklistView";
 import { answersOut, parseAnswers, parseCriticality, parseQuestions, parseRules, ParsedQuestion } from "./contract";
 import { evaluate, type Answers, type Result, type RiskRule } from "./engine/engine";
@@ -55,7 +57,7 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
     }
     if (changed || this.result === null) this.recalculate(false);
 
-    return React.createElement(ChecklistView, {
+    const view = React.createElement(ChecklistView, {
       questions: this.questions,
       answers: this.answers,
       result: this.result!,
@@ -64,6 +66,7 @@ export class InspectionChecklist implements ComponentFramework.ReactControl<IInp
       height: Number(context.mode.allocatedHeight) > 0 ? Number(context.mode.allocatedHeight) : 600,
       onAnswer: this.onAnswer,
     });
+    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent" } }, view);
   }
 
   private onAnswer = (questionId: string, value: string | undefined): void => {

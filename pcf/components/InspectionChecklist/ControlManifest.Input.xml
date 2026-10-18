@@ -9,7 +9,7 @@
     <property name="RulesJson" display-name-key="Risk rules (JSON)" description-key="Active fp_riskrule rows: Code, Name, Bonus, Explanation, Rule, Active." of-type="Multiple" usage="input" required="false" />
     <property name="AnswersJson" display-name-key="Saved answers (JSON)" description-key="Answers to load: QId, Code, Value. A new value replaces the answers in the component." of-type="Multiple" usage="input" required="false" />
     <property name="Criticality" display-name-key="Criticality" description-key="Low, Medium or High (multiplier 1.0, 1.25, 1.5)." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="ReadOnly" display-name-key="Read only" description-key="Show answers without allowing changes." of-type="TwoOptions" usage="input" required="false" />
+    <property name="ReadOnly" display-name-key="Read only" description-key="Show answers without allowing changes." of-type="TwoOptions" usage="input" required="false" default-value="false" />
 
     <!-- Outputs to the Canvas app -->
     <property name="AnswersOut" display-name-key="Answers (JSON)" description-key="Answers to visible questions only: QId, Code, Value, Contribution." of-type="Multiple" usage="output" />

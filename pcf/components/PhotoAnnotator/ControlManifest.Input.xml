@@ -7,7 +7,7 @@
     <!-- Inputs from the Canvas app -->
     <property name="ImageDataUri" display-name-key="Photo (data URI)" description-key="JSON(Photo, JSONFormat.IncludeBinaryData), without the surrounding quotes." of-type="Multiple" usage="input" required="true" />
     <property name="AnnotationJson" display-name-key="Saved marks (JSON)" description-key="fp_annotationjson of the photo, to keep editing earlier marks." of-type="Multiple" usage="input" required="false" />
-    <property name="ReadOnly" display-name-key="Read only" description-key="Show marks without allowing changes." of-type="TwoOptions" usage="input" required="false" />
+    <property name="ReadOnly" display-name-key="Read only" description-key="Show marks without allowing changes." of-type="TwoOptions" usage="input" required="false" default-value="false" />
 
     <!-- Outputs to the Canvas app -->
     <property name="AnnotatedImageDataUri" display-name-key="Annotated photo (data URI)" description-key="The photo with marks burned in, full resolution, JPEG. Empty when there are no marks." of-type="Multiple" usage="output" />

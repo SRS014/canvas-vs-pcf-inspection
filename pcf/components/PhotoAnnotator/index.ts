@@ -1,5 +1,7 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
+import { FluentProvider } from "@fluentui/react-components";
+import { fusionTheme } from "../shared/theme";
 import { AnnotatorView } from "./AnnotatorView";
 import { Mark, flatten, parseMarks, serialiseMarks } from "./marks";
 
@@ -34,7 +36,7 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
       this.lastMarksJson = marksJson;
       this.marks = parseMarks(marksJson);
     }
-    return React.createElement(AnnotatorView, {
+    const view = React.createElement(AnnotatorView, {
       src,
       marks: this.marks,
       readOnly: context.parameters.ReadOnly.raw === true,
@@ -43,6 +45,7 @@ export class PhotoAnnotator implements ComponentFramework.ReactControl<IInputs, 
       onChange: this.onChange,
       onImageLoad: this.onImageLoad,
     });
+    return React.createElement(FluentProvider, { theme: fusionTheme, style: { background: "transparent" } }, view);
   }
 
   private onImageLoad = (img: HTMLImageElement): void => {
