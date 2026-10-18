@@ -1,0 +1,227 @@
+Screens:
+  InspectionScreen:
+    Properties:
+      Fill: =cWash
+      LoadingSpinnerColor: =cPrimary
+    Children:
+      - conInspRoot:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =cWash
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - htmInspTopBar:
+                Control: HtmlViewer
+                Properties:
+                  HtmlText: =HtmlLine(6, 0)
+                  AutoHeight: =true
+                  Size: =1
+                  PaddingTop: =0
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Height: =6
+                  FillPortions: =0
+                  LayoutMinHeight: =6
+                  AlignInContainer: =AlignInContainer.Stretch
+            - conInspHeader:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =cWhite
+                  FillPortions: =0
+                  Height: =76
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =16
+                  LayoutMinHeight: =76
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - btnInspExit:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: ="Abandon this inspection"
+                        Appearance: =ButtonAppearance.Subtle
+                        Color: =cPrimary
+                        Height: =48
+                        Icon: ="Dismiss"
+                        OnSelect: |-
+                          =If(
+                              Confirm(
+                                  "Your answers will be lost. The Draft inspection stays on the home list without a score.",
+                                  {
+                                      Title: "Abandon " & varCtx.Number & "?",
+                                      ConfirmButton: "Abandon inspection",
+                                      CancelButton: "Keep inspecting"
+                                  }
+                              ),
+                              Clear(colAns);
+                              Clear(colQ);
+                              Clear(colVis);
+                              Clear(colLines);
+                              Navigate(InspectionsHomeScreen, ScreenTransition.None)
+                          )
+                        Size: =16
+                        Text: ="Abandon"
+                        Width: =128
+                  - imgInspMark:
+                      Control: Image
+                      Properties:
+                        Image: =BrandSymbol
+                        ImagePosition: =ImagePosition.Fit
+                        Width: =40
+                        Height: =40
+                        LayoutMinWidth: =40
+                        LayoutMinHeight: =40
+                        AlignInContainer: =AlignInContainer.Center
+                        TabIndex: =0
+                        AccessibleLabel: ="The Fusion Platform"
+                  - conInspTitleBlock:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        DropShadow: =DropShadow.None
+                        Height: =72
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMinHeight: =72
+                      Children:
+                        - txtInspEyebrow:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cPurple
+                              FontWeight: =FontWeight.Semibold
+                              Height: =18
+                              LayoutMinHeight: =18
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =12
+                              Text: ="DRAFT INSPECTION"
+                              Overflow: =Overflow.Hidden
+                        - txtInspTitle:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cText
+                              FontWeight: =FontWeight.Semibold
+                              Height: =32
+                              LayoutMinHeight: =32
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =22
+                              Text: =varCtx.Number
+                              Overflow: =Overflow.Hidden
+                        - txtInspContext:
+                            Control: Label
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              Color: =cMuted
+                              Height: =22
+                              LayoutMinHeight: =22
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: |-
+                                =varCtx.EquipmentName & " · " & varCtx.AssetTag & " · " & varCtx.SiteName & " · " &
+                                varCtx.EquipType & " · " & varCtx.Criticality & " x" & Text(Multiplier(varCtx.Criticality), "0.00")
+                              Wrap: =false
+                              Overflow: =Overflow.Hidden
+                  - btnInspPhotos:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        Appearance: =ButtonAppearance.Outline
+                        Color: =cPrimary
+                        Height: =48
+                        Icon: ="Camera"
+                        OnSelect: =Navigate(PhotosScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Photos"
+                        Width: =128
+                  - btnInspReview:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =Self.Text
+                        BasePaletteColor: =cPrimary
+                        FontWeight: =FontWeight.Semibold
+                        Height: =48
+                        Icon: ="ClipboardTaskListLtr"
+                        OnSelect: =Navigate(ReviewSubmitScreen, ScreenTransition.None)
+                        Size: =16
+                        Text: ="Review"
+                        Width: =140
+            - conInspBody:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =24
+                  PaddingBottom: =24
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =16
+                Children:
+                  - pcfInspChecklist:
+                      Control: CodeComponent
+                      ComponentName: fp_Fusion.InspectionChecklist
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        FillPortions: =1
+                        LayoutMinWidth: =600
+                        LayoutMinHeight: =400
+                        # Canvas passes everything in as JSON; the component never calls Dataverse.
+                        QuestionsJson: =JSON(DropColumns(colQ, Rec), JSONFormat.Compact)
+                        RulesJson: =JSON(colRules, JSONFormat.Compact)
+                        # Keyed on the inspection, so a new inspection starts with a clean set of answers.
+                        AnswersJson: |-
+                          =JSON({Inspection: varCtx.InspectionId}, JSONFormat.Compact)
+                        Criticality: =varCtx.Criticality
+                        OnChange: |-
+                          =// Mirror the component's results into collections; Review and Submit read these.
+                          ClearCollect(
+                              colAns,
+                              ForAll(
+                                  Table(ParseJSON(Self.AnswersOut)) As a,
+                                  {
+                                      AQId: GUID(Text(a.Value.QId)),
+                                      ACode: Text(a.Value.Code),
+                                      AValue: Text(a.Value.Value),
+                                      AContrib: Value(a.Value.Contribution)
+                                  }
+                              )
+                          );
+                          ClearCollect(colVis, ForAll(Table(ParseJSON(Self.VisibleIdsJson)) As v, {Id: GUID(Text(v.Value))}));
+                          ClearCollect(
+                              colLines,
+                              ForAll(
+                                  Table(ParseJSON(Self.ExplanationJson)) As l,
+                                  {
+                                      Kind: Text(l.Value.Kind),
+                                      Code: Text(l.Value.Code),
+                                      QText: Text(l.Value.Label),
+                                      Weight: Value(l.Value.Points),
+                                      Critical: Boolean(l.Value.Critical)
+                                  }
+                              )
+                          )

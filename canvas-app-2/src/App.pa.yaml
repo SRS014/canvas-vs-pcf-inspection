@@ -1,0 +1,125 @@
+App:
+  Properties:
+    Formulas: |-
+      =// ---------- Fusion Sky colour tokens ----------
+      cPrimary = ColorValue("#0B5F7E");
+      cSecondary = ColorValue("#209CCB");
+      cPurple = ColorValue("#742774");
+      cText = ColorValue("#0F2530");
+      cMuted = ColorValue("#51646E");
+      cWash = ColorValue("#EDF7FB");
+      cBorder = ColorValue("#CBE2EC");
+      cSuccess = ColorValue("#167044");
+      cWarning = ColorValue("#8A5A00");
+      cError = ColorValue("#B42318");
+      cSuccessTint = ColorValue("#E8F3EC");
+      cWarningTint = ColorValue("#FBF1DF");
+      cErrorTint = ColorValue("#FBE9E7");
+      cPrimaryTint = ColorValue("#E3F0F5");
+      cPurpleTint = ColorValue("#F3E9F3");
+      cWhite = Color.White;
+      cLavender = ColorValue("#F5EFF8");
+
+      // ---------- Fusion Sky brand assets (inline SVG, so the app needs no media files) ----------
+      // Line gradient: top bar, card top lines and the footer rule.
+      BrandLine = "data:image/svg+xml;utf8," & EncodeUrl(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4' preserveAspectRatio='none'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='#209CCB'/><stop offset='0.5' stop-color='#742774'/><stop offset='1' stop-color='#E3008C'/></linearGradient></defs><rect width='100' height='4' fill='url(#g)'/></svg>"
+      );
+      // Light wash: the Home hero.
+      BrandWash = "data:image/svg+xml;utf8," & EncodeUrl(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><defs><linearGradient id='w' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#EDF7FB'/><stop offset='1' stop-color='#F5EFF8'/></linearGradient></defs><rect width='100' height='100' fill='url(#w)'/></svg>"
+      );
+      // The gradient ring symbol (fusion-symbol-color-gradient.svg).
+      BrandSymbol = "data:image/svg+xml;utf8," & EncodeUrl(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='r' gradientUnits='userSpaceOnUse' x1='10' y1='10' x2='54' y2='54'><stop offset='0' stop-color='#209CCB'/><stop offset='1' stop-color='#742774'/></linearGradient></defs><circle cx='32' cy='24.68' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='32' cy='24.68' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/><circle cx='23.5' cy='39.4' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='23.5' cy='39.4' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/><circle cx='40.5' cy='39.4' r='11.5' fill='none' stroke='#FFFFFF' stroke-width='7.2'/><circle cx='40.5' cy='39.4' r='11.5' fill='none' stroke='url(#r)' stroke-width='5.4'/></svg>"
+      );
+      BrandTagline = "Fuse ideas. Build smarter. Integrate better.";
+      // Decorative gradients as HTML (not focusable, so screen readers skip them; an Image control
+      // fails the accessibility checker even when disabled). Each HtmlViewer uses AutoHeight with
+      // Size 1, so it grows to fit its content and never shows a scrollbar.
+      HtmlLine(px: Number, radius: Number): Text =
+          "<div style=""height:" & px & "px;border-radius:" & radius & "px " & radius & "px 0 0;" &
+          "background:linear-gradient(90deg,#209CCB,#742774,#E3008C)""></div>";
+      HtmlWash(px: Number): Text =
+          "<div style=""height:" & px & "px;background:linear-gradient(135deg,#EDF7FB,#F5EFF8)""></div>";
+
+      // ---------- Checklist structure ----------
+      Stages = ["Pre-use", "Visual and structural", "Operational test", "Safety sign-off"];
+
+      // ---------- App 2: the checklist component owns visibility and scoring ----------
+      // InspectionChecklist walks the question tree by recursion (no depth limit), evaluates
+      // fp_rulejson and fp_riskrule generically, and reports its results through OnChange into
+      // colVis (visible question ids), colAns (answers with contributions) and colLines (every
+      // point in the score). App 1's per-level formulas, the hard-coded FL-32 rule and the answer
+      // functions are gone; the formulas below only read those collections.
+      VisibleQ = SortByColumns(Filter(colQ, QId in colVis.Id), "SortKey", SortOrder.Ascending);
+
+      // ---------- Risk ----------
+      Multiplier(criticality: Text): Number = Switch(criticality, "High", 1.5, "Medium", 1.25, 1);
+      Band(score: Number, criticalStop: Boolean): Text =
+          If(criticalStop || score >= 75, "Critical", score >= 50, "High", score >= 25, "Medium", "Low");
+      // Question lines and compound-rule lines from the component's explanation.
+      RiskItems = colLines;
+      CriticalHit = CountRows(Filter(RiskItems, Critical)) > 0;
+      RawPoints = Sum(RiskItems, Weight);
+      LiveScore = Min(100, Round(RawPoints * Multiplier(varCtx.Criticality), 1));
+      LiveBand = Band(LiveScore, CriticalHit);
+      BandColor(band: Text): Color = Switch(band, "Low", cSuccess, "Medium", cWarning, cError);
+      BandTint(band: Text): Color = Switch(band, "Low", cSuccessTint, "Medium", cWarningTint, "High", cErrorTint, cError);
+      AnsweredCount = CountRows(Filter(VisibleQ, !IsBlank(LookUp(colAns, AQId = QId).AValue)));
+
+      StageIndex(stage: Text): Number =
+          Switch(stage, "Pre-use", 1, "Visual and structural", 2, "Operational test", 3, "Safety sign-off", 4, 5);
+
+      // Visible questions with their session answers (used by Review and Submit).
+      VisibleAnswers = AddColumns(VisibleQ, AValue, LookUp(colAns, AQId = QId).AValue);
+    OnStart: |-
+      =// Typed, empty session collections. They are filled when an inspection starts.
+      ClearCollect(
+          colQ,
+          {
+              QId: GUID(),
+              Code: "",
+              QText: "",
+              Help: "",
+              ParentId: GUID(),
+              Depth: 0,
+              Stage: "",
+              SortKey: 0,
+              AnswerType: "",
+              Options: "",
+              ShowOp: "",
+              ShowVal: "",
+              RiskOp: "",
+              RiskVal: "",
+              Weight: 0,
+              Critical: false,
+              Rule: "",
+              // The question row itself, so Submit can set the Question lookup without one query per answer.
+              Rec: Defaults('Checklist questions')
+          }
+      );
+      Clear(colQ);
+      ClearCollect(colRules, {Code: "", Name: "", Bonus: 0, Explanation: "", Rule: "", Active: true});
+      Clear(colRules);
+      ClearCollect(colAns, {AQId: GUID(), ACode: "", AValue: "", AContrib: 0});
+      Clear(colAns);
+      ClearCollect(colVis, {Id: GUID()});
+      Clear(colVis);
+      ClearCollect(colLines, {Kind: "", Code: "", QText: "", Weight: 0, Critical: false});
+      Clear(colLines);
+      Set(
+          varCtx,
+          {
+              InspectionId: GUID(),
+              Number: "",
+              EquipmentName: "",
+              AssetTag: "",
+              SiteName: "",
+              EquipType: "",
+              Criticality: ""
+          }
+      );
+      Set(varBannerText, "")
+    StartScreen: =InspectionsHomeScreen
+    Theme: =PowerAppsTheme

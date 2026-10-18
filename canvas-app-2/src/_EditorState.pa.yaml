@@ -1,0 +1,7 @@
+EditorState:
+  ScreensOrder:
+    - InspectionsHomeScreen
+    - NewInspectionScreen
+    - InspectionScreen
+    - PhotosScreen
+    - ReviewSubmitScreen

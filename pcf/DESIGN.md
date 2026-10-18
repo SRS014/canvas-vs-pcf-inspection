@@ -75,13 +75,26 @@ Tools: numbered marker, arrow, rectangle, freehand and text note, with per-mark 
 - In the Power Platform admin center, the environment setting **Allow publishing of canvas apps with code components** must be on (owner).
 - Deployment: `pac auth create` with device code in the owner's browser, then `pac pcf push` for development and a solution package for the release.
 
+## Progress
+
+- 2026-10-17: `fp_riskrule` provisioned and seeded (6 rules). Both components written in one project ([components/](components/)), build clean (lint, type-check, bundle). 14 engine and contract tests pass against the seed data. Not yet run in the test harness or deployed.
+- 2026-10-18: Both components (0.1.3) checked in the harness and deployed in the `FusionPcfComponents` solution ([solution/](solution/)); 15 tests pass. App 2 wired to both components. It compiles clean with no accessibility or App checker issues, and Studio's control order matches the source on every screen. Waiting on the owner's Monitor test run.
+  - Studio quirk: classic Labels created from YAML are flagged as interactive (missing TabIndex, FocusedBorderThickness 0). The fix is a round trip: compile each Label once as a minimal `ModernText`, then compile the original Label YAML again.
+  - Renaming a screen and renaming it back (two compiles) rebuilds it in source order. This also cleared duplicate Label copies that Studio had kept on PhotosScreen.
+  - A compile changes only the open Studio session. If the tab is reloaded before **Save**, Studio goes back to the last save. That is how the first owner test got blank duplicate Labels (the two black boxes on Photos) and lost both fixes above.
+- 2026-10-18, owner test 1: the checklist showed tabs but no questions, and annotation did nothing. Fixed in 0.1.4:
+  - In Canvas, `updateView` runs only when an input or the size changes, not after `notifyOutputChanged` (the test harness re-renders on both, which hid this). Clicks changed answers and marks but nothing re-rendered. A small store ([shared/live.ts](components/shared/live.ts)) now re-renders the view itself.
+  - Inside an auto-layout container, `allocatedWidth` reports the Width property, not the laid-out width, so the question column got almost no width. Both views now fill 100% of the control's box, and PhotoAnnotator measures its photo area with a ResizeObserver.
+  - The annotation toolbar wraps, so Undo and Delete selected stay visible. The Note tool asks for text when it has none.
+- 2026-10-18, owner test 2: passed on the published app (saved 16:10 UTC, components 0.1.4). The downloaded package matched the source on every screen. Merged to main.
+
 ## Build order and checkpoints
 
-1. **Engine first.** The visibility, rules and scoring engine with unit tests against the seed data. Checkpoint: the tests show the sixth level, FL-32 and the compound rules working.
-2. **InspectionChecklist UI** in the PCF test harness (`npm start`).
-3. **PhotoAnnotator** in the test harness.
-4. **Deploy** both components to the environment (owner signs in).
-5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor.
+1. **Engine first.** The visibility, rules and scoring engine with unit tests against the seed data. Checkpoint: the tests show the sixth level, FL-32 and the compound rules working. *Done.*
+2. **InspectionChecklist UI** in the PCF test harness (`npm start`). *Done.*
+3. **PhotoAnnotator** in the test harness. *Done.*
+4. **Deploy** both components to the environment (owner signs in). *Done.*
+5. **App 2 canvas app** wired to the components. Checkpoint: owner test run with Monitor. *Done: owner test passed 2026-10-18 on the published app, components 0.1.4.*
 6. **docs/how-pro-code-solved-it.md**: each limit A1–A10 against the technique that removed it, with evidence from both apps.
 
 ## To verify while building
