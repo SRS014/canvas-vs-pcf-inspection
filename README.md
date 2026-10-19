@@ -94,13 +94,15 @@ More screenshots and the full write-up: [the case studies on my portfolio](https
 - [docs/data-model.md](docs/data-model.md): tables, the checklist tree and the risk model
 - [docs/where-canvas-stopped.md](docs/where-canvas-stopped.md): App 1's limits, with evidence from the build and three traced test runs
 - [pcf/DESIGN.md](pcf/DESIGN.md): App 2's design, progress log and lessons
+- [When to Use Code Components in Canvas Apps](https://thefusionplatform.wordpress.com/2026/10/19/when-to-use-code-components-in-canvas-apps/): the write-up on The Fusion Platform (Low-Code to Pro-Code, Part 10 of 10): the three walls, the boundary and the three traps from testing
+- Portfolio case studies: [App 1](https://srs014.github.io/projects/canvas-equipment-inspections/) and [App 2](https://srs014.github.io/projects/canvas-pcf-rules-driven-inspections/)
 
 ## Status
 
 - [x] Data model, provisioning and seed scripts
-- [x] App 1: Canvas app, signed off after three Monitor-traced test runs
+- [x] App 1: Canvas app, signed off after three test runs traced with Live monitor
 - [x] App 2: two code components (15 unit tests) and the Canvas app, merged to main
 - [ ] App 2: final traced test after the column-selection fix
-- [ ] Screenshots and the "How pro-code solved it" write-up
+- [x] Screenshots and the write-up ([blog post](https://thefusionplatform.wordpress.com/2026/10/19/when-to-use-code-components-in-canvas-apps/), 19 October 2026)
 
 All company, site and equipment names are fictional.
