@@ -77,7 +77,17 @@ Everything was built in a free Power Apps Developer Plan environment. All data i
 
 ## Screenshots
 
-Screenshots coming soon.
+All sites, equipment and inspections are fictional demo data.
+
+| App 1 · Home | App 1 · A critical stop forces the Critical band |
+| --- | --- |
+| ![App 1 home screen with inspection counts and a list of inspections](docs/screenshots/01_app1_home.png) | ![App 1 checklist with the operator licence question answered No and a 30 out of 100 Critical score](docs/screenshots/02_app1_critical-stop.png) |
+
+**App 2 · The checklist and live risk panel are one React code component inside the Canvas screen**
+
+![App 2 checklist drawn by the React code component with stage tabs and a live risk panel](docs/screenshots/03_app2_pcf-checklist.png)
+
+More screenshots and the full write-up: [the case studies on my portfolio](https://srs014.github.io/projects/).
 
 ## Further reading
 
