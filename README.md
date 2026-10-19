@@ -52,7 +52,9 @@ docs/          data model, "Where Canvas stopped", architecture diagram
 
 ## Install it in your own environment
 
-Everything runs on a free Power Apps Developer Plan environment. All data is fictional.
+Everything was built in a free Power Apps Developer Plan environment. All data is fictional.
+
+> **Heads-up:** Microsoft is retiring unmanaged developer environments, the kind the Developer Plan creates. New ones can't be created from 15 November 2026, existing ones are suspended from 15 December 2026 and deleted from 15 January 2027 ([Developer Plan guide](https://learn.microsoft.com/en-us/power-platform/developer/plan)). Use a trial or another non-production environment instead.
 
 1. **Dataverse tables and demo data.** Needs Node.js 20 or later.
    ```bash
