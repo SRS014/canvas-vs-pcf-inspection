@@ -17,7 +17,7 @@ npm run test:app1
 
 Each test opens the app fresh, and every inspection a test creates is deleted by number afterwards. Tests wait for something on screen rather than for a fixed time, so a slow run takes longer instead of failing.
 
-## What App 1's 20 tests cover
+## What App 1's 23 tests cover
 
 | Group | Checks |
 | --- | --- |
@@ -26,6 +26,7 @@ Each test opens the app fresh, and every inspection a test creates is deleted by
 | C. Checklist | Child questions appear and go away with their parent; the branch stops at level five; collapsed answers stop scoring; critical stops; number thresholds; the cross-question rule; band limits at 25, 50 and 75; the cap at 100 |
 | D. Submit | Disabled with no answers; score, band and answer rows saved; hidden answers not saved; a critical stop saved as Critical |
 | E. Leaving | Exit asks first; abandoning leaves an unscored Draft |
+| G. On screen | No control on any screen shows the default word "Text"; Contributing questions show the whole of the longest question; a new inspection is the first row in view after a submit |
 | F. Photos | A photo saves full-size; pen strokes save separately from it |
 
 Test C2 confirms that the sixth-level question never shows. That is Canvas's documented limit, the point of this project, and not a defect the suite hides.

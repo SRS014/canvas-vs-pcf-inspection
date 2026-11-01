@@ -489,10 +489,10 @@ Screens:
                               TabIndex: =0
                               AccessibleLabel: ="Questions contributing to the score"
                               Items: =SortByColumns(RiskItems, "Weight", SortOrder.Descending)
-                              LayoutMinHeight: =96
+                              LayoutMinHeight: =136
                               Selectable: =false
                               TemplatePadding: =0
-                              TemplateSize: =48
+                              TemplateSize: =72
                             Children:
                               - txtRevContribText:
                                   Control: Label
@@ -500,17 +500,18 @@ Screens:
                                     PaddingTop: =0
                                     PaddingBottom: =0
                                     Color: =If(ThisItem.Critical, cError, cText)
-                                    Height: =44
+                                    Height: =68
                                     PaddingLeft: =0
                                     Size: =14
                                     Text: =ThisItem.Code & "  " & ThisItem.QText & If(ThisItem.Critical, "  · CRITICAL STOP", "")
                                     VerticalAlign: =VerticalAlign.Top
-                                    Width: =Parent.TemplateWidth - 56
+                                    Width: =Parent.TemplateWidth - 60
                                     Y: =2
                                     Overflow: =Overflow.Hidden
                               - txtRevContribWeight:
                                   Control: Label
                                   Properties:
+                                    AutoHeight: =true
                                     PaddingTop: =0
                                     PaddingBottom: =0
                                     Align: =Align.Right
@@ -520,7 +521,7 @@ Screens:
                                     Size: =16
                                     Text: ="+" & ThisItem.Weight
                                     Width: =56
-                                    X: =Parent.TemplateWidth - 56
+                                    X: =Parent.TemplateWidth - 65
                                     Y: =2
                                     Overflow: =Overflow.Hidden
                         - galRevCalc:

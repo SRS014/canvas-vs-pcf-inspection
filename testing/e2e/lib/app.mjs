@@ -3,7 +3,15 @@
 import { chromium } from "@playwright/test";
 import { PROFILE_DIR, playUrl } from "./env.mjs";
 
+// Reuse the browser that auth/studio.mjs keeps open (same signed-in profile) when it's running;
+// otherwise start our own from the saved profile. Two browsers can't share one profile.
 export async function openBrowser({ headless = true, viewport = { width: 1280, height: 720 }, recordVideo } = {}) {
+  if (!recordVideo) {
+    try {
+      const browser = await chromium.connectOverCDP("http://localhost:9333", { timeout: 3000 });
+      return { context: browser.contexts()[0], close: () => browser.close(), viewport };
+    } catch { /* not running */ }
+  }
   const context = await chromium.launchPersistentContext(PROFILE_DIR, { headless, viewport, recordVideo });
   return { context, close: () => context.close(), viewport };
 }
@@ -134,6 +142,17 @@ export class InspectionApp extends App {
       await this.page.waitForTimeout(250);
     }
     throw new Error(`KPI cards never showed ${drafts} drafts and ${submitted} submitted (last: "${text}")`);
+  }
+  // The inspection number at the top of the home list's visible area
+  async firstRowInView() {
+    return this.ctl("galHomeInspections").evaluate((gallery) => {
+      const top = gallery.getBoundingClientRect().top;
+      const rows = [...gallery.querySelectorAll('[data-control-name="txtHomeRowNumber"]')]
+        .map((e) => ({ text: e.innerText.trim(), y: e.getBoundingClientRect().top }))
+        .filter((r) => r.y >= top && r.text)
+        .sort((a, b) => a.y - b.y);
+      return rows[0]?.text;
+    });
   }
   // Question row by exact code; the code label reads "FL-01   ·   level 1"
   question(code) {

@@ -39,12 +39,12 @@ test.beforeEach(async () => {
 test.describe("A. Home", () => {
   test("A1 KPI cards match Dataverse", async () => {
     const c = await dv.counts();
+    await app.waitKpis(c.drafts, c.submitted);
     const kpis = (await app.ctl("galHomeKpis").innerText()).replace(/\s+/g, " ");
     expect(kpis).toContain(`Total inspections ${c.total}`);
-    expect(kpis).toContain(`Drafts ${c.drafts}`);
-    expect(kpis).toContain(`Submitted ${c.submitted}`);
   });
   test("A2 the list is newest first", async () => {
+    await app.waitText("txtHomeRowNumber", /INS-/);
     const numbers = (await app.all("txtHomeRowNumber").allInnerTexts()).map((t) => t.trim()).filter(Boolean);
     expect(numbers.length).toBeGreaterThan(1);
     expect(numbers).toEqual([...numbers].sort().reverse());
@@ -266,6 +266,65 @@ test.describe("D. Review and submit", () => {
     await app.click("btnRevSubmit");
     await app.ctl("conHomeBanner").waitFor({ timeout: 60_000 });
     expect(await dv.inspection(number)).toMatchObject({ status: "Submitted", score: 30, band: "Critical" });
+  });
+});
+
+test.describe("G. What the screen shows", () => {
+  // A blank modern Text control shows its default word "Text"
+  const noDefaultText = async (screen) => {
+    const stray = await app.frame.locator("[data-control-name]").evaluateAll((els) =>
+      els.filter((e) => e.offsetParent !== null && !e.querySelector("[data-control-name]") && (e.innerText || "").trim() === "Text")
+        .map((e) => e.getAttribute("data-control-name")));
+    expect(stray, `${screen} shows the default word "Text"`).toEqual([]);
+  };
+  test("G1 no control on any screen shows the default word Text", async () => {
+    await noDefaultText("Home");
+    await start(EASTPORT, FL21);
+    await noDefaultText("Inspection");
+    await app.yesNo("FL-03", "No");
+    await app.score(30, "Critical");
+    await app.click("btnInspPhotos");
+    await app.ctl("addPhotoPicker").waitFor();
+    await noDefaultText("Photos");
+    await app.click("btnPhotoBackNav");
+    await app.ctl("tabInspStages").waitFor();
+    await app.click("btnInspReview");
+    await app.waitText("txtRevScore", /30\.0/);
+    await noDefaultText("Review");
+    await app.click("btnRevBackNav");
+    await app.ctl("tabInspStages").waitFor();
+    await app.page.close();
+    app = new InspectionApp((await InspectionApp.open(browser.context)).page);
+    await app.click("btnHomeNew");
+    await app.ctl("galStartSites").waitFor();
+    await noDefaultText("New inspection");
+  });
+  test("G2 Contributing questions show the whole of the longest question", async () => {
+    await start("Northgate Distribution Centre", "Conveyor CV-A");
+    await app.yesNo("CV-01", "No"); // the template's longest: a question plus the CRITICAL STOP tag
+    await app.yesNo("CV-02", "No");
+    await app.click("btnInspReview");
+    await app.waitText("txtRevScore", /75\.0/);
+    const rows = await app.all("txtRevContribText").evaluateAll((els) =>
+      els.filter((e) => e.offsetParent !== null).map((e) => {
+        const box = e.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(e);
+        return { text: e.innerText.trim(), box: Math.round(box.bottom), text_bottom: Math.round(range.getBoundingClientRect().bottom) };
+      }));
+    expect(rows.length).toBe(2);
+    for (const r of rows) expect(r.text_bottom, r.text).toBeLessThanOrEqual(r.box);
+  });
+  test("G3 after a submit the new inspection is the first row in view", async () => {
+    const number = await start(EASTPORT, FL21);
+    await app.yesNo("FL-03", "Yes");
+    await app.click("btnInspReview");
+    await app.waitEnabled("btnRevSubmit");
+    await app.click("btnRevSubmit");
+    await app.ctl("conHomeBanner").waitFor({ timeout: 60_000 });
+    const { drafts, submitted } = await dv.counts();
+    await app.waitKpis(drafts, submitted);
+    await expect.poll(() => app.firstRowInView(), { timeout: 30_000 }).toBe(number);
   });
 });
 

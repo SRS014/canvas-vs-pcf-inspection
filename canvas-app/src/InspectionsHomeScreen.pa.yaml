@@ -3,6 +3,7 @@ Screens:
     Properties:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
+      OnVisible: =Reset(galHomeInspections)
     Children:
       - conHomeRoot:
           Control: GroupContainer
@@ -184,13 +185,13 @@ Screens:
                         - txtHomeBannerLabel:
                             Control: Label
                             Properties:
+                              AutoHeight: =true
                               PaddingTop: =0
                               PaddingBottom: =0
                               Text: ="✓  Submitted"
                               Size: =16
                               FontWeight: =FontWeight.Bold
                               Color: =cSuccess
-                              Width: =130
                               LayoutMinWidth: =130
                               Overflow: =Overflow.Hidden
                               Height: =32

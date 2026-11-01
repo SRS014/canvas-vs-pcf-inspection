@@ -322,6 +322,7 @@ Screens:
                                     - txtPhotoRowTag:
                                         Control: Label
                                         Properties:
+                                          AutoHeight: =true
                                           PaddingTop: =0
                                           PaddingBottom: =0
                                           Align: =Align.Center
@@ -516,6 +517,7 @@ Screens:
                         - txtPhotoHelper:
                             Control: Label
                             Properties:
+                              AutoHeight: =true
                               PaddingTop: =0
                               PaddingBottom: =0
                               AlignInContainer: =AlignInContainer.Stretch

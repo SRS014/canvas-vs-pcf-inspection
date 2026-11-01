@@ -656,20 +656,18 @@ Screens:
                                     BorderColor: =cMuted
                                     BorderStyle: =BorderStyle.Solid
                                     BorderThickness: =1
-                                    Height: =28
+                                    Height: =30
                                     RadiusBottomLeft: =6
                                     RadiusBottomRight: =6
                                     RadiusTopLeft: =6
                                     RadiusTopRight: =6
-                                    Width: =160
+                                    Width: =170
                                     X: =Parent.TemplateWidth - 210
                                     Y: =24
                                   Children:
                                     - txtStartEquipCrit:
                                         Control: Label
                                         Properties:
-                                          PaddingTop: =0
-                                          PaddingBottom: =0
                                           Align: =Align.Center
                                           Color: =cMuted
                                           FontWeight: =FontWeight.Semibold
@@ -691,10 +689,10 @@ Screens:
                                     Text: ="✓"
                                     Visible: =locEquip.Equipment = ThisItem.Equipment
                                     Width: =32
-                                    X: =Parent.TemplateWidth - 44
+                                    X: =Parent.TemplateWidth - 40
                                     Y: =24
                                     Overflow: =Overflow.Hidden
-                                    Height: =32
+                                    Height: =24
                               - btnStartEquipSelect:
                                   Control: ModernButton
                                   Properties:

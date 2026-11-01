@@ -261,7 +261,6 @@ Screens:
                                           RadiusTopRight: =0
                                           Visible: =ThisItem.Depth > 0
                                           Width: =2
-                                          X: =ThisItem.Depth * 32 - 8
                                     - txtInspQCode:
                                         Control: Label
                                         Properties:
@@ -298,6 +297,7 @@ Screens:
                                           - txtInspQCritical:
                                               Control: Label
                                               Properties:
+                                                AutoHeight: =true
                                                 PaddingTop: =0
                                                 PaddingBottom: =0
                                                 Align: =Align.Center
@@ -584,7 +584,6 @@ Screens:
                             Properties:
                               TabIndex: =0
                               AccessibleLabel: ="How the score is calculated"
-                              FillPortions: =0
                               Height: =124
                               Items: |-
                                 =Filter(
@@ -605,6 +604,7 @@ Screens:
                               - txtInspDerivLabel:
                                   Control: Label
                                   Properties:
+                                    AutoHeight: =true
                                     PaddingTop: =0
                                     PaddingBottom: =0
                                     Color: =cMuted
@@ -618,6 +618,7 @@ Screens:
                               - txtInspDerivValue:
                                   Control: Label
                                   Properties:
+                                    AutoHeight: =true
                                     PaddingTop: =0
                                     PaddingBottom: =0
                                     Align: =Align.Right
