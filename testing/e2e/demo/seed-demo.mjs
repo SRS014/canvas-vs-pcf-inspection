@@ -82,6 +82,7 @@ for (const [index, item] of INSPECTIONS.entries()) {
       await app.waitText("txtHomeRowNumber", new RegExp(number), 60_000);
       const { drafts, submitted } = await dv.counts();
       await app.waitKpis(drafts, submitted);
+      while ((await app.firstRowInView()) !== number) await app.page.waitForTimeout(250);
       console.log(`List and KPI cards caught up ${((Date.now() - bannerAt) / 1000).toFixed(1)} s after the banner`);
       await app.page.waitForTimeout(1500); // let the player's progress dots clear
       await app.shot(join(SHOTS, "08-submitted.png"));
