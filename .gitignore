@@ -9,3 +9,25 @@ generated/
 .env.*
 .DS_Store
 Thumbs.db
+
+# Tenant-specific values and sign-in state
+local.config.json
+**/.auth/
+
+# Test output and demo working files
+**/test-results/
+**/playwright-report/
+testing/e2e/demo/out/
+testing/e2e/demo/voice/
+
+# Audio: raw memos and generated clips never go in git
+*.m4a
+*.wav
+*.mp3
+
+# Photos dropped in for the demo stay local
+testing/e2e/demo/*.jpg
+testing/e2e/demo/*.jpeg
+testing/e2e/demo/*.png
+testing/e2e/demo/*.heic
+testing/e2e/demo/*.webp

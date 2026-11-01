@@ -1,0 +1,9 @@
+{
+  "$comment": "Copy to local.config.json (git-ignored) and fill in your tenant's values. Used only by testing/e2e.",
+  "dataverseUrl": "https://yourorg.crm.dynamics.com",
+  "environmentId": "00000000-0000-0000-0000-000000000000",
+  "tenantId": "00000000-0000-0000-0000-000000000000",
+  "loginHint": "you@yourtenant.onmicrosoft.com",
+  "app1Id": "00000000-0000-0000-0000-000000000000",
+  "app2Id": "00000000-0000-0000-0000-000000000000"
+}
