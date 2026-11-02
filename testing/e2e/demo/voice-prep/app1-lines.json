@@ -1,0 +1,40 @@
+{
+  "_about": "App 1's demo script for the cloned voice. Each line is [id, what the voice says, caption text if it differs]. Numbers are written as spoken. 'Sohan' is respelled by Fusion Voice Studio's pronunciations.json, never here.",
+  "scenes": [
+    { "scene": "title", "lines": [
+      ["s01a", "Hi, I'm Sohan. This is an equipment inspection app I built in Power Apps Canvas, on Dataverse.", null],
+      ["s01b", "It's one of two builds of the same app, made to find exactly where Canvas stops.", null] ] },
+    { "scene": "problem", "lines": [
+      ["s02a", "Inspectors check forklifts and conveyors across three warehouse sites.", null],
+      ["s02b", "They need a checklist that changes with each answer, a live risk score, and photos of any defect.", null] ] },
+    { "scene": "home", "lines": [
+      ["s03a", "The home screen lists every inspection, with its status and its risk.", null],
+      ["s03b", "Four of these twelve are high or critical, so the problems stand out straight away.", null] ] },
+    { "scene": "start", "lines": [
+      ["s04a", "A new inspection starts with the site, then the equipment.", null],
+      ["s04b", "This forklift is high criticality, so every risk point counts one and a half times.", null] ] },
+    { "scene": "checklist", "lines": [
+      ["s05a", "The checklist is a tree stored in Dataverse, and it grows as you answer.", null],
+      ["s05b", "This forklift is out of service, with damage in the hydraulics, and fluid is leaking.", null],
+      ["s05c", "No spill kit has been deployed. That's level five, and the score is fifty-two point five, high.", null] ] },
+    { "scene": "limit", "lines": [
+      ["s06a", "The next question is at level six, and it's a critical safety stop.", null],
+      ["s06b", "It never appears. Power Fx functions can't call themselves, so there's one formula per level, and the app stops at five.", null] ] },
+    { "scene": "stop", "lines": [
+      ["s07a", "Change the first answer to yes, and the whole branch closes. Its points go with it.", null],
+      ["s07b", "Now the operator has no valid licence. Forty-five points would only be medium, but a critical stop forces the top band.", null] ] },
+    { "scene": "photos", "lines": [
+      ["s08a", "Inspectors can add a photo, and mark the defect with the pen.", null],
+      ["s08b", "It's freehand only, and the strokes save apart from the photo. That's another limit I measured.", null] ] },
+    { "scene": "review", "lines": [
+      ["s09a", "Review lists every answer, and shows how the score was worked out.", null],
+      ["s09b", "Submit saves it to Dataverse, and the new inspection goes straight to the top of the list.", null] ] },
+    { "scene": "value", "lines": [
+      ["s10a", "Under the hood it's six Dataverse tables, five screens, and over three and a half thousand lines of Power Fx source.", null],
+      ["s10b", "Twenty-three Playwright tests drive the published app, and check what it saved in Dataverse.", null],
+      ["s10c", "All of this is sample data, in a developer environment.", null] ] },
+    { "scene": "outro", "lines": [
+      ["s11a", "The next build moves the checklist and the photo markup into code components.", null],
+      ["s11b", "The full build, the tests and the scripts are on my GitHub, and there's more on my portfolio. Thanks for watching.", null] ] }
+  ]
+}
