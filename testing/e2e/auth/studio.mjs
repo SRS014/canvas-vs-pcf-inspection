@@ -18,6 +18,11 @@ console.log("Studio loading...");
 // EmbeddedStudio iframe, so look in every frame, not just the top page.
 const end = Date.now() + 300_000;
 for (;;) {
+  // Apps with code components ask first. These are this repo's own components (pcf/).
+  for (const f of page.frames()) {
+    const openApp = f.getByRole("button", { name: "Open app", exact: true });
+    if (await openApp.count().catch(() => 0)) await openApp.first().click().catch(() => {});
+  }
   const found = await Promise.all(page.frames().map((f) =>
     f.locator('button[aria-label^="Publish"]').count().catch(() => 0)));
   if (found.some((n) => n > 0)) break;

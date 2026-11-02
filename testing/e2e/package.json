@@ -7,6 +7,7 @@
     "login": "node auth/login.mjs",
     "test": "playwright test",
     "test:app1": "playwright test tests/app1.spec.mjs",
+    "test:app2": "playwright test tests/app2.spec.mjs",
     "demo:app1": "node demo/record-app1.mjs"
   },
   "devDependencies": {

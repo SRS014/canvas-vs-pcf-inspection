@@ -105,6 +105,7 @@ const STAGE_ANCHOR = {
 // App 1 and App 2 share these screens and control names
 export class InspectionApp extends App {
   stageType = "Forklift";
+  checklistReady = "tabInspStages";
   // New inspection → site → equipment → Start. Returns the new inspection's number.
   async startInspection(site, equipment) {
     await this.click("btnHomeNew");
@@ -113,7 +114,7 @@ export class InspectionApp extends App {
     await this.pickRow("galStartEquipment", equipment, "btnStartEquipSelect");
     await this.waitEnabled("btnStartGo");
     await this.click("btnStartGo");
-    await this.ctl("tabInspStages").waitFor({ timeout: 60_000 });
+    await this.ctl(this.checklistReady).waitFor({ timeout: 60_000 });
     return (await this.waitText("txtInspTitle", /INS-\d+/, 30_000)).match(/INS-\d+/)[0];
   }
   async waitEnabled(name, timeout = 30_000) {
@@ -142,6 +143,12 @@ export class InspectionApp extends App {
       await this.page.waitForTimeout(250);
     }
     throw new Error(`KPI cards never showed ${drafts} drafts and ${submitted} submitted (last: "${text}")`);
+  }
+  // Names of visible controls showing a blank modern Text control's default word
+  async defaultTextControls() {
+    return this.frame.locator("[data-control-name]").evaluateAll((els) =>
+      els.filter((e) => e.offsetParent !== null && !e.querySelector("[data-control-name]") && (e.innerText || "").trim() === "Text")
+        .map((e) => e.getAttribute("data-control-name")));
   }
   // The inspection number at the top of the home list's visible area
   async firstRowInView() {
@@ -220,5 +227,82 @@ export class InspectionApp extends App {
   async score(value, band) {
     await this.waitText("txtInspRiskScore", new RegExp(`^${value.toFixed(1).replace(".", "\\.")} / 100`));
     if (band) await this.waitText("txtInspRiskBadge", new RegExp(band, "i"));
+  }
+}
+
+// App 2: the checklist and the photo markup are code components, addressed by role and accessible name
+const code = (c) => c.replace(/\./g, "\\.");
+export class ChecklistApp extends InspectionApp {
+  checklistReady = "pcfInspChecklist";
+  get checklist() { return this.ctl("pcfInspChecklist"); }
+  riskPanel() { return this.checklist.getByRole("complementary", { name: "Live risk" }); }
+  async stage(name) {
+    await this.checklist.getByRole("tab", { name: new RegExp(`^${name}`) }).click();
+    await this.waitShows(STAGE_ANCHOR[this.stageType][name]);
+  }
+  question(c) { return this.checklist.getByRole("listitem").filter({ hasText: new RegExp(`^\\s*${code(c)}\\s+·`) }).first(); }
+  answerButton(c, value) { return this.checklist.getByRole("button", { name: `${c} ${value}`, exact: true }); }
+  async yesNo(c, value) {
+    await this.waitShows(c);
+    await this.answerButton(c, value).click();
+  }
+  async choice(c, option) {
+    await this.waitShows(c);
+    await this.checklist.getByRole("combobox", { name: new RegExp(`^${code(c)} `) }).click();
+    const opt = this.frame.getByRole("option", { name: option, exact: true }).first();
+    await opt.waitFor({ timeout: 15_000 });
+    await opt.click();
+  }
+  async number(c, value) {
+    await this.waitShows(c);
+    const input = this.checklist.getByRole("spinbutton", { name: new RegExp(`^${code(c)} `) });
+    await input.fill(String(value));
+    await input.press("Tab");
+  }
+  async note(c, value) {
+    await this.waitShows(c);
+    const input = this.checklist.getByRole("textbox", { name: new RegExp(`^${code(c)} `) });
+    await input.fill(value);
+    await input.press("Tab");
+  }
+  async score(value, band) {
+    const label = `Live risk score ${value.toFixed(1)} out of 100${band ? `, ${band}` : ""}`;
+    await this.checklist.locator(`[aria-label^="${label}"]`).waitFor({ timeout: 30_000 });
+  }
+  async answered(n) {
+    await this.riskPanel().getByText(new RegExp(`^Answered ${n} of`)).waitFor({ timeout: 30_000 });
+  }
+  get annotator() { return this.ctl("pcfPhotoAnnotator"); }
+  get markup() { return this.annotator.locator("svg[role=img]").first(); }
+  async annotatorReady() {
+    await this.annotator.getByRole("toolbar", { name: "Annotation tools" }).waitFor({ timeout: 60_000 });
+    await this.markup.waitFor({ timeout: 60_000 });
+  }
+  async markCount(n) {
+    await this.annotator.locator(`svg[aria-label="Photo annotations, ${n} marks"]`).waitFor({ timeout: 30_000 });
+  }
+  // Picks a tool, then clicks or drags on the photo; positions are fractions of the picture
+  async placeMark(tool, from, to, { steps = 12 } = {}) {
+    await this.annotator.getByRole("button", { name: tool, exact: true }).click();
+    const box = await this.markup.boundingBox();
+    const at = (p) => [box.x + box.width * p.x, box.y + box.height * p.y];
+    await this.page.mouse.move(...at(from));
+    await this.page.mouse.down();
+    if (to) await this.page.mouse.move(...at(to), { steps });
+    await this.page.mouse.up();
+  }
+  // A freehand arc on the photo, left open: the component discards a stroke that ends where it started
+  // (see the known issue in the README). Positions are fractions of the picture.
+  async freehandRing({ x, y, rx, ry }) {
+    await this.annotator.getByRole("button", { name: "Freehand", exact: true }).click();
+    const box = await this.markup.boundingBox();
+    const at = (t) => [box.x + box.width * (x + rx * Math.cos(t)), box.y + box.height * (y + ry * Math.sin(t))];
+    await this.page.mouse.move(...at(0));
+    await this.page.mouse.down();
+    for (let k = 1; k <= 30; k++) {
+      await this.page.mouse.move(...at((k / 30) * 1.6 * Math.PI));
+      await this.page.waitForTimeout(20); // a visible stroke speed, for the recording
+    }
+    await this.page.mouse.up();
   }
 }

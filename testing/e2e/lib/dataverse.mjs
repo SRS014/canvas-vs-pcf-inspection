@@ -23,8 +23,8 @@ export async function answerExists(value) {
   return r.value.length > 0;
 }
 export async function photos(inspectionId) {
-  const r = await api("GET", `fp_inspectionphotos?$select=fp_name,fp_photo_url,fp_canvasstrokes_url&$filter=_fp_inspection_value eq ${inspectionId}`);
-  return r.value.map((p) => ({ caption: p.fp_name, hasPhoto: !!p.fp_photo_url, hasStrokes: !!p.fp_canvasstrokes_url }));
+  const r = await api("GET", `fp_inspectionphotos?$select=fp_name,fp_photo_url,fp_canvasstrokes_url,fp_annotatedphoto_url,fp_annotationjson&$filter=_fp_inspection_value eq ${inspectionId}`);
+  return r.value.map((p) => ({ caption: p.fp_name, hasPhoto: !!p.fp_photo_url, hasStrokes: !!p.fp_canvasstrokes_url, hasAnnotated: !!p.fp_annotatedphoto_url, annotationJson: p.fp_annotationjson }));
 }
 export async function counts() {
   const r = await api("GET", "fp_inspections?$select=fp_status&$top=5000", undefined, ANN);
