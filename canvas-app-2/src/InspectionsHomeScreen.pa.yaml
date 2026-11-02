@@ -3,6 +3,7 @@ Screens:
     Properties:
       Fill: =cWash
       LoadingSpinnerColor: =cPrimary
+      OnVisible: =Reset(galHomeInspections)
     Children:
       - conHomeRoot:
           Control: GroupContainer
