@@ -8,6 +8,8 @@ One equipment-inspection process, built twice on the same Dataverse data. **App 
 
 **App 1 demo video and case study:** [srs014.github.io/projects/canvas-equipment-inspections](https://srs014.github.io/projects/canvas-equipment-inspections/) · [watch the video in this repo](docs/demo/equipment-inspections-demo.mp4)
 
+**App 2 demo video and case study:** [srs014.github.io/projects/canvas-pcf-rules-driven-inspections](https://srs014.github.io/projects/canvas-pcf-rules-driven-inspections/) · [watch the video in this repo](docs/demo/rules-driven-inspections-demo.mp4)
+
 ## The problem
 
 A fictional manufacturer inspects forklifts and conveyors across three warehouse sites. Inspectors need:
@@ -36,20 +38,34 @@ A fictional manufacturer inspects forklifts and conveyors across three warehouse
 
 [App 1's walkthrough](docs/demo/equipment-inspections-demo.mp4) (2:42) follows one forklift inspection in the published app: the checklist growing as you answer, the sixth-level question that never appears, a critical stop, pen markup on a photo, and the submit. Playwright drives the app, and all the data is fictional. Two waits are shortened in the edit, and each cut shows how many seconds it skipped. Captions are burned in, with [.srt](docs/demo/equipment-inspections-demo.srt) and [.vtt](docs/demo/equipment-inspections-demo.vtt) files alongside. The [description](docs/demo/VIDEO-DESCRIPTION-app1.md) has chapters.
 
-Narration generated with a clone of my own voice.
+[App 2's walkthrough](docs/demo/rules-driven-inspections-demo.mp4) (2:30) follows the same inspection through the code components: the sixth-level question that App 1 could never show, a compound rule stored as a row, the data boundary, and numbered markers, arrows and boxes on a photo. It has the same captions, with [.srt](docs/demo/rules-driven-inspections-demo.srt) and [.vtt](docs/demo/rules-driven-inspections-demo.vtt) files, and its [description](docs/demo/VIDEO-DESCRIPTION-app2.md) has chapters.
 
-App 2's video is still to come.
+Narration generated with a clone of my own voice.
 
 ## Testing
 
 | Suite | What it covers | Result |
 | --- | --- | --- |
 | [App 1 end-to-end](testing/e2e) | 23 Playwright tests against the published app: home figures, starting an inspection, branching and scoring, submit, abandoning, photos and on-screen checks. They read Dataverse to confirm what was saved, and delete the rows they create | All pass |
+| [App 2 end-to-end](testing/e2e) | 23 Playwright tests against the published app: the checklist and annotator components, the sixth level, stored rules and compound rules, keyboard answering, submit, abandoning and on-screen checks. They read Dataverse to confirm what was saved | All pass |
 | [Code components](pcf/components/tests) | 15 unit tests for the scoring engine and the Canvas data contract | All pass |
 
 Test C2 confirms that the sixth-level question never shows in App 1. That is the documented limit, and the point of the project.
 
-App 1 has no offline mode, and keyboard use isn't covered yet. App 2 has no end-to-end suite yet.
+Neither app has an offline mode. Keyboard use is covered for App 2's answer buttons only.
+
+## The code components
+
+Two virtual React controls replace the parts of App 1 that hit a wall. Canvas still owns every Dataverse read and write, because code components in canvas apps have no Web API.
+
+| Component | Purpose | Inputs | Outputs |
+| --- | --- | --- | --- |
+| `InspectionChecklist` | Walks the question tree recursively, evaluates rules stored as JSON and explains every point in the score | `QuestionsJson`, `RulesJson`, `AnswersJson`, `Criticality`, `ReadOnly` | `AnswersOut`, `Score`, `Band`, `CriticalHit`, `AnsweredCount`, `VisibleIdsJson`, `VisibleCount`, `ExplanationJson` |
+| `PhotoAnnotator` | Numbered markers, arrows, boxes, freehand and notes on a photo | `ImageDataUri`, `AnnotationJson`, `ReadOnly` | `AnnotatedImageDataUri`, `AnnotationJsonOut`, `MarkCount` |
+
+Canvas passes data in as JSON and reads the results in the control's `OnChange`. To build and import them, see [pcf/README.md](pcf/README.md).
+
+**Known issue.** `PhotoAnnotator` discards a freehand stroke that ends where it started, because it decides whether the pointer moved by comparing the first and last points. So a closed circle disappears, while an open curve saves. The fix is to measure the stroke's length, and it needs a new component version. The demo video draws an open arc for this reason.
 
 ## Design decisions
 
@@ -121,9 +137,13 @@ All sites, equipment and inspections are fictional demo data.
 | --- | --- |
 | ![App 1 photo screen with a freehand circle drawn around a spanner's jaw](docs/screenshots/app1/06-photo-pen.png) | ![App 1 photo screen after saving, with a note that strokes are stored as a separate image](docs/screenshots/app1/07-photo-saved.png) |
 
-**App 2 · The checklist and live risk panel are one React code component inside the Canvas screen**
+| App 2 · The sixth level appears and scores | App 2 · A compound rule explains itself |
+| --- | --- |
+| ![App 2 checklist component with a branch open to level six, and a risk panel at 100 out of 100, Critical](docs/screenshots/app2/04-sixth-level.png) | ![App 2 checklist component with a score of 75 and the compound rule listed under Why this score](docs/screenshots/app2/03-compound-rule.png) |
 
-![App 2 checklist drawn by the React code component with stage tabs and a live risk panel](docs/screenshots/03_app2_pcf-checklist.png)
+| App 2 · The photo annotator component | App 2 · The annotated copy, with the original kept |
+| --- | --- |
+| ![App 2 annotator with a numbered marker, an arrow, a box and a freehand arc on a photo of a spanner](docs/screenshots/app2/05-annotator.png) | ![App 2 photo screen showing the annotated copy, with a note that the original photo is unchanged](docs/screenshots/app2/06-annotated-saved.png) |
 
 More screenshots and the full write-up: [the case studies on my portfolio](https://srs014.github.io/projects/).
 
@@ -141,7 +161,8 @@ More screenshots and the full write-up: [the case studies on my portfolio](https
 - [x] App 1: Canvas app, signed off after three test runs traced with Live monitor
 - [x] App 1: 23 end-to-end tests, screenshots and demo video
 - [x] App 2: two code components (15 unit tests) and the Canvas app, merged to main
-- [ ] App 2: final traced test after the column-selection fix
+- [x] App 2: scoring confirmed after the column-selection fix: an end-to-end test checks the saved score, band and each answer's contribution
+- [x] App 2: 23 end-to-end tests, screenshots and demo video
 - [x] Screenshots and the write-up ([blog post](https://thefusionplatform.wordpress.com/2026/10/19/when-to-use-code-components-in-canvas-apps/), 19 October 2026)
 
 All company, site and equipment names are fictional.

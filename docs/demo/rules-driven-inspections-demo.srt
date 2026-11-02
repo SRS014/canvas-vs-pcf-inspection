@@ -1,0 +1,179 @@
+1
+00:00:00,001 --> 00:00:01,801
+Hi, I'm Sohan.
+
+2
+00:00:01,801 --> 00:00:03,881
+This is the same inspection app,
+
+3
+00:00:03,881 --> 00:00:07,481
+rebuilt with two React code components inside Canvas.
+
+4
+00:00:07,738 --> 00:00:09,858
+It takes the places where Canvas stopped,
+
+5
+00:00:09,858 --> 00:00:12,968
+and shows what it costs to cross that line.
+
+6
+00:00:13,231 --> 00:00:15,631
+The Canvas build hit real limits.
+
+7
+00:00:15,631 --> 00:00:17,711
+The checklist stopped at level five,
+
+8
+00:00:17,711 --> 00:00:20,271
+and a safety question never appeared.
+
+9
+00:00:20,528 --> 00:00:24,708
+Rules were hard-coded, and photo markup was freehand only,
+
+10
+00:00:24,708 --> 00:00:26,768
+saved apart from the photo.
+
+11
+00:00:27,782 --> 00:00:30,762
+The screens around the components are still standard Canvas,
+
+12
+00:00:30,762 --> 00:00:33,362
+on the same Dataverse tables.
+
+13
+00:00:34,984 --> 00:00:36,924
+An inspection starts the same way,
+
+14
+00:00:36,924 --> 00:00:39,764
+with a site and a piece of equipment.
+
+15
+00:00:43,528 --> 00:00:46,188
+Now the checklist is one code component,
+
+16
+00:00:46,188 --> 00:00:48,488
+written in React and TypeScript.
+
+17
+00:00:48,744 --> 00:00:52,364
+This forklift is out of service, with damage in the hydraulics,
+
+18
+00:00:52,364 --> 00:00:54,484
+and fluid is leaking.
+
+19
+00:00:54,742 --> 00:00:57,002
+No spill kit has been deployed.
+
+20
+00:00:57,002 --> 00:00:59,202
+A compound rule adds fifteen points,
+
+21
+00:00:59,202 --> 00:01:02,632
+and it's a row in Dataverse, not a formula.
+
+22
+00:01:02,886 --> 00:01:04,436
+And here's the sixth level,
+
+23
+00:01:04,436 --> 00:01:07,256
+the question Canvas could never show.
+
+24
+00:01:07,515 --> 00:01:09,035
+It's a critical stop,
+
+25
+00:01:09,035 --> 00:01:11,685
+and the score reaches the cap of one hundred.
+
+26
+00:01:12,000 --> 00:01:15,720
+Code components in canvas apps cannot call Dataverse,
+
+27
+00:01:15,720 --> 00:01:18,750
+so the app passes the data in as JSON.
+
+28
+00:01:19,000 --> 00:01:21,100
+The component hands the answers,
+
+29
+00:01:21,100 --> 00:01:24,870
+the score and the explanation back through output properties.
+
+30
+00:01:28,651 --> 00:01:31,011
+The second component is the photo annotator,
+
+31
+00:01:31,011 --> 00:01:35,781
+with numbered markers, arrows, boxes and freehand.
+
+32
+00:01:36,039 --> 00:01:40,039
+Every mark saves as data, and burned into a copy of the photo,
+
+33
+00:01:40,039 --> 00:01:42,979
+so the original stays clean.
+
+34
+00:01:46,732 --> 00:01:48,572
+Review reads the component's outputs,
+
+35
+00:01:48,572 --> 00:01:51,832
+and Submit saves everything to Dataverse.
+
+36
+00:01:56,468 --> 00:02:00,128
+The new inspection goes straight to the top of the list.
+
+37
+00:02:00,405 --> 00:02:01,485
+Under the hood,
+
+38
+00:02:01,485 --> 00:02:05,055
+that's two React components and seven Dataverse tables.
+
+39
+00:02:05,330 --> 00:02:08,410
+Twenty-three Playwright tests drive the published app,
+
+40
+00:02:08,410 --> 00:02:12,120
+and fifteen unit tests cover the components' logic.
+
+41
+00:02:12,379 --> 00:02:16,139
+All of this is sample data, in a developer environment.
+
+42
+00:02:16,422 --> 00:02:18,822
+Canvas still does most of this app.
+
+43
+00:02:18,822 --> 00:02:21,802
+The code components took only the parts it couldn't.
+
+44
+00:02:22,059 --> 00:02:24,979
+The full build, the tests and the scripts are on my GitHub,
+
+45
+00:02:24,979 --> 00:02:28,769
+and there's more on my portfolio. Thanks for watching.

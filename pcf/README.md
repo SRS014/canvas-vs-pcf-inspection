@@ -27,6 +27,10 @@ The checklist engine (`InspectionChecklist/engine/engine.ts`) has no runtime imp
 - answers on a collapsed branch never score;
 - with no compound rules, the same answers score exactly as App 1 (52.5 High).
 
+Against the published app, 23 Playwright tests in [testing/e2e](../testing/e2e) drive both components and check what Canvas saves to Dataverse.
+
+**Known issue.** `PhotoAnnotator` discards a freehand stroke that ends where it started, so a closed circle disappears. `onPointerUp` in `AnnotatorView.tsx` compares only the first and last points. Measuring the stroke's length would fix it.
+
 ## Trying it in the test harness
 
 In `npm start`, paste a sample into the inputs:
