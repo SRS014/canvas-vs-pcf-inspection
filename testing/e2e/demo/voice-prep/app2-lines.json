@@ -1,0 +1,37 @@
+{
+  "_about": "App 2's demo script for the cloned voice. Each line is [id, what the voice says, caption text if it differs]. Numbers are written as spoken. 'Sohan' is respelled by Fusion Voice Studio's pronunciations.json, never here.",
+  "scenes": [
+    { "scene": "title", "lines": [
+      ["s01a", "Hi, I'm Sohan. This is the same inspection app, rebuilt with two React code components inside Canvas.", null],
+      ["s01b", "It takes the places where Canvas stopped, and shows what it costs to cross that line.", null] ] },
+    { "scene": "problem", "lines": [
+      ["s02a", "The Canvas build hit real limits. The checklist stopped at level five, and a safety question never appeared.", null],
+      ["s02b", "Rules were hard-coded, and photo markup was freehand only, saved apart from the photo.", null] ] },
+    { "scene": "home", "lines": [
+      ["s03a", "The screens around the components are still standard Canvas, on the same Dataverse tables.", null] ] },
+    { "scene": "start", "lines": [
+      ["s04a", "An inspection starts the same way, with a site and a piece of equipment.", null] ] },
+    { "scene": "checklist", "lines": [
+      ["s05a", "Now the checklist is one code component, written in React and TypeScript.", null],
+      ["s05b", "This forklift is out of service, with damage in the hydraulics, and fluid is leaking.", null],
+      ["s05c", "No spill kit has been deployed. A compound rule adds fifteen points, and it's a row in Dataverse, not a formula.", null],
+      ["s05d", "And here's the sixth level, the question Canvas could never show.", null],
+      ["s05e", "It's a critical stop, and the score reaches the cap of one hundred.", null] ] },
+    { "scene": "boundary", "lines": [
+      ["s06a", "Code components in canvas apps cannot call Dataverse, so the app passes the data in as JSON.", null],
+      ["s06b", "The component hands the answers, the score and the explanation back through output properties.", null] ] },
+    { "scene": "photos", "lines": [
+      ["s07a", "The second component is the photo annotator, with numbered markers, arrows, boxes and freehand.", null],
+      ["s07b", "Every mark saves as data, and burned into a copy of the photo, so the original stays clean.", null] ] },
+    { "scene": "review", "lines": [
+      ["s08a", "Review reads the component's outputs, and Submit saves everything to Dataverse.", null],
+      ["s08b", "The new inspection goes straight to the top of the list.", null] ] },
+    { "scene": "value", "lines": [
+      ["s09a", "Under the hood, that's two React components and seven Dataverse tables.", null],
+      ["s09b", "Twenty-three Playwright tests drive the published app, and fifteen unit tests cover the components' logic.", null],
+      ["s09c", "All of this is sample data, in a developer environment.", null] ] },
+    { "scene": "outro", "lines": [
+      ["s10a", "Canvas still does most of this app. The code components took only the parts it couldn't.", null],
+      ["s10b", "The full build, the tests and the scripts are on my GitHub, and there's more on my portfolio. Thanks for watching.", null] ] }
+  ]
+}

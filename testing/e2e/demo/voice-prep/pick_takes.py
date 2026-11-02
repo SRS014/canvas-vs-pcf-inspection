@@ -15,7 +15,7 @@ work, takes = Path(sys.argv[1]), sys.argv[2:]
 SPEC = json.loads((Path(__file__).with_name(f"{os.environ.get('DEMO', 'app1')}-lines.json")).read_text(encoding="utf-8"))
 spec = [line for scene in SPEC["scenes"] for line in scene["lines"]]
 norm = lambda t: re.findall(r"[a-z0-9']+", t.lower().replace("’", "'").replace("-", " ").replace(",", ""))
-DIGITS = {"52.5": "fifty two point five", "45": "forty five", "23": "twenty three", "12": "twelve", "3.5": "three and a half"}
+DIGITS = {"52.5": "fifty two point five", "45": "forty five", "23": "twenty three", "12": "twelve", "15": "fifteen", "100": "one hundred", "5": "five", "6": "six", "7": "seven"}
 heard = {t: json.loads((work / f"stage-{t}" / "final_words.json").read_text(encoding="utf-8")) for t in takes}
 picks = []
 for id_, say, _ in spec:
@@ -25,7 +25,7 @@ for id_, say, _ in spec:
             continue
         text = " ".join(w[2] for w in heard[t][id_])
         for d, words in DIGITS.items():  # Whisper writes spoken numbers as digits; that's not an error
-            text = text.replace(d, words)
+            text = re.sub(rf"(?<![\d.]){re.escape(d)}(?![\d.])", words, text)
         text = text.replace("I am", "I'm")
         sm = SequenceMatcher(a=norm(say), b=norm(text), autojunk=False)
         scores.append((sum(b.size for b in sm.get_matching_blocks()) / len(norm(say)), t, text))

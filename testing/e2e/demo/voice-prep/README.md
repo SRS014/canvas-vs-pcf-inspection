@@ -2,7 +2,7 @@
 
 The demo's voice is Sohan's own, cloned locally with [Fusion Voice Studio](https://srs014.github.io/) (Chatterbox Nano, 200-character chunks). Audio stays out of git, and nothing leaves the machine. Only clone your own voice.
 
-Each demo has a lines file, such as `app1-lines.json`. Every line is `[id, what the voice says, caption text if it differs]`, with numbers written the way they're spoken. `DEMO` selects the file (`app1` by default).
+Each demo has a lines file, such as `app1-lines.json`. Every line is `[id, what the voice says, caption text if it differs]`, with numbers written the way they're spoken. `DEMO` selects the file (`app1` by default), and `../voice/app1` below becomes `../voice/app2`.
 
 Keep working files in a folder outside the repo, `WORK` below.
 
