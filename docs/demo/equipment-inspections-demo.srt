@@ -1,0 +1,187 @@
+1
+00:00:00,001 --> 00:00:01,881
+Hi, I'm Sohan.
+
+2
+00:00:01,881 --> 00:00:05,161
+This is an equipment inspection app I built in Power Apps Canvas,
+
+3
+00:00:05,161 --> 00:00:07,061
+on Dataverse.
+
+4
+00:00:07,324 --> 00:00:10,044
+It's one of two builds of the same app,
+
+5
+00:00:10,044 --> 00:00:13,544
+made to find exactly where Canvas stops.
+
+6
+00:00:13,938 --> 00:00:18,538
+Inspectors check forklifts and conveyors across three warehouse sites.
+
+7
+00:00:18,800 --> 00:00:22,020
+They need a checklist that changes with each answer,
+
+8
+00:00:22,020 --> 00:00:25,940
+a live risk score, and photos of any defect.
+
+9
+00:00:26,211 --> 00:00:28,111
+The home screen lists every inspection,
+
+10
+00:00:28,111 --> 00:00:30,921
+with its status and its risk.
+
+11
+00:00:31,186 --> 00:00:33,866
+Four of these twelve are high or critical,
+
+12
+00:00:33,866 --> 00:00:36,606
+so the problems stand out straight away.
+
+13
+00:00:38,426 --> 00:00:42,046
+A new inspection starts with the site, then the equipment.
+
+14
+00:00:43,643 --> 00:00:46,023
+This forklift is high criticality,
+
+15
+00:00:46,023 --> 00:00:49,383
+so every risk point counts one and a half times.
+
+16
+00:00:53,136 --> 00:00:55,936
+The checklist is a tree stored in Dataverse,
+
+17
+00:00:55,936 --> 00:00:57,916
+and it grows as you answer.
+
+18
+00:00:58,177 --> 00:01:02,037
+This forklift is out of service, with damage in the hydraulics,
+
+19
+00:01:02,037 --> 00:01:04,517
+and fluid is leaking.
+
+20
+00:01:04,786 --> 00:01:07,126
+No spill kit has been deployed.
+
+21
+00:01:07,126 --> 00:01:11,926
+That's level five, and the score is fifty-two point five, high.
+
+22
+00:01:12,206 --> 00:01:13,926
+The next question is at level six,
+
+23
+00:01:13,926 --> 00:01:16,656
+and it's a critical safety stop.
+
+24
+00:01:16,909 --> 00:01:18,569
+It never appears.
+
+25
+00:01:18,569 --> 00:01:21,669
+Power Fx functions can't call themselves,
+
+26
+00:01:21,669 --> 00:01:26,029
+so there's one formula per level, and the app stops at five.
+
+27
+00:01:26,300 --> 00:01:30,520
+Change the first answer to yes, and the whole branch closes.
+
+28
+00:01:30,520 --> 00:01:32,110
+Its points go with it.
+
+29
+00:01:32,365 --> 00:01:35,205
+Now the operator has no valid licence.
+
+30
+00:01:35,205 --> 00:01:37,485
+Forty-five points would only be medium,
+
+31
+00:01:37,485 --> 00:01:40,275
+but a critical stop forces the top band.
+
+32
+00:01:44,035 --> 00:01:48,615
+Inspectors can add a photo, and mark the defect with the pen.
+
+33
+00:01:48,867 --> 00:01:52,447
+It's freehand only, and the strokes save apart from the photo.
+
+34
+00:01:52,447 --> 00:01:54,417
+That's another limit I measured.
+
+35
+00:01:57,212 --> 00:01:58,512
+Review lists every answer,
+
+36
+00:01:58,512 --> 00:02:00,952
+and shows how the score was worked out.
+
+37
+00:02:01,219 --> 00:02:03,839
+Submit saves it to Dataverse,
+
+38
+00:02:03,839 --> 00:02:07,109
+and the new inspection goes straight to the top of the list.
+
+39
+00:02:09,631 --> 00:02:13,011
+Under the hood it's six Dataverse tables, five screens,
+
+40
+00:02:13,011 --> 00:02:17,531
+and over three and a half thousand lines of Power Fx source.
+
+41
+00:02:17,791 --> 00:02:20,851
+Twenty-three Playwright tests drive the published app,
+
+42
+00:02:20,851 --> 00:02:23,981
+and check what it saved in Dataverse.
+
+43
+00:02:24,243 --> 00:02:28,223
+All of this is sample data, in a developer environment.
+
+44
+00:02:28,495 --> 00:02:30,035
+The next build moves the checklist
+
+45
+00:02:30,035 --> 00:02:33,255
+and the photo markup into code components.
+
+46
+00:02:33,506 --> 00:02:36,566
+The full build, the tests and the scripts are on my GitHub,
+
+47
+00:02:36,566 --> 00:02:40,436
+and there's more on my portfolio. Thanks for watching.

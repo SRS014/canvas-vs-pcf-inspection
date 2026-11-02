@@ -6,6 +6,8 @@ One equipment-inspection process, built twice on the same Dataverse data. **App 
 
 ![Solution architecture](docs/architecture.png)
 
+**App 1 demo video and case study:** [srs014.github.io/projects/canvas-equipment-inspections](https://srs014.github.io/projects/canvas-equipment-inspections/) · [watch the video in this repo](docs/demo/equipment-inspections-demo.mp4)
+
 ## The problem
 
 A fictional manufacturer inspects forklifts and conveyors across three warehouse sites. Inspectors need:
@@ -30,6 +32,33 @@ A fictional manufacturer inspects forklifts and conveyors across three warehouse
 
 **A lesson from testing.** In App 2's first traced run every question was visible and nothing scored. Power Apps' explicit column selection fetches only the columns the app visibly uses, and the questions reached the component only through `JSON(DropColumns(colQ, Rec))`, so the parent, condition and weight columns were never requested. Naming every column with `ShowColumns` fixed it. Anything a code component reads through JSON has to be named somewhere the analyzer can see.
 
+## Demo video
+
+[App 1's walkthrough](docs/demo/equipment-inspections-demo.mp4) (2:42) follows one forklift inspection in the published app: the checklist growing as you answer, the sixth-level question that never appears, a critical stop, pen markup on a photo, and the submit. Playwright drives the app, and all the data is fictional. Two waits are shortened in the edit, and each cut shows how many seconds it skipped. Captions are burned in, with [.srt](docs/demo/equipment-inspections-demo.srt) and [.vtt](docs/demo/equipment-inspections-demo.vtt) files alongside. The [description](docs/demo/VIDEO-DESCRIPTION-app1.md) has chapters.
+
+Narration generated with a clone of my own voice.
+
+App 2's video is still to come.
+
+## Testing
+
+| Suite | What it covers | Result |
+| --- | --- | --- |
+| [App 1 end-to-end](testing/e2e) | 23 Playwright tests against the published app: home figures, starting an inspection, branching and scoring, submit, abandoning, photos and on-screen checks. They read Dataverse to confirm what was saved, and delete the rows they create | All pass |
+| [Code components](pcf/components/tests) | 15 unit tests for the scoring engine and the Canvas data contract | All pass |
+
+Test C2 confirms that the sixth-level question never shows in App 1. That is the documented limit, and the point of the project.
+
+App 1 has no offline mode, and keyboard use isn't covered yet. App 2 has no end-to-end suite yet.
+
+## Design decisions
+
+- **The checklist and its rules are data.** Questions are rows in a self-referencing table, so a new template doesn't need a new app version.
+- **One formula per level in App 1.** Power Fx functions can't call themselves, so visibility is walked level by level. That's why the depth is fixed at five.
+- **Canvas owns Dataverse in both apps.** Code components in canvas apps have no Web API, so they get their data as JSON and hand results back through output properties.
+- **One batched write on Submit.** Row-by-row saving took about 1.2 s per answer in the first traced run, so answers now go in one `Collect`.
+- **The source and the published app are kept matching.** A compile overwrites values set only in Studio, so I compare them in both directions before compiling, and again after publishing.
+
 ## Tech stack
 
 | Layer | Used |
@@ -37,7 +66,7 @@ A fictional manufacturer inspects forklifts and conveyors across three warehouse
 | Apps | Power Apps canvas apps, Power Fx (named formulas, user-defined functions) |
 | Code components | Power Apps component framework (virtual React controls), React 16 (platform), TypeScript, Fluent UI v9 |
 | Data | Dataverse: 7 tables, choice columns, image columns, a self-referencing lookup |
-| Tooling | Power Platform CLI (`pac`), .NET SDK (solution project), Node.js (provisioning and tests), canvas-apps authoring MCP, Monitor |
+| Tooling | Power Platform CLI (`pac`), .NET SDK (solution project), Node.js (provisioning and tests), Playwright (end-to-end tests and demo recording), canvas-apps authoring MCP, Monitor |
 | ALM | Git and GitHub, unmanaged solutions in a Developer environment |
 
 ## Repository layout
@@ -47,7 +76,8 @@ dataverse/     schema.json, seed data, provision and seed scripts (Node, Dataver
 canvas-app/    App 1: design notes and the .pa.yaml source
 canvas-app-2/  App 2: the .pa.yaml source
 pcf/           App 2: the two code components, their tests and the solution project
-docs/          data model, "Where Canvas stopped", architecture diagram
+testing/e2e/   Playwright tests and the demo recorder
+docs/          data model, "Where Canvas stopped", architecture diagram, screenshots, demo video
 ```
 
 ## Install it in your own environment
@@ -79,9 +109,17 @@ Everything was built in a free Power Apps Developer Plan environment. All data i
 
 All sites, equipment and inspections are fictional demo data.
 
-| App 1 · Home | App 1 · A critical stop forces the Critical band |
+| App 1 · Home | App 1 · The branch stops at level five |
 | --- | --- |
-| ![App 1 home screen with inspection counts and a list of inspections](docs/screenshots/01_app1_home.png) | ![App 1 checklist with the operator licence question answered No and a 30 out of 100 Critical score](docs/screenshots/02_app1_critical-stop.png) |
+| ![App 1 home screen with inspection counts and a list of inspections across risk levels](docs/screenshots/01_app1_home.png) | ![App 1 checklist with a branch open to level five and a score of 52.5, High](docs/screenshots/app1/03-checklist-branch.png) |
+
+| App 1 · A critical stop forces the Critical band | App 1 · Review and submit |
+| --- | --- |
+| ![App 1 checklist with the operator licence question answered No and a 30 out of 100 Critical score](docs/screenshots/app1/04-critical-stop.png) | ![App 1 review screen listing answers, contributing questions and the score calculation](docs/screenshots/app1/05-review.png) |
+
+| App 1 · Pen markup | App 1 · Strokes saved apart from the photo |
+| --- | --- |
+| ![App 1 photo screen with a freehand circle drawn around a spanner's jaw](docs/screenshots/app1/06-photo-pen.png) | ![App 1 photo screen after saving, with a note that strokes are stored as a separate image](docs/screenshots/app1/07-photo-saved.png) |
 
 **App 2 · The checklist and live risk panel are one React code component inside the Canvas screen**
 
@@ -101,6 +139,7 @@ More screenshots and the full write-up: [the case studies on my portfolio](https
 
 - [x] Data model, provisioning and seed scripts
 - [x] App 1: Canvas app, signed off after three test runs traced with Live monitor
+- [x] App 1: 23 end-to-end tests, screenshots and demo video
 - [x] App 2: two code components (15 unit tests) and the Canvas app, merged to main
 - [ ] App 2: final traced test after the column-selection fix
 - [x] Screenshots and the write-up ([blog post](https://thefusionplatform.wordpress.com/2026/10/19/when-to-use-code-components-in-canvas-apps/), 19 October 2026)

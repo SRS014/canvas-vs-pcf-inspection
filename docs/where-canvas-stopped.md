@@ -67,6 +67,16 @@ The current build, with no errors or warnings. The only warning in the file came
 - [x] **B6. Choice dropdown loop.** Change a Choice answer that reveals children. Does the dropdown's change event fire again when the list reloads? Microsoft documents this as a gallery pitfall.
 - [x] **B7. Submit.** Submit, then check the Dataverse records: one answer row per visible answered question, plus the score, band, status and "Canvas only" on the inspection.
 
+### Run 4 (2026-11-01, Playwright against the published app)
+
+Twenty-three end-to-end tests now cover App 1, and all pass. Checking screenshots from those runs found three display problems the compiler had let through, all fixed and now tested:
+
+- **Blank controls on the Review screen.** An earlier compile had kept empty modern Text controls under the source's names and moved the real labels to `txtRevAnswersTitle_1` and `txtRevScoreKicker_1`, so both cards showed the default word "Text".
+- **Clipped questions.** Contributing-question rows were 27 high in the published app while the source said 44, so longer questions lost their second line.
+- **A hidden new row.** After a submit, the home list kept its scroll position while the new row arrived, so it sat just above the visible area. `Reset(galHomeInspections)` in `OnVisible` fixed it.
+
+Fixing them showed the same cost as A10 from another side. A compile overwrites values set only in Studio: it removed `AutoHeight` from seven labels until those values were written into the source. Comparing the live app with the source has to run in both directions, before compiling and again after publishing.
+
 ## What this sets up for App 2
 
 The PCF component (React + TypeScript) takes over the three interaction-heavy jobs: the recursive checklist, the annotation canvas and the rules engine. The Canvas app keeps navigation and Dataverse reads and writes, because code components in canvas apps can't call the Dataverse Web API. The mapping from each limit to its solution is in [how-pro-code-solved-it.md](how-pro-code-solved-it.md) (after App 2).
