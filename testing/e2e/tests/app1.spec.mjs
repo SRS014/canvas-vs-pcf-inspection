@@ -377,6 +377,7 @@ test.describe("F. Photos", () => {
     let saved = await dv.photos(row.id);
     expect(saved).toHaveLength(1);
     expect(saved[0]).toMatchObject({ caption: "Test card", hasPhoto: true, hasStrokes: false });
+    expect(await app.waitPhotoShown()).toBe(800); // the full image, not the 144 px thumbnail
 
     await app.pickRow("galPhotoList", "Test card", "btnPhotoRowSelect");
     await app.ctl("btnPhotoAnnotate").waitFor();

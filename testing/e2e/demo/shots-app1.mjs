@@ -13,6 +13,7 @@ const PHOTO = join(ROOT, "demo", "out", "photo-clean.jpg");
 mkdirSync(SHOTS, { recursive: true });
 const NORTHGATE = "Northgate Distribution Centre";
 const EASTPORT = "Eastport Bonded Warehouse";
+const JAW = { x: 0.25, y: 0.42, rx: 0.15, ry: 0.2 }; // around the spanner's jaw in the photo
 
 const browser = await openBrowser();
 const created = [];
@@ -61,24 +62,19 @@ try {
     await app.ctl("addPhotoPicker").waitFor();
     await app.ctl("addPhotoPicker").locator('input[type="file"]').first().setInputFiles(PHOTO);
     await app.waitEnabled("btnPhotoSave");
-    await app.ctl("txtPhotoCaption").locator("input, textarea").first().fill("Defect close-up");
+    await app.ctl("txtPhotoCaption").locator("input, textarea").first().fill("Worn spanner jaw");
     await app.click("btnPhotoSave");
-    await app.ctl("galPhotoList").getByText("Defect close-up").waitFor({ timeout: 60_000 });
-    await app.pickRow("galPhotoList", "Defect close-up", "btnPhotoRowSelect");
+    await app.waitText("galPhotoList", /Worn spanner/, 60_000);
     await app.ctl("btnPhotoAnnotate").waitFor();
+    await app.waitPhotoShown();
     await app.click("btnPhotoAnnotate");
     await app.ctl("penPhotoAnnotate").waitFor();
-    const box = await app.ctl("penPhotoAnnotate").boundingBox();
-    const at = (x, y) => [box.x + box.width * x, box.y + box.height * y];
-    await app.page.mouse.move(...at(0.42, 0.34));
-    await app.page.mouse.down();
-    for (let t = 0; t <= 1.02; t += 0.04) {
-      await app.page.mouse.move(...at(0.5 + 0.1 * Math.cos(t * 2 * Math.PI + Math.PI), 0.42 + 0.14 * Math.sin(t * 2 * Math.PI + Math.PI)));
-    }
-    await app.page.mouse.up();
+    await app.drawCircle("penPhotoAnnotate", JAW);
     await shot(app, "06-photo-pen");
     await app.click("btnPhotoSave");
     await app.ctl("conPhotoRowTagBadge").waitFor({ timeout: 60_000 });
+    await app.waitPhotoShown();
+    await app.waitPhotoShown(60_000, "imgPhotoStrokes");
     await shot(app, "07-photo-saved");
   } else {
     console.log("No demo/out/photo-clean.jpg yet: photo screens skipped.");

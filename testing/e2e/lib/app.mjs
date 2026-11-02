@@ -194,6 +194,28 @@ export class InspectionApp extends App {
     await input.fill(value);
     await input.press("Tab");
   }
+  // Waits until the photo viewer shows the saved image, and returns its width in pixels
+  async waitPhotoShown(timeout = 60_000, control = "imgPhotoMain") {
+    const end = Date.now() + timeout;
+    while (Date.now() < end) {
+      const width = await this.ctl(control).locator("img").first().evaluate((i) => i.naturalWidth).catch(() => 0);
+      if (width > 0) return width;
+      await this.page.waitForTimeout(250);
+    }
+    throw new Error(`${control} never showed its image`);
+  }
+  // Draws an ellipse on a pen control; positions are fractions of the control's box
+  async drawCircle(name, { x, y, rx, ry }) {
+    const box = await this.ctl(name).boundingBox();
+    const at = (t) => [box.x + box.width * (x + rx * Math.cos(t)), box.y + box.height * (y + ry * Math.sin(t))];
+    await this.page.mouse.move(...at(0));
+    await this.page.mouse.down();
+    for (let k = 1; k <= 40; k++) {
+      await this.page.mouse.move(...at((k / 40) * 2 * Math.PI));
+      await this.page.waitForTimeout(25); // a visible stroke speed, for the recording
+    }
+    await this.page.mouse.up();
+  }
   // Waits for the live panel: "52.5 / 100" and its band
   async score(value, band) {
     await this.waitText("txtInspRiskScore", new RegExp(`^${value.toFixed(1).replace(".", "\\.")} / 100`));

@@ -31,3 +31,4 @@ testing/e2e/demo/*.jpeg
 testing/e2e/demo/*.png
 testing/e2e/demo/*.heic
 testing/e2e/demo/*.webp
+testing/e2e/demo/*.jfif
